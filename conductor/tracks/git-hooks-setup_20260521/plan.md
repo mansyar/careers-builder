@@ -1,6 +1,6 @@
 # Implementation Plan: Pre-Commit & Pre-Push Checks
 
-## Phase 1 — Linter & Formatter Configuration
+## Phase 1 — Linter & Formatter Configuration [checkpoint: a5a2fe8]
 
 ### Task 1.1: Install ESLint, Prettier, and related dev dependencies
 - [x] Install `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `eslint-plugin-react`, `prettier`, `eslint-config-prettier` as dev dependencies
