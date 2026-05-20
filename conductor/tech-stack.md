@@ -25,7 +25,8 @@
 - **Concurrency Control:** `p-limit` — Max 3 concurrent embedding jobs to prevent OOM
 
 ## Infrastructure
-- **Containerization:** Docker with `node:20-slim` base image
+- **Containerization:** Docker with `node:22-slim` base image
+  - *Deviation Note (2026-05-21):* Changed from `node:20-slim` to `node:22-slim` because the latest pnpm requires Node.js v22.13+. Multi-stage build with Playwright Chromium installed for PDF/scraping.
 - **CI/CD:** GitHub Actions — Vitest on every commit, Playwright E2E nightly
 - **Architecture:** Single-container local web application (monolithic)
 - **Target Platforms:** Windows, macOS, Linux (cross-platform via Docker + Node.js)

@@ -3,7 +3,7 @@ import { getHealthStatus } from '../../lib/server/health'
 
 /**
  * Health check route at /api/health.
- * Returns JSON with status for Docker container health checks.
+ * Returns JSON with status for Docker container health checks and monitoring.
  */
 export const Route = createFileRoute('/api/health')({
   loader: () => {
