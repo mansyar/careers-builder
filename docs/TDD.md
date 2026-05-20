@@ -103,7 +103,7 @@ Response:
   "status": "ok"
 }
 ```
-Returns HTTP 200. Used by Docker `HEALTHCHECK` and system monitoring. Implemented as a TanStack Router file-based route (`src/routes/api/health.tsx`) with a loader + component, because the `server.handlers` pattern in TanStack Start v1.168.8 tree-shakes handler code from the SSR bundle.
+Returns HTTP 200 with `Content-Type: application/json`. Used by Docker `HEALTHCHECK` and system monitoring. Implemented as a TanStack Start server route at `src/routes/api/health.ts` using `createFileRoute` with `server: { handlers: { GET: ... } }`. Requires `pnpm dev` to run at least once before production build to generate the route tree — build-only will tree-shake the handler code.
 
 #### `POST /api/chat` — Conversational Interview
 ```

@@ -140,7 +140,7 @@ A private, full-stack desktop web application running on the user's laptop, serv
 - **Styling:** Tailwind CSS v4
 - **Package Manager:** pnpm v10+ (deviated from npm — faster, disk-efficient)
 - **Container:** Docker multi-stage build, `node:22-slim` base (deviated from `node:20-slim` — pnpm v11 requires Node.js ≥ v22.13)
-- **Health Check:** `GET /api/health` → HTTP 200, `{ "status": "ok" }`
+- **Health Check:** `GET /api/health` → HTTP 200, `Content-Type: application/json`, `{ "status": "ok" }`. Implemented as a TanStack Start server route (`.ts` with `server.handlers`). Requires `pnpm dev` before build to generate the route tree.
 - **Testing:** Vitest v4 + `@vitest/coverage-v8`, first test at 100% coverage
 - **CI Readiness:** All TanStack boilerplate removed, branded as Careers Builder. Docker image verified, health endpoint tested inside container.
 

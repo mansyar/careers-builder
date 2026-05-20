@@ -16,7 +16,7 @@ Goal: Bootable app with navigation shell and database connectivity.
 - Initialized TanStack Start project with TypeScript (strict mode)
 - Configured Vite 8, Nitro, TanStack Router (file-based routing)
 - Set up Dockerfile with `node:22-slim` (deviated from `node:20-slim` for pnpm v11 compat), Playwright Chromium, and `wget`
-- Health check endpoint at `GET /api/health` returns HTTP 200 with `{ "status": "ok" }`
+- Health check endpoint at `GET /api/health` returns HTTP 200 with `Content-Type: application/json` and `{ "status": "ok" }`. Uses TanStack Start server route pattern (`.ts` with `server.handlers`). Requires `pnpm dev` before build to generate route tree.
 - Dev toolchain: pnpm (deviated from npm), Vitest, `@vitest/coverage-v8`
 - All TanStack boilerplate removed — branded as Careers Builder
 - **Test:** Docker boots, `GET /api/health` returns 200 (tested: 100% coverage)
