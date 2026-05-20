@@ -46,4 +46,4 @@
 ## Phase: Review Fixes
 - [x] Task: Apply review suggestions (style fixes, boilerplate cleanup, version pinning) [ccfbfb8]
 
-> **Note:** The TanStack Start `server.handlers` pattern (`.ts` with `server: { handlers: { GET: ... } }`) is not supported in v1.168.x — the handler code is tree-shaken from the SSR bundle, causing HTTP 500. Even after upgrading from 1.168.8 → 1.168.9 the issue persists. Current workaround uses `createFileRoute` with `loader` + `component` (`.tsx`) which returns HTTP 200 with JSON rendered in a `<pre>` tag. Test again after a future TanStack Start release.
+> **Note:** The TanStack Start `server.handlers` pattern (`.ts` with `server: { handlers: { GET: ... } }`) works correctly but requires the route tree to be generated via `pnpm dev` (not build-only). Running `pnpm dev` once generates the proper route registry that includes server route handlers. After that, `pnpm run build` produces a working build where `GET /api/health` returns `{"status":"ok"}` with `Content-Type: application/json`.
