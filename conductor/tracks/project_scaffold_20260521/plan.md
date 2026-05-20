@@ -42,3 +42,5 @@
 - [x] Confirm Docker health check endpoint responds correctly — HTTP 200 at /api/health
 - [x] Verify `pnpm run build` produces a production build without errors
 - [x] Task: Conductor - User Manual Verification 'Phase 0.1 — Project Scaffold' (Protocol in workflow.md)
+
+> **Note:** The TanStack Start `server.handlers` pattern (`.ts` with `server: { handlers: { GET: ... } }`) is not fully supported in v1.168.8 — the handler code is tree-shaken from the SSR bundle. Current workaround uses `createFileRoute` with `loader` + `component` (`.tsx`) which returns HTTP 200 with JSON rendered in a `<pre>` tag. Upgrade TanStack Start to a newer version to use the native server route pattern.
