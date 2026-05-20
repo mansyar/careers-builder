@@ -2,8 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { getHealthStatus } from '../../lib/server/health'
 
 /**
- * Health check route at /api/health.
- * Returns JSON with status for Docker container health checks and monitoring.
+ * Health check route at GET /api/health.
+ * Renders JSON status for Docker container health checks and system monitoring.
  */
 export const Route = createFileRoute('/api/health')({
   loader: () => {
@@ -14,6 +14,7 @@ export const Route = createFileRoute('/api/health')({
 
 function HealthRoute() {
   const data = Route.useLoaderData()
+  // Render JSON inside a pre tag — Docker wget --spider checks HTTP 200 only
   return (
     <pre
       style={{
