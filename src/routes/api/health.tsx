@@ -3,18 +3,19 @@ import { createFileRoute } from '@tanstack/react-router'
 /**
  * Health check route at GET /api/health.
  *
- * NOTE: The ideal TanStack Start pattern for this is a `.ts` server route with
- * `server: { handlers: { GET: ... } }`. However, in TanStack Start v1.168.x,
- * the handler code in `.ts` server routes is tree-shaken from the SSR bundle,
- * causing the endpoint to return HTTP 500 instead of 200.
+ * The TanStack Start docs describe a `server.handlers` pattern for pure API
+ * routes (.ts files with server: { handlers: { GET: ... } }). However, the
+ * `server` property is not yet defined in the `@tanstack/router-core`
+ * route options interface (v1.171.4). Without the type-level support, the
+ * handler code gets tree-shaken from the SSR bundle, returning HTTP 500.
  *
- * This `.tsx` workaround uses a component-based route with a loader, which
+ * This .tsx workaround uses a component-based route with a loader, which
  * IS properly bundled. It renders JSON inside a `<pre>` tag and returns
- * HTTP 200 — sufficient for Docker `HEALTHCHECK` which only checks the
- * HTTP status code.
+ * HTTP 200 — sufficient for Docker HEALTHCHECK (which only checks status).
  *
- * Upgrade path: When a future version of TanStack Start properly bundles
- * server route handlers, switch to:
+ * Upgrade path: When @tanstack/router-core adds the `server` property to
+ * FilebaseRouteOptionsInterface, switch to:
+ *
  *   export const Route = createFileRoute('/api/health')({
  *     server: { handlers: { GET: async () => Response.json({ status: 'ok' }) } },
  *   })
