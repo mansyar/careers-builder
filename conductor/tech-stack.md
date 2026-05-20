@@ -33,7 +33,8 @@
 - **Image Size Target:** ≤ 1 GB
 
 ## Development Tools
-- **Package Manager:** npm
+- **Package Manager:** pnpm (preferred, faster and more disk-efficient)
+  - *Deviation Note (2026-05-21):* Original spec listed npm. Changed to pnpm per developer preference. All commands use `pnpm` instead of `npm`.
 - **Build Tool:** Vite
 - **Type Checking:** TypeScript (strict mode)
 - **Linting:** ESLint + TypeScript-ESLint

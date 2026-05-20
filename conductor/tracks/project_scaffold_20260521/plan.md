@@ -3,12 +3,12 @@
 ## Phase 0.1 — Project Scaffold
 
 ### Task 1: Initialize TanStack Start project with TypeScript
-- [ ] Create project scaffolding using `npm create tanstack-start@latest` with TypeScript template
-- [ ] Configure `tsconfig.json` with strict mode enabled
-- [ ] Install core dependencies: `@tanstack/react-router`, `@tanstack/start`, `react`, `react-dom`, `vinxi`, `vite`
-- [ ] Verify the project structure follows the required layout (`src/routes/`, `src/components/`, `src/lib/`, `src/server/`)
-- [ ] Run initial `npm run build` and verify zero errors
-- [ ] Verify TypeScript compiles without type errors
+- [x] Create project scaffolding using `npx @tanstack/cli create` with TypeScript template
+- [x] Configure `tsconfig.json` with strict mode enabled
+- [x] Install core dependencies: `@tanstack/react-router`, `@tanstack/start`, `react`, `react-dom`, `vinxi`, `vite`, `tailwindcss`, `vitest`
+- [x] Verify the project structure follows the required layout (`src/routes/`, `src/components/`, `src/lib/`, `src/server/`)
+- [x] Run initial `pnpm run build` and verify zero errors
+- [x] Verify TypeScript compiles without type errors [a0c6100]
 
 ### Task 2: Configure development toolchain
 - [ ] Configure TanStack Router with file-based routing in `app.config.ts`
