@@ -3,28 +3,28 @@
 ## Phase 1 — Linter & Formatter Configuration
 
 ### Task 1.1: Install ESLint, Prettier, and related dev dependencies
-- [ ] Install `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `eslint-plugin-react`, `prettier`, `eslint-config-prettier` as dev dependencies
+- [x] Install `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `eslint-plugin-react`, `prettier`, `eslint-config-prettier` as dev dependencies
 
 ### Task 1.2: Create ESLint flat configuration
-- [ ] Create `eslint.config.js` with TypeScript-ESLint parser and plugin
-- [ ] Include recommended rulesets for TypeScript and React
-- [ ] Add ignore patterns for `src/routeTree.gen.ts`, `dist/`, `coverage/`, `node_modules/`
-- [ ] Integrate Prettier config via `eslint-config-prettier` to avoid rule conflicts
+- [x] Create `eslint.config.js` with TypeScript-ESLint parser and plugin
+- [x] Include recommended rulesets for TypeScript and React
+- [x] Add ignore patterns for `src/routeTree.gen.ts`, `dist/`, `coverage/`, `node_modules/`
+- [x] Integrate Prettier config via `eslint-config-prettier` to avoid rule conflicts
 
 ### Task 1.3: Create Prettier configuration
-- [ ] Create `.prettierrc` with single quotes, trailing commas, print width 100
-- [ ] Create `.prettierignore` excluding generated files
+- [x] Create `.prettierrc` with single quotes, trailing commas, print width 100
+- [x] Create `.prettierignore` excluding generated files
 
 ### Task 1.4: Add PNPM scripts for linting and formatting
-- [ ] Add script: `"lint": "eslint src/"`
-- [ ] Add script: `"format": "prettier --write src/"`
-- [ ] Add script: `"format:check": "prettier --check src/"`
+- [x] Add script: `"lint": "eslint src/"`
+- [x] Add script: `"format": "prettier --write src/"`
+- [x] Add script: `"format:check": "prettier --check src/"`
 
 ### Task 1.5: Test the ESLint and Prettier configuration
-- [ ] **Write test:** Create `src/lib/__tests__/lint-config.spec.ts` that verifies the ESLint config loads without errors
-- [ ] **Write test:** Verify `.prettierrc` is valid JSON and contains expected settings
-- [ ] **Implement:** Run `pnpm lint` to confirm zero errors on current codebase
-- [ ] **Implement:** Run `pnpm format:check` to confirm all files are already formatted
+- [x] **Write test:** Create `src/lib/__tests__/lint-config.spec.ts` that verifies the ESLint config loads without errors
+- [x] **Write test:** Verify `.prettierrc` is valid JSON and contains expected settings
+- [x] **Implement:** Run `pnpm lint` to confirm zero errors on current codebase
+- [x] **Implement:** Run `pnpm format:check` to confirm all files are already formatted
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 1 — Linter & Formatter Configuration' (Protocol in workflow.md)
 
