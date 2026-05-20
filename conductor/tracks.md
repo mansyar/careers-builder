@@ -4,6 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Pre-Commit & Pre-Push Checks**
+- [~] **Track: Pre-Commit & Pre-Push Checks**
 *Link: [./tracks/git-hooks-setup_20260521/](./tracks/git-hooks-setup_20260521/)*
 

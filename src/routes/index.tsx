@@ -1,6 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({ component: App });
 
 function App() {
   return (
@@ -13,8 +13,8 @@ function App() {
           Build your CV. Find your next role.
         </h1>
         <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-          A private, AI-powered CV Builder and Smart Job Opportunity Searcher.
-          All your data stays on your machine.
+          A private, AI-powered CV Builder and Smart Job Opportunity Searcher. All your data stays
+          on your machine.
         </p>
         <div className="flex flex-wrap gap-3">
           <a
@@ -50,13 +50,11 @@ function App() {
             className="island-shell feature-card rise-in rounded-2xl p-5"
             style={{ animationDelay: `${index * 90 + 80}ms` }}
           >
-            <h2 className="mb-2 text-base font-semibold text-[var(--sea-ink)]">
-              {title}
-            </h2>
+            <h2 className="mb-2 text-base font-semibold text-[var(--sea-ink)]">{title}</h2>
             <p className="m-0 text-sm text-[var(--sea-ink-soft)]">{desc}</p>
           </article>
         ))}
       </section>
     </main>
-  )
+  );
 }
