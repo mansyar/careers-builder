@@ -46,4 +46,4 @@
 ## Phase: Review Fixes
 - [x] Task: Apply review suggestions (style fixes, boilerplate cleanup, version pinning) [ccfbfb8]
 
-> **Note:** The TanStack Start `server.handlers` pattern (`.ts` with `server: { handlers: { GET: ... } }`) is not fully supported in v1.168.8 — the handler code is tree-shaken from the SSR bundle. Current workaround uses `createFileRoute` with `loader` + `component` (`.tsx`) which returns HTTP 200 with JSON rendered in a `<pre>` tag. Upgrade TanStack Start to a newer version to use the native server route pattern.
+> **Note:** The TanStack Start `server.handlers` pattern (`.ts` with `server: { handlers: { GET: ... } }`) is not supported in v1.168.x — the handler code is tree-shaken from the SSR bundle, causing HTTP 500. Even after upgrading from 1.168.8 → 1.168.9 the issue persists. Current workaround uses `createFileRoute` with `loader` + `component` (`.tsx`) which returns HTTP 200 with JSON rendered in a `<pre>` tag. Test again after a future TanStack Start release.
