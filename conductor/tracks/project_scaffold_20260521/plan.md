@@ -43,4 +43,7 @@
 - [x] Verify `pnpm run build` produces a production build without errors
 - [x] Task: Conductor - User Manual Verification 'Phase 0.1 — Project Scaffold' (Protocol in workflow.md)
 
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions (style fixes, boilerplate cleanup, version pinning) [ccfbfb8]
+
 > **Note:** The TanStack Start `server.handlers` pattern (`.ts` with `server: { handlers: { GET: ... } }`) is not fully supported in v1.168.8 — the handler code is tree-shaken from the SSR bundle. Current workaround uses `createFileRoute` with `loader` + `component` (`.tsx`) which returns HTTP 200 with JSON rendered in a `<pre>` tag. Upgrade TanStack Start to a newer version to use the native server route pattern.
