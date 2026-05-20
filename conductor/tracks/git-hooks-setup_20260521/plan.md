@@ -30,7 +30,7 @@
 
 ---
 
-## Phase 2 — File Size Check & Pre-Commit Hooks
+## Phase 2 — File Size Check & Pre-Commit Hooks [checkpoint: c472d36]
 
 ### Task 2.1: Create file size check script
 - [~] Create `scripts/check-file-size.mjs` that reads a file path and exits with error if lines > 500
@@ -68,7 +68,7 @@
 
 ---
 
-## Phase 3 — Pre-Push Checks
+## Phase 3 — Pre-Push Checks [checkpoint: c472d36]
 
 ### Task 3.1: Configure TypeScript type check script
 - [x] Verify `tsc --noEmit` works without errors on the current codebase
