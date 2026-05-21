@@ -21,13 +21,13 @@ Goal: Create all decoupled, testable handler functions for CV profile and versio
     - [x] Write failing test: primitive values in patch replace primitives in target
     - [x] Implement deepMerge(target, source) in `src/lib/server/deep-merge.ts`
     - [x] Verify all tests pass
-- [ ] Task 1.2: createCvProfile handler — create profile + first empty version
-    - [ ] Write failing test: auto-creates default user (id=1) if missing
-    - [ ] Write failing test: creates a cv_profiles row with user_id=1
-    - [ ] Write failing test: auto-creates first cv_profile_versions row (version_number=1, version_label='Initial', full_cv_json='{}')
-    - [ ] Write failing test: returns { id, activeVersionId }
-    - [ ] Implement createCvProfile(db) handler
-    - [ ] Verify all tests pass
+- [x] Task 1.2: createCvProfile handler — create profile + first empty version (8e0ae98)
+    - [x] Write failing test: auto-creates default user (id=1) if missing
+    - [x] Write failing test: creates a cv_profiles row with user_id=1
+    - [x] Write failing test: auto-creates first cv_profile_versions row (version_number=1, version_label='Initial', full_cv_json='{}')
+    - [x] Write failing test: returns { id, activeVersionId }
+    - [x] Implement createCvProfile(db) handler
+    - [x] Verify all tests pass
 - [ ] Task 1.3: listVersions handler — list all versions for a profile
     - [ ] Write failing test: returns versions array ordered by version_number DESC
     - [ ] Write failing test: returns activeVersionId from cv_profiles
