@@ -40,7 +40,7 @@ export function TagInput({
     <div className="flex flex-wrap items-center gap-2 rounded-lg border border-[var(--chip-line)] bg-white px-3 py-2">
       {tags.map((tag, index) => (
         <span
-          key={`${tag}-${index}`}
+          key={`${index}-${tag}`}
           className="flex items-center gap-1 rounded-full bg-[var(--chip-bg)] px-2.5 py-1 text-sm text-[var(--sea-ink)]"
         >
           {tag}

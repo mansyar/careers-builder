@@ -71,6 +71,9 @@ function getDefaultFormData(): CvFormData {
   };
 }
 
+// Helper to extract typed fields from the raw JSON payload from the server.
+// Type assertions are safe here because the schema is controlled server-side
+// (serialized from the same TypeScript interfaces that define the form data).
 function mapJsonToFormData(json: Record<string, unknown>): CvFormData {
   const contact = (json.contact as ContactData) ?? getDefaultFormData().contact;
   const summary = (json.summary as string) ?? '';
@@ -284,13 +287,7 @@ function CvBuilder() {
         <CollapsibleSection
           title="Skills"
           defaultOpen
-          emptyText="No skills added yet. Add one?"
-          onAdd={() =>
-            setFormData((prev) => ({
-              ...prev,
-              skills: [...prev.skills, ''],
-            }))
-          }
+          emptyText="Type a skill below and press Enter to add it."
         >
           <SkillsSection
             data={formData.skills}

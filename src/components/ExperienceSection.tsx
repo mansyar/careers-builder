@@ -33,7 +33,11 @@ export function ExperienceSection({ data, onChange }: ExperienceSectionProps) {
     onChange(data.filter((_, i) => i !== index));
   };
 
-  const updateEntry = (index: number, field: keyof ExperienceEntry, value: unknown) => {
+  const updateEntry = (
+    index: number,
+    field: keyof ExperienceEntry,
+    value: string | boolean | string[],
+  ) => {
     const updated = data.map((entry, i) => (i === index ? { ...entry, [field]: value } : entry));
     onChange(updated);
   };
@@ -159,6 +163,23 @@ export function ExperienceSection({ data, onChange }: ExperienceSectionProps) {
                 />
               </div>
             )}
+            <div className="col-span-2">
+              <label className="mb-1 block text-xs font-medium text-[var(--sea-ink-soft)]">
+                Description (one per line)
+              </label>
+              <textarea
+                value={entry.description.join('\n')}
+                onChange={(e) =>
+                  updateEntry(
+                    index,
+                    'description',
+                    e.target.value.split('\n').filter((line) => line.trim() !== ''),
+                  )
+                }
+                rows={3}
+                className="w-full rounded-lg border border-[var(--chip-line)] bg-white px-3 py-2 text-sm outline-none focus:border-[var(--sea-ink)]"
+              />
+            </div>
           </div>
         </div>
       ))}
