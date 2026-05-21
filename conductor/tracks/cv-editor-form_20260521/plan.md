@@ -1,31 +1,30 @@
 # Track: Track 1.2 — Manual CV Editor Form
 
-## Phase 1: CV Form Data Layer & Route Setup
+## Phase 1: CV Form Data Layer & Route Setup [checkpoint: 0f43887]
 
 **Goal:** Wire up the `/cv-builder` route with a TanStack Router loader that initializes the CV profile, fetches the active version, and caches data for offline access.
 
-- [ ] **Task: Profile initialization service**
-    - [ ] Write failing test: loader calls `createCvProfile()` directly (imported from handler) when no profile exists
-    - [ ] Implement: profile initialization logic — import and call `createCvProfile()` from `src/lib/server/cv-profiles.ts` directly (not via HTTP fetch; follows the project's decoupled handler pattern)
-    - [ ] Write failing test: profileId is persisted to localStorage after creation
-    - [ ] Implement: localStorage persistence for profileId on first creation
-    - [ ] Write failing test: loader looks up profileId from localStorage on subsequent visits
-    - [ ] Write failing test: loader falls back to DB query (`SELECT ... FROM cv_profiles WHERE user_id = 1 ORDER BY id DESC LIMIT 1`) when localStorage is empty
-    - [ ] Implement: lookup logic — localStorage first, DB fallback second
-    - [ ] Write failing test: loader calls `getVersion()` directly to fetch active version data
-    - [ ] Implement: fetch logic — import and call `getVersion()` from `src/lib/server/cv-profiles.ts` directly
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: Route loader integration**
-    - [ ] Write failing test: cv-builder route exports loader with correct shape
-    - [ ] Implement: create `src/routes/_app/cv-builder.loader.ts` with the server-side loader logic (decoupled handler pattern, consistent with `src/lib/server/cv-profiles.ts`)
-    - [ ] Implement: wire the loader into `/_app/cv-builder.tsx` using `createFileRoute` with `loader` option
-    - [ ] Implement: pass `profileId`, `activeVersionId`, and `full_cv_json` as loader return data to the component
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: Offline caching**
-    - [ ] Write failing test: loader data survives client-side navigation (TanStack Router built-in cache)
-    - [ ] Implement: rely on TanStack Router's built-in client-side data caching (no `gcTime` — that is a TanStack Query concept, not Router). Configure `staleTime` for preloading behavior. Router loaders cache data automatically across SPA navigation.
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)**
+- [x] **Task: Profile initialization service**
+    - [x] Write failing test: loader calls `createCvProfile()` directly (imported from handler) when no profile exists
+    - [x] Implement: profile initialization logic — `cv-loader.ts` imports and calls `createCvProfile()` from `../cv-profiles.ts`
+    - [x] Write failing test: profileId is persisted to localStorage after creation
+    - [x] Implement: localStorage persistence for profileId on first creation (useEffect in cv-builder.tsx)
+    - [x] Write failing test: loader looks up profileId from localStorage on subsequent visits
+    - [x] Write failing test: loader falls back to DB query (`SELECT ... FROM cv_profiles WHERE user_id = 1 ORDER BY id DESC LIMIT 1`) when localStorage is empty
+    - [x] Implement: lookup logic — loadOrCreateProfile checks DB for user 1 profile; component stores/reads from localStorage
+    - [x] Write failing test: loader calls `getVersion()` directly to fetch active version data
+    - [x] Implement: fetch logic — `cv-loader.ts` imports and calls `getVersion()` from `../cv-profiles.ts`
+    - [x] Verify tests pass (Green phase for server function)
+- [x] **Task: Route loader integration**
+    - [x] Write failing test: cv-builder route exports loader with correct shape
+    - [x] Implement: create `src/lib/server/cv-loader-server.ts` with the server-side loader logic via `createServerFn` (decoupled handler pattern, consistent with `src/lib/server/cv-profiles.ts`)
+    - [x] Implement: wire the loader into `/_app/cv-builder.tsx` using `createFileRoute` with `loader` option
+    - [x] Implement: pass `profileId`, `activeVersionId`, and `full_cv_json` as loader return data to the component
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: Offline caching**
+    - [x] Write failing test: loader data survives client-side navigation (TanStack Router built-in cache)
+    - [x] Implement: rely on TanStack Router's built-in client-side data caching. Configure `staleTime: 30_000` for preloading behavior. Router loaders cache data automatically across SPA navigation.
+    - [x] Verify tests pass (Green phase)
 
 ## Phase 2: Section Form Components
 
