@@ -12,7 +12,7 @@ Goal: Create the persistent sidebar navigation component, update Header, use Tan
     - [ ] Remove Home, About, Features inline nav links from `src/components/Header.tsx` (note: "Features" link is a bug — it points to `/about`)
     - [ ] Keep only the brand logo/link and ThemeToggle
     - [ ] Update any tests that check for the removed links
-- [ ] Task 1.2: Create persistent Sidebar component (`src/components/Sidebar.tsx`)
+- [x] Task 1.2: Create persistent Sidebar component (`src/components/Sidebar.tsx`) [c7277e6]
     - [ ] Write failing test (jsdom env): sidebar renders with three nav items (Home, CV Builder, Job Search)
     - [ ] Write failing test (jsdom env): active route is highlighted
     - [ ] Implement `Sidebar` component using TanStack Router's `<Link>` with `activeProps`
