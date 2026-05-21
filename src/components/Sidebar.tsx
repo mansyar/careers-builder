@@ -85,12 +85,13 @@ export function Sidebar() {
         </svg>
       </button>
 
-      {/* Backdrop overlay */}
+      {/* Backdrop overlay — interactive button so screen readers can dismiss sidebar */}
       {isMobileOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/30"
+        <button
+          type="button"
+          className="fixed inset-0 z-30 bg-black/30 cursor-default"
           onClick={() => setIsMobileOpen(false)}
-          aria-hidden="true"
+          aria-label="Close navigation menu"
         />
       )}
 
