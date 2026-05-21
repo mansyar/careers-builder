@@ -134,6 +134,26 @@ A private, full-stack desktop web application running on the user's laptop, serv
 ---
 ## 9. Implementation History
 
+### Track 1.2 — Manual CV Editor Form (Completed: 2026-05-22)
+- **Route:** `/cv-builder` under `_app` layout — full-featured manual CV editing form.
+- **Profile Initialization:** Server function `getCvProfileData` (via `createServerFn` in `src/lib/server/cv-loader-server.ts`) auto-creates a CV profile on first visit or returns existing data. `profileId` persisted to `localStorage`; TanStack Router loader re-fetches on subsequent visits with built-in SPA caching (`staleTime: 30s`).
+- **Sections (6 collapsible panels, all open by default):**
+  - *Contact:* name (required), email, phone, location, LinkedIn URL, website URL.
+  - *Executive Summary:* textarea with 500-word counter and over-limit visual warning.
+  - *Experience:* repeatable entries with company, role, location, start/end dates, "Currently working here" checkbox (hides endDate), add/remove/reorder, description (one bullet per line).
+  - *Education:* repeatable entries with institution, degree, field, start/end dates, GPA.
+  - *Skills:* tag-style input — type and press Enter to add, click X to remove, case-insensitive duplicate prevention.
+  - *Projects:* repeatable entries with name, role, description, technologies (tag input), URL.
+- **Save Flow:** "Save Changes" button calls `PUT /api/cv/:profileId/version/:activeVersionId` with `{ patch: formData }`. On success: inline "Saved!" badge (auto-fades 2s), new `activeVersionId` stored in localStorage. On failure: inline error banner with "Retry" button. Copy-on-write ensures each save creates a new version.
+- **Offline:** All form fields editable without network. Save button shows disabled cursor-not-allowed state with "Come back online to save changes" tooltip when `navigator.onLine === false`.
+- **Loading State:** Skeleton shimmer panels (3 animated cards) rendered via TanStack Router `pendingComponent` while loader resolves.
+- **Architecture:**
+  - Server function: `src/lib/server/cv-loader-server.ts` (TanStack Start `createServerFn`)
+  - Profile logic: `src/lib/server/cv-loader.ts` (`loadOrCreateProfile` — create or find existing)
+  - Section components: `CollapsibleSection`, `TagInput`, `ContactSection`, `ExecutiveSummarySection`, `ExperienceSection`, `EducationSection`, `SkillsSection`, `ProjectsSection` in `src/components/`
+- **Testing:** 197 tests passing across 30 test files. Covers all 6 sections rendering, save flow (success, failure, retry), offline state, collapsible toggle, localStorage persistence, skeleton shimmer.
+- **Coverage:** 83.65% statements, 83.09% branches, 86.86% lines (function coverage gap from pre-existing server-side files).
+
 ### Track 1.1 — CV Profile & Version API (Completed: 2026-05-21)
 - **POST /api/cv:** Creates a new CV profile with auto-created user (if missing), first empty version, and returns `{ id, activeVersionId }`. All DB operations wrapped in a transaction.
 - **GET /api/cv/:cvProfileId/versions:** Lists all versions for a profile ordered by `version_number DESC`, includes `activeVersionId`.
