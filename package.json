@@ -20,12 +20,11 @@
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
       "eslint --fix",
-      "prettier --write"
+      "prettier --write",
+      "node scripts/check-file-size.mjs"
     ],
     "src/**/*.{css,json,md}": [
-      "prettier --write"
-    ],
-    "src/**/*.{ts,tsx,css,json,md}": [
+      "prettier --write",
       "node scripts/check-file-size.mjs"
     ],
     "scripts/**/*.mjs": [
