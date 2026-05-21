@@ -55,10 +55,10 @@ export const Route = createFileRoute('/api/cv/$cvProfileId/version/$versionId')(
         } catch (error) {
           const message = error instanceof Error ? error.message : 'Internal server error';
           // Map known handler errors to HTTP status codes
-          if (message.includes('profile not found') || message.includes('version not found')) {
+          if (message === 'CV profile not found' || message === 'CV version not found') {
             return Response.json({ error: message, code: 'NOT_FOUND' }, { status: 404 });
           }
-          if (message.includes('belongs to another profile')) {
+          if (message === 'Version belongs to another profile') {
             return Response.json({ error: message, code: 'CONFLICT' }, { status: 409 });
           }
           return Response.json({ error: message, code: 'INTERNAL_ERROR' }, { status: 500 });

@@ -6,15 +6,7 @@ export interface CreateCvProfileResult {
   activeVersionId: number;
 }
 
-/**
- * Creates a new CV profile with a first empty version.
- *
- * - Auto-creates default user (id=1) if missing
- * - Creates a cv_profiles row for the user
- * - Auto-creates first cv_profile_versions row (version_number=1, version_label='Initial', full_cv_json='{}')
- * - Updates cv_profiles.active_version_id to point to the new version
- * - All operations wrapped in a transaction
- */
+/** Result shape for the listVersions handler. */
 export interface ListVersionsResult {
   versions: Array<{
     id: number;
@@ -108,6 +100,15 @@ export function getVersion(
   };
 }
 
+/**
+ * Creates a new CV profile with a first empty version.
+ *
+ * - Auto-creates default user (id=1) if missing
+ * - Creates a cv_profiles row for the user
+ * - Auto-creates first cv_profile_versions row (version_number=1, version_label='Initial', full_cv_json='{}')
+ * - Updates cv_profiles.active_version_id to point to the new version
+ * - All operations wrapped in a transaction
+ */
 export function createCvProfile(db: Database.Database): CreateCvProfileResult {
   const result = db.transaction(() => {
     // Ensure default user exists
