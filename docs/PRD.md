@@ -134,6 +134,17 @@ A private, full-stack desktop web application running on the user's laptop, serv
 ---
 ## 9. Implementation History
 
+### Track 1.1 — CV Profile & Version API (Completed: 2026-05-21)
+- **POST /api/cv:** Creates a new CV profile with auto-created user (if missing), first empty version, and returns `{ id, activeVersionId }`. All DB operations wrapped in a transaction.
+- **GET /api/cv/:cvProfileId/versions:** Lists all versions for a profile ordered by `version_number DESC`, includes `activeVersionId`.
+- **GET /api/cv/:cvProfileId/version/:versionId:** Fetches a single version with full `full_cv_json`. Returns 404 if profile or version doesn't exist.
+- **PUT /api/cv/:cvProfileId/version/:versionId:** Updates CV data via deep merge with copy-on-write semantics — updating the active version creates a new version row (immutability), updating a historical version mutates in-place. Accepts optional `versionLabel` for meaningful version naming.
+- **Architecture:** Decoupled handler pattern — business logic in `src/lib/server/cv-profiles.ts` (4 handlers: `createCvProfile`, `listVersions`, `getVersion`, `updateVersion`), thin TanStack Start server routes wrapping each handler.
+- **Deep Merge Utility:** `deepMerge()` in `src/lib/server/deep-merge.ts` — merges nested objects (preserving existing keys), replaces arrays, handles null/undefined gracefully.
+- **Coverage:** Route files excluded from coverage (thin wrappers). Handler layer at 91% coverage. Overall project at 88.23%.
+- **Testing:** 102 tests passing (21 test files). Full-flow acceptance test (`cv-acceptance.spec.ts`) covers create → PUT → GET → copy-on-write → historical immutability.
+- **Deviations:** `POST /api/cv` added (not in original TDD §4 — required for profile creation). PUT response includes `versionLabel`, `createdAt`, and `full_cv_json` beyond TDD spec (reduces client round-trips). PUT request accepts optional `versionLabel`.
+
 ### Track 0.3 — UI Shell + Database Bootstrap (Completed: 2026-05-21)
 - **Sidebar Navigation:** Persistent left sidebar with Home, CV Builder, and Job Search links. Replaced header nav links (removed Home, About, Features). Active route highlighting via TanStack Router `activeProps`.
 - **Responsive Design:** Sidebar collapses to hamburger toggle on viewports < 768px with slide animation and backdrop overlay.

@@ -48,12 +48,14 @@ Goal: Bootable app with navigation shell and database connectivity.
 
 Goal: Full CRUD for CV profiles and versions. Manual editing works. No AI yet.
 
-### Track 1.1 — CV Profile & Version API
+### Track 1.1 — CV Profile & Version API ✅ *(Complete — 2026-05-21)*
 - `POST /api/cv` — create profile (auto-creates first empty version)
 - `GET /api/cv/:cvProfileId/versions` — list versions
 - `GET /api/cv/:cvProfileId/version/:versionId` — get single version JSON
 - `PUT /api/cv/:cvProfileId/version/:versionId` — update version (deep merge, copy-on-write)
-- **Test:** Create profile → add data via PUT → verify via GET → copy-on-write creates new version
+- Decoupled handler pattern: business logic in `src/lib/server/cv-profiles.ts`, thin TanStack Start server routes
+- Full TDD cycle (Red → Green) for all 4 handlers: deepMerge, createCvProfile, listVersions, getVersion, updateVersion
+- **Test:** 102 tests passing, 88.23% overall coverage (handler layer at 91%). Create profile → add data via PUT → verify via GET → copy-on-write creates new version → historical versions remain immutable.
 
 ### Track 1.2 — Manual CV Editor Form
 - Frontend form renders all CV sections (Contact, Executive Summary, Experience, Education, Skills, Projects)
