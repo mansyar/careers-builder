@@ -4,7 +4,7 @@ Implementation order: UI Shell first (faster visible progress, no database depen
 
 ---
 
-## Phase 1 — Sidebar Navigation & Routes
+## Phase 1 — Sidebar Navigation & Routes [checkpoint: 408f4b1]
 
 Goal: Create the persistent sidebar navigation component, update Header, use TanStack Router route nesting (`_app.tsx` layout), add CV Builder and Job Search routes with empty states, and implement responsive mobile behavior.
 
