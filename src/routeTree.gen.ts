@@ -13,9 +13,12 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiCvRouteImport } from './routes/api/cv'
 import { Route as AppJobSearchRouteImport } from './routes/_app/job-search'
 import { Route as AppCvBuilderRouteImport } from './routes/_app/cv-builder'
 import { Route as ApiInternalDebugDbSchemaRouteImport } from './routes/api/internal/debug/db-schema'
+import { Route as ApiCvCvProfileIdVersionsRouteImport } from './routes/api/cv/$cvProfileId/versions'
+import { Route as ApiCvCvProfileIdVersionVersionIdRouteImport } from './routes/api/cv/$cvProfileId/version/$versionId'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -36,6 +39,11 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
   path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCvRoute = ApiCvRouteImport.update({
+  id: '/api/cv',
+  path: '/api/cv',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppJobSearchRoute = AppJobSearchRouteImport.update({
   id: '/job-search',
   path: '/job-search',
@@ -52,22 +60,40 @@ const ApiInternalDebugDbSchemaRoute =
     path: '/api/internal/debug/db-schema',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiCvCvProfileIdVersionsRoute =
+  ApiCvCvProfileIdVersionsRouteImport.update({
+    id: '/$cvProfileId/versions',
+    path: '/$cvProfileId/versions',
+    getParentRoute: () => ApiCvRoute,
+  } as any)
+const ApiCvCvProfileIdVersionVersionIdRoute =
+  ApiCvCvProfileIdVersionVersionIdRouteImport.update({
+    id: '/$cvProfileId/version/$versionId',
+    path: '/$cvProfileId/version/$versionId',
+    getParentRoute: () => ApiCvRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/cv-builder': typeof AppCvBuilderRoute
   '/job-search': typeof AppJobSearchRoute
+  '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
+  '/api/cv/$cvProfileId/versions': typeof ApiCvCvProfileIdVersionsRoute
   '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
+  '/api/cv/$cvProfileId/version/$versionId': typeof ApiCvCvProfileIdVersionVersionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/cv-builder': typeof AppCvBuilderRoute
   '/job-search': typeof AppJobSearchRoute
+  '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
+  '/api/cv/$cvProfileId/versions': typeof ApiCvCvProfileIdVersionsRoute
   '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
+  '/api/cv/$cvProfileId/version/$versionId': typeof ApiCvCvProfileIdVersionVersionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -76,8 +102,11 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/_app/cv-builder': typeof AppCvBuilderRoute
   '/_app/job-search': typeof AppJobSearchRoute
+  '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
+  '/api/cv/$cvProfileId/versions': typeof ApiCvCvProfileIdVersionsRoute
   '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
+  '/api/cv/$cvProfileId/version/$versionId': typeof ApiCvCvProfileIdVersionVersionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -86,16 +115,22 @@ export interface FileRouteTypes {
     | '/about'
     | '/cv-builder'
     | '/job-search'
+    | '/api/cv'
     | '/api/health'
+    | '/api/cv/$cvProfileId/versions'
     | '/api/internal/debug/db-schema'
+    | '/api/cv/$cvProfileId/version/$versionId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/cv-builder'
     | '/job-search'
+    | '/api/cv'
     | '/api/health'
+    | '/api/cv/$cvProfileId/versions'
     | '/api/internal/debug/db-schema'
+    | '/api/cv/$cvProfileId/version/$versionId'
   id:
     | '__root__'
     | '/'
@@ -103,14 +138,18 @@ export interface FileRouteTypes {
     | '/about'
     | '/_app/cv-builder'
     | '/_app/job-search'
+    | '/api/cv'
     | '/api/health'
+    | '/api/cv/$cvProfileId/versions'
     | '/api/internal/debug/db-schema'
+    | '/api/cv/$cvProfileId/version/$versionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   AboutRoute: typeof AboutRoute
+  ApiCvRoute: typeof ApiCvRouteWithChildren
   ApiHealthRoute: typeof ApiHealthRoute
   ApiInternalDebugDbSchemaRoute: typeof ApiInternalDebugDbSchemaRoute
 }
@@ -145,6 +184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/cv': {
+      id: '/api/cv'
+      path: '/api/cv'
+      fullPath: '/api/cv'
+      preLoaderRoute: typeof ApiCvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/job-search': {
       id: '/_app/job-search'
       path: '/job-search'
@@ -166,6 +212,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiInternalDebugDbSchemaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/cv/$cvProfileId/versions': {
+      id: '/api/cv/$cvProfileId/versions'
+      path: '/$cvProfileId/versions'
+      fullPath: '/api/cv/$cvProfileId/versions'
+      preLoaderRoute: typeof ApiCvCvProfileIdVersionsRouteImport
+      parentRoute: typeof ApiCvRoute
+    }
+    '/api/cv/$cvProfileId/version/$versionId': {
+      id: '/api/cv/$cvProfileId/version/$versionId'
+      path: '/$cvProfileId/version/$versionId'
+      fullPath: '/api/cv/$cvProfileId/version/$versionId'
+      preLoaderRoute: typeof ApiCvCvProfileIdVersionVersionIdRouteImport
+      parentRoute: typeof ApiCvRoute
+    }
   }
 }
 
@@ -181,10 +241,23 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface ApiCvRouteChildren {
+  ApiCvCvProfileIdVersionsRoute: typeof ApiCvCvProfileIdVersionsRoute
+  ApiCvCvProfileIdVersionVersionIdRoute: typeof ApiCvCvProfileIdVersionVersionIdRoute
+}
+
+const ApiCvRouteChildren: ApiCvRouteChildren = {
+  ApiCvCvProfileIdVersionsRoute: ApiCvCvProfileIdVersionsRoute,
+  ApiCvCvProfileIdVersionVersionIdRoute: ApiCvCvProfileIdVersionVersionIdRoute,
+}
+
+const ApiCvRouteWithChildren = ApiCvRoute._addFileChildren(ApiCvRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   AboutRoute: AboutRoute,
+  ApiCvRoute: ApiCvRouteWithChildren,
   ApiHealthRoute: ApiHealthRoute,
   ApiInternalDebugDbSchemaRoute: ApiInternalDebugDbSchemaRoute,
 }
