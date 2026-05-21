@@ -59,7 +59,7 @@ Goal: Create all decoupled, testable handler functions for CV profile and versio
 
 ---
 
-## Phase 2 - API Route Wiring & Acceptance [checkpoint: TBD]
+## Phase 2 - API Route Wiring & Acceptance [checkpoint: 6add3d7]
 
 Goal: Wrap handler functions as thin TanStack Start server routes. Route tests are kept light since all business logic is already tested in Phase 1 — only the request/response wiring is verified here.
 
@@ -90,4 +90,8 @@ Goal: Wrap handler functions as thin TanStack Start server routes. Route tests a
     - [x] Verify all handler tests pass
     - [x] Verify coverage meets 80% threshold
     - [x] Run `CI=true pnpm test -- --coverage` and confirm
-- [~] Task 2.5: Document deviations in tech-stack.md
+- [x] Task 2.5: Document deviations in tech-stack.md (da3674c)
+    - [x] Add deviation note: POST /api/cv added (not in TDD §4)
+    - [x] Add deviation note: PUT response includes versionLabel + createdAt
+    - [x] Add deviation note: PUT request accepts optional versionLabel
+- [x] Task 2.6: Conductor - User Manual Verification 'Phase 2 - API Route Wiring & Acceptance' (Protocol in workflow.md)
