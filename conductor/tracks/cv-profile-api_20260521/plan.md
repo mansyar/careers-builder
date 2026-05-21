@@ -70,17 +70,17 @@ Goal: Wrap handler functions as thin TanStack Start server routes. Route tests a
 - `src/routes/api/__tests__/cv-acceptance.spec.ts` — Full flow acceptance test
 - `conductor/tech-stack.md` — Add deviation notes
 
-- [ ] Task 2.1: Create POST /api/cv route
-    - [ ] Implement route at `src/routes/api/cv.ts` calling createCvProfile
-    - [ ] Verify dev server starts and route is registered (`pnpm dev`)
-- [ ] Task 2.2: Create GET /api/cv/:cvProfileId/versions route
-    - [ ] Implement route at `src/routes/api/cv/$cvProfileId/versions.ts` calling listVersions
-    - [ ] Verify route is registered
-- [ ] Task 2.3: Create GET + PUT /api/cv/:cvProfileId/version/:versionId route
-    - [ ] Implement GET handler at `src/routes/api/cv/$cvProfileId/version/$versionId.ts` calling getVersion
-    - [ ] Implement PUT handler calling updateVersion
-    - [ ] Verify route is registered
-- [ ] Task 2.4: Write full-flow acceptance test
+- [x] Task 2.1: Create POST /api/cv route (d515a87)
+    - [x] Implement route at `src/routes/api/cv.ts` calling createCvProfile
+    - [x] Verify dev server starts and route is registered
+- [x] Task 2.2: Create GET /api/cv/:cvProfileId/versions route (bf5a95d)
+    - [x] Implement route at `src/routes/api/cv/$cvProfileId/versions.ts` calling listVersions
+    - [x] Verify route is registered
+- [x] Task 2.3: Create GET + PUT /api/cv/:cvProfileId/version/:versionId route (bf5a95d)
+    - [x] Implement GET handler at `src/routes/api/cv/$cvProfileId/version/$versionId.ts` calling getVersion
+    - [x] Implement PUT handler calling updateVersion
+    - [x] Verify route is registered
+- [~] Task 2.4: Write full-flow acceptance test
     - [ ] Create profile → verify { id, activeVersionId }
     - [ ] Add CV data via PUT → verify merged full_cv_json
     - [ ] Verify data via GET single version → matches PUT response
