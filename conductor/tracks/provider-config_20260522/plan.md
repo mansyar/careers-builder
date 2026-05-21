@@ -31,25 +31,25 @@ Goal: Build the server-side encryption service, provider settings CRUD, validati
     - [x] Handle missing secret file: throw descriptive error with recovery guidance
     - [x] Run tests and confirm they pass
 
-- [ ] Task 1.4: Write tests for provider settings handler (Red phase)
-    - [ ] Create `src/lib/server/provider-settings.spec.ts`
-    - [ ] Write test: `loadSettings` returns defaults when no settings exist (empty DB)
-    - [ ] Write test: `loadSettings` decrypts and returns stored settings with nested `provider` key
-    - [ ] Write test: `loadSettings` handles decryption failure gracefully — returns `apiKey: ''` with other fields intact (recovery mode)
-    - [ ] Write test: `saveSettings` encrypts apiKey and stores as `{ provider: { apiKey, baseUrl, modelId } }`
-    - [ ] Write test: `maskApiKey` returns correctly masked string (`sk-...xyz`)
-    - [ ] Write test: `maskApiKey` handles short keys (≤8 chars) by returning `'****'`
-    - [ ] Write test: `validateSettings` returns `{ valid: true }` on successful streamText call (mock `streamText`)
-    - [ ] Write test: `validateSettings` returns `{ valid: false, error }` on failure (mock `streamText` throws)
-    - [ ] Run tests and confirm they fail
+- [x] Task 1.4: Write tests for provider settings handler (Red phase)
+    - [x] Create `src/lib/server/provider-settings.spec.ts`
+    - [x] Write test: `loadSettings` returns defaults when no settings exist (empty DB)
+    - [x] Write test: `loadSettings` decrypts and returns stored settings with nested `provider` key
+    - [x] Write test: `loadSettings` handles decryption failure gracefully — returns `apiKey: ''` with other fields intact (recovery mode)
+    - [x] Write test: `saveSettings` encrypts apiKey and stores as `{ provider: { apiKey, baseUrl, modelId } }`
+    - [x] Write test: `maskApiKey` returns correctly masked string (`sk-...xyz`)
+    - [x] Write test: `maskApiKey` handles short keys (≤8 chars) by returning `'****'`
+    - [x] Write test: `validateSettings` returns `{ valid: true }` on successful streamText call (mock `streamText`)
+    - [x] Write test: `validateSettings` returns `{ valid: false, error }` on failure (mock `streamText` throws)
+    - [x] Run tests and confirm they fail
 
-- [ ] Task 1.5: Implement provider settings handler (`src/lib/server/provider-settings.ts`)
-    - [ ] Implement `maskApiKey(key: string): string`
-    - [ ] Implement `loadSettings(db)`: read `users.target_settings`, parse JSON, decrypt `provider.apiKey`, return config with nested structure
-    - [ ] Implement `saveSettings(db, { apiKey, baseUrl, modelId })`: encrypt key, structure as `{ provider: { apiKey: <encrypted>, baseUrl, modelId } }`, write JSON to `users.target_settings`
-    - [ ] Implement `loadSettings` decryption failure path: catch decrypt error, return `apiKey: ''` with `baseUrl` and `modelId` from stored JSON
-    - [ ] Implement `validateSettings({ apiKey, baseUrl, modelId })`: construct `openai(modelId, { baseURL })`, call `streamText({ model, prompt: 'Hi', maxTokens: 5 })`, return result
-    - [ ] Run tests and confirm they pass
+- [x] Task 1.5: Implement provider settings handler (`src/lib/server/provider-settings.ts`) [33ac9ea]
+    - [x] Implement `maskApiKey(key: string): string`
+    - [x] Implement `loadSettings(db)`: read `users.target_settings`, parse JSON, decrypt `provider.apiKey`, return config with nested structure
+    - [x] Implement `saveSettings(db, { apiKey, baseUrl, modelId })`: encrypt key, structure as `{ provider: { apiKey: <encrypted>, baseUrl, modelId } }`, write JSON to `users.target_settings`
+    - [x] Implement `loadSettings` decryption failure path: catch decrypt error, return `apiKey: ''` with `baseUrl` and `modelId` from stored JSON
+    - [x] Implement `validateSettings({ apiKey, baseUrl, modelId })`: construct `openai(modelId, { baseURL })`, call `streamText({ model, prompt: 'Hi', maxTokens: 5 })`, return result
+    - [x] Run tests and confirm they pass
 
 - [ ] Task 1.6: Write tests for server functions (Red phase)
     - [ ] Create `src/lib/server/provider-settings-server.spec.ts`
