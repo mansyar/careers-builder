@@ -21,7 +21,14 @@ Goal: Bootable app with navigation shell and database connectivity.
 - All TanStack boilerplate removed — branded as Careers Builder
 - **Test:** Docker boots, `GET /api/health` returns 200 (tested: 100% coverage)
 
-### Track 0.2 — UI Shell + Database Bootstrap
+### Track 0.2 — Dev Tooling & Git Hooks ✅ *(Complete — 2026-05-21)*
+- Configured ESLint + Prettier with flat config, TypeScript-ESLint, and React plugins
+- Set up Husky + lint-staged for pre-commit hooks (lint, format, file size check)
+- Set up pre-push hooks (TypeScript typecheck, 80% coverage threshold)
+- Added pnpm scripts: lint, format, format:check, typecheck, check:all
+- **Test:** 14 tests passing, 94% line coverage
+
+### Track 0.3 — UI Shell + Database Bootstrap
 - Render sidebar layout (CV Builder / Job Search navigation)
 - Initialize `better-sqlite3` + `sqlite-vec` at boot
 - Apply all structural tables via migrations (`users`, `cv_profiles`, `cv_profile_versions`, `job_postings`)

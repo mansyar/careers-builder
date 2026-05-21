@@ -330,6 +330,8 @@ Missing or invalid API key renders all chat/extract endpoints inoperable — the
 - Run Vitest unit + integration tests on every commit.
 - Run Playwright E2E tests nightly and on PR merge to main.
 - Target: ≥ 80% code coverage for database and embedding layers.
+- **Pre-commit gates:** ESLint linting + Prettier formatting + file size check (≤ 500 lines) via Husky + lint-staged.
+- **Pre-push gates:** TypeScript type check + coverage threshold (≥ 80%) enforced via Git hooks.
 
 ---
 
