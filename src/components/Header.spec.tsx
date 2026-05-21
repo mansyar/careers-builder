@@ -16,8 +16,18 @@ vi.mock('./ThemeToggle', () => ({
 
 // Mock TanStack Router Link to avoid needing router context in unit tests
 vi.mock('@tanstack/react-router', () => ({
-  Link: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => (
-    <a {...props}>{children}</a>
+  Link: ({
+    children,
+    to,
+    ...props
+  }: {
+    children?: React.ReactNode;
+    to?: string;
+    [key: string]: unknown;
+  }) => (
+    <a href={to} {...props}>
+      {children}
+    </a>
   ),
 }));
 
