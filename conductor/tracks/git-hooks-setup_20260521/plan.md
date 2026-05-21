@@ -94,3 +94,8 @@
 - [x] **Write test:** Simulate a push with all clean → verify push succeeds (check:all confirmed)
 
 - [x] Task: Conductor - User Manual Verification 'Phase 3 — Pre-Push Checks' (Protocol in workflow.md)
+
+---
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions (consolidate lint-staged patterns) [26a4687]
