@@ -8,7 +8,7 @@ Implementation order: UI Shell first (faster visible progress, no database depen
 
 Goal: Create the persistent sidebar navigation component, update Header, use TanStack Router route nesting (`_app.tsx` layout), add CV Builder and Job Search routes with empty states, and implement responsive mobile behavior.
 
-- [ ] Task 1.1: Update Header — remove nav links
+- [x] Task 1.1: Update Header — remove nav links [08941d8]
     - [ ] Remove Home, About, Features inline nav links from `src/components/Header.tsx` (note: "Features" link is a bug — it points to `/about`)
     - [ ] Keep only the brand logo/link and ThemeToggle
     - [ ] Update any tests that check for the removed links
