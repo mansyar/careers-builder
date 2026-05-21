@@ -61,6 +61,52 @@ export function listVersions(db: Database.Database, cvProfileId: number): ListVe
   return { versions, activeVersionId: profile.active_version_id };
 }
 
+export interface GetVersionResult {
+  id: number;
+  versionNumber: number;
+  versionLabel: string | null;
+  createdAt: string;
+  full_cv_json: Record<string, unknown>;
+}
+
+/**
+ * Fetches a single CV profile version with full_cv_json.
+ * Returns null if the version does not exist or does not belong to the specified profile.
+ */
+export function getVersion(
+  db: Database.Database,
+  cvProfileId: number,
+  versionId: number,
+): GetVersionResult | null {
+  const row = db
+    .prepare(
+      `SELECT id, version_number, version_label, created_at, full_cv_json
+       FROM cv_profile_versions
+       WHERE id = ? AND cv_profile_id = ?`,
+    )
+    .get(versionId, cvProfileId) as
+    | {
+        id: number;
+        version_number: number;
+        version_label: string | null;
+        created_at: string;
+        full_cv_json: string;
+      }
+    | undefined;
+
+  if (!row) {
+    return null;
+  }
+
+  return {
+    id: row.id,
+    versionNumber: row.version_number,
+    versionLabel: row.version_label,
+    createdAt: row.created_at,
+    full_cv_json: JSON.parse(row.full_cv_json),
+  };
+}
+
 export function createCvProfile(db: Database.Database): CreateCvProfileResult {
   const result = db.transaction(() => {
     // Ensure default user exists

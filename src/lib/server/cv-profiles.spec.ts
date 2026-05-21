@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import type Database from 'better-sqlite3';
 import { DatabaseManager } from './db';
 import { runStructuralMigrations } from './migrations';
-import { createCvProfile, listVersions } from './cv-profiles';
+import { createCvProfile, listVersions, getVersion } from './cv-profiles';
 
 // Helper to set up a fresh DB with a profile
 function setupProfile(db: Database.Database): number {
@@ -172,6 +172,55 @@ describe('listVersions', () => {
     const result = listVersions(db, 999);
     expect(result.versions).toEqual([]);
     expect(result.activeVersionId).toBeNull();
+    db.close();
+  });
+});
+
+describe('getVersion', () => {
+  beforeEach(() => {
+    DatabaseManager.resetInstance();
+  });
+
+  it('should return full version object with all fields', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+
+    const versionRow = db.prepare('SELECT id FROM cv_profile_versions').get() as { id: number };
+
+    const result = getVersion(db, profileId, versionRow.id);
+    expect(result).toBeDefined();
+    expect(result!.id).toBe(versionRow.id);
+    expect(result!.versionNumber).toBe(1);
+    expect(result!.versionLabel).toBe('Initial');
+    expect(result!.createdAt).toBeDefined();
+    expect(result!.full_cv_json).toEqual({});
+    db.close();
+  });
+
+  it('should return null when version does not exist', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    runStructuralMigrations(db);
+
+    const result = getVersion(db, 1, 999);
+    expect(result).toBeNull();
+    db.close();
+  });
+
+  it('should return null when version belongs to a different profile', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+
+    // Create a second profile
+    const profileId2 = createCvProfile(db).id;
+
+    // Get the version from profile 1
+    const versionRow = db
+      .prepare('SELECT id FROM cv_profile_versions WHERE cv_profile_id = ?')
+      .get(profileId) as { id: number };
+
+    // Try to get it via profile 2
+    const result = getVersion(db, profileId2, versionRow.id);
+    expect(result).toBeNull();
     db.close();
   });
 });
