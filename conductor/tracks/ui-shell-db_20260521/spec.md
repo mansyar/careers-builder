@@ -2,7 +2,7 @@
 
 ## Overview
 
-This track establishes the foundational application layout (sidebar navigation) and database infrastructure (SQLite initialization, migrations, and a debug endpoint). It transforms the current single-page shell into a navigable two-mode application with local data persistence.
+This track establishes the foundational application layout (persistent sidebar navigation) and database infrastructure (SQLite initialization, migrations, and a debug endpoint). It transforms the current single-page shell into a navigable two-mode application with local data persistence.
 
 ## Functional Requirements
 
@@ -10,17 +10,18 @@ This track establishes the foundational application layout (sidebar navigation) 
 
 - **Sidebar replaces header nav:** The existing header's inline navigation links (Home, About, Features) are removed. The header retains only the brand logo/link ("Careers Builder") and the ThemeToggle.
 - **Persistent left sidebar** with three navigation items:
-  - **Home** — links back to the landing page (`/`)
+  - **Home** — links to the landing page (`/`)
   - **CV Builder** — links to `/cv-builder` (shows empty state initially)
   - **Job Search** — links to `/job-search` (shows empty state initially)
 - **Sidebar behavior:**
-  - Visible only when the user is on CV Builder or Job Search routes
-  - Not rendered on the landing page (`/`) or the About page (`/about`)
-  - Active route highlighted with a visual indicator
-- **Route changes:**
-  - Create new file routes: `src/routes/cv-builder.tsx` and `src/routes/job-search.tsx`
-  - Both routes initially render an empty state component explaining the purpose of each view
-  - A shared layout component wraps these routes with the sidebar
+  - **Persistent on all routes** — the sidebar is always visible, matching the PRD requirement ("Persistent sidebar navigation toggling between CV Builder View and Job Search Matrix")
+  - Active route is highlighted with a visual indicator
+  - Content area shifts right to accommodate the sidebar width
+- **Route architecture:**
+  - The sidebar is rendered via a TanStack Router layout route (`_app.tsx` route group) that nests the sidebar-wrapped routes
+  - Routes under the `_app` layout: `/cv-builder` and `/job-search` (both render inside the sidebar layout)
+  - Routes outside the `_app` layout: `/` (landing page) and `/about` remain un-nested children of the root
+  - The `_app.tsx` layout renders the Sidebar component + `<Outlet />` for child content
 - **Empty states:**
   - CV Builder empty state: "No CV yet. Start the guided interview to build your CV." with a call-to-action button
   - Job Search empty state: "No job searches yet. Create a CV first to start searching." with appropriate messaging
@@ -29,12 +30,13 @@ This track establishes the foundational application layout (sidebar navigation) 
 ### 2. Database Initialization & Migrations
 
 - **Dependencies to install:**
-  - `better-sqlite3` — synchronous embedded SQLite engine
-  - `sqlite-vec` — virtual vector table extension
+  - `better-sqlite3` — synchronous embedded SQLite engine (native bindings; must be added to `pnpm.onlyBuiltDependencies`)
+  - `sqlite-vec` — virtual vector table extension (native bindings; must be added to `pnpm.onlyBuiltDependencies`)
   - `@types/better-sqlite3` (dev dependency)
 - **Database initialization:** A `DatabaseManager` singleton class at `src/lib/server/db.ts` that:
   - Opens/creates the SQLite database file at a configurable path (default: `./data/local_vault.db`)
-  - Loads the `sqlite-vec` extension at boot via `.loadExtension()`
+  - Supports `:memory:` for unit testing
+  - Loads the `sqlite-vec` extension at boot via `.loadExtension()` (mocked in unit tests)
   - Exposes the database instance to the rest of the application
 - **Migration runner:** A `runMigrations(db)` function at `src/lib/server/migrations.ts` that applies all migrations sequentially
 - **Migrations are idempotent:** All `CREATE TABLE` statements use `IF NOT EXISTS`
@@ -51,9 +53,10 @@ This track establishes the foundational application layout (sidebar navigation) 
 ### 3. Debug / Internal Endpoint
 
 - **Route:** `GET /api/internal/debug/db-schema`
-- **Access:** No authentication (local-only app). Must be implemented as a TanStack Start server route (`.ts` with `server.handlers`), following the same pattern as `src/routes/api/health.ts`
-- **Response:** JSON object with a `tables` array containing the name and column info of each table
-- **Purpose:** Used by automated tests to verify database tables exist after boot
+- **Architecture:** Decoupled into a handler function at `src/lib/server/db-schema.ts` and a thin route wrapper at `src/routes/api/internal/debug/db-schema.ts` — following the same pattern as `src/lib/server/health.ts` + `src/routes/api/health.ts`
+- **Handler function (`getDbSchema(db)`):** Accepts a database instance, queries `sqlite_master` to list all tables and their column info
+- **Response format:** `{ "tables": [ { "name": string, "columns": [{ "name": string, "type": string }] } ] }`
+- **Purpose:** Used by automated tests to verify database tables exist after boot. The handler function is unit-testable without route infrastructure
 
 ## Non-Functional Requirements
 
@@ -69,7 +72,7 @@ This track establishes the foundational application layout (sidebar navigation) 
 3. Navigating to `/job-search` shows empty state with sidebar visible
 4. The sidebar highlights the active route
 5. `GET /api/internal/debug/db-schema` returns a JSON response listing all 6 tables (4 structural + 2 vector)
-6. The landing page (`/`) renders unchanged with hero and feature cards — no sidebar visible
+6. The landing page (`/`) renders unchanged with hero and feature cards — sidebar is visible (persistent layout)
 7. All database tables are confirmed to exist via the debug endpoint
 8. Running migrations a second time succeeds without errors (idempotent)
 
@@ -79,3 +82,4 @@ This track establishes the foundational application layout (sidebar navigation) 
 - No Playwright fixtures or E2E tests — only Vitest unit tests for this track
 - No data seeding or mock data
 - No user creation flow
+- The TDD §4 defines a separate `GET /api/internal/debug/latest-cv` endpoint for E2E CV data verification — that endpoint is out of scope for this track and will be implemented in a later track (Track 1.1 or Track 6.x)

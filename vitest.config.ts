@@ -17,8 +17,6 @@ export default defineConfig({
       exclude: [
         'src/routeTree.gen.ts',
         'src/router.tsx',
-        'src/routes/**',
-        'src/components/Header.tsx',
         'src/**/*.spec.ts',
         'src/**/*.spec.tsx',
         'src/**/*.test.ts',
