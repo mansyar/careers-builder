@@ -105,6 +105,21 @@ Response:
 ```
 Returns HTTP 200 with `Content-Type: application/json`. Used by Docker `HEALTHCHECK` and system monitoring. Implemented as a TanStack Start server route at `src/routes/api/health.ts` using `createFileRoute` with `server: { handlers: { GET: ... } }`. Requires `pnpm dev` to run at least once before production build to generate the route tree — build-only will tree-shake the handler code.
 
+#### `GET /api/internal/debug/db-schema` — Debug Database Schema *(Implemented — Track 0.3)*
+```
+Response:
+{
+  "tables": [
+    {
+      "name": "users",
+      "columns": [{ "name": "id", "type": "INTEGER" }, { "name": "created_at", "type": "DATETIME" }, ...]
+    },
+    ...
+  ]
+}
+```
+Returns JSON listing all database tables and their columns. Uses a decoupled handler at `src/lib/server/db-schema.ts` (querying `sqlite_master` + `PRAGMA table_info`) wrapped by a thin TanStack Start server route at `src/routes/api/internal/debug/db-schema.ts`. Used by automated tests to verify database tables exist after boot.
+
 #### `POST /api/chat` — Conversational Interview
 ```
 Request:

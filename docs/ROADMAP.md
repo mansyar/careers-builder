@@ -28,13 +28,19 @@ Goal: Bootable app with navigation shell and database connectivity.
 - Added pnpm scripts: lint, format, format:check, typecheck, check:all
 - **Test:** 14 tests passing, 94% line coverage
 
-### Track 0.3 — UI Shell + Database Bootstrap
-- Render sidebar layout (CV Builder / Job Search navigation)
-- Initialize `better-sqlite3` + `sqlite-vec` at boot
-- Apply all structural tables via migrations (`users`, `cv_profiles`, `cv_profile_versions`, `job_postings`)
-- Apply virtual vector tables (`vec_cv_profile_versions`, `vec_job_postings`)
-- UI shows empty state for both views
-- **Test:** App boots, sidebar renders, database tables exist (via internal debug endpoint)
+### Track 0.3 — UI Shell + Database Bootstrap ✅ *(Complete — 2026-05-21)*
+- Persistent sidebar with Home, CV Builder, Job Search navigation (active route highlighting)
+- Header nav links removed (brand + ThemeToggle only)
+- Responsive sidebar: desktop always visible, mobile hamburger toggle with backdrop overlay
+- Routes: `/cv-builder` and `/job-search` nested under `_app` layout route with empty states
+- Landing page hero buttons and clickable feature cards navigate to both routes
+- `better-sqlite3` + `sqlite-vec` installed and initialized at boot
+- `DatabaseManager` singleton (configurable path, `:memory:` for tests, WAL mode, FK enforcement)
+- Idempotent migrations for `users`, `cv_profiles`, `cv_profile_versions`, `job_postings`, `vec_cv_profile_versions`, `vec_job_postings`
+- `GET /api/internal/debug/db-schema` returns all table/column info (decoupled handler pattern)
+- Landpage page landing page updated with working "Build Your CV" and "Search Jobs" CTA buttons
+- Dev tooling: coverage exclusion narrowed to include `src/routes/**`, `pnpm dev --port 3001`
+- **Test:** 50 tests passing, 14 test files, 92.45% component coverage, 81.48% DB layer coverage
 
 ---
 

@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as AppJobSearchRouteImport } from './routes/_app/job-search'
 import { Route as AppCvBuilderRouteImport } from './routes/_app/cv-builder'
+import { Route as ApiInternalDebugDbSchemaRouteImport } from './routes/api/internal/debug/db-schema'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -45,6 +46,12 @@ const AppCvBuilderRoute = AppCvBuilderRouteImport.update({
   path: '/cv-builder',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiInternalDebugDbSchemaRoute =
+  ApiInternalDebugDbSchemaRouteImport.update({
+    id: '/api/internal/debug/db-schema',
+    path: '/api/internal/debug/db-schema',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -52,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/cv-builder': typeof AppCvBuilderRoute
   '/job-search': typeof AppJobSearchRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,6 +67,7 @@ export interface FileRoutesByTo {
   '/cv-builder': typeof AppCvBuilderRoute
   '/job-search': typeof AppJobSearchRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -68,12 +77,25 @@ export interface FileRoutesById {
   '/_app/cv-builder': typeof AppCvBuilderRoute
   '/_app/job-search': typeof AppJobSearchRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/cv-builder' | '/job-search' | '/api/health'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/cv-builder'
+    | '/job-search'
+    | '/api/health'
+    | '/api/internal/debug/db-schema'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/cv-builder' | '/job-search' | '/api/health'
+  to:
+    | '/'
+    | '/about'
+    | '/cv-builder'
+    | '/job-search'
+    | '/api/health'
+    | '/api/internal/debug/db-schema'
   id:
     | '__root__'
     | '/'
@@ -82,6 +104,7 @@ export interface FileRouteTypes {
     | '/_app/cv-builder'
     | '/_app/job-search'
     | '/api/health'
+    | '/api/internal/debug/db-schema'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -89,6 +112,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   AboutRoute: typeof AboutRoute
   ApiHealthRoute: typeof ApiHealthRoute
+  ApiInternalDebugDbSchemaRoute: typeof ApiInternalDebugDbSchemaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -135,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCvBuilderRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/internal/debug/db-schema': {
+      id: '/api/internal/debug/db-schema'
+      path: '/api/internal/debug/db-schema'
+      fullPath: '/api/internal/debug/db-schema'
+      preLoaderRoute: typeof ApiInternalDebugDbSchemaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -155,6 +186,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   AboutRoute: AboutRoute,
   ApiHealthRoute: ApiHealthRoute,
+  ApiInternalDebugDbSchemaRoute: ApiInternalDebugDbSchemaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

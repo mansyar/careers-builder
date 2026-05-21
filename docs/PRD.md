@@ -134,6 +134,18 @@ A private, full-stack desktop web application running on the user's laptop, serv
 ---
 ## 9. Implementation History
 
+### Track 0.3 — UI Shell + Database Bootstrap (Completed: 2026-05-21)
+- **Sidebar Navigation:** Persistent left sidebar with Home, CV Builder, and Job Search links. Replaced header nav links (removed Home, About, Features). Active route highlighting via TanStack Router `activeProps`.
+- **Responsive Design:** Sidebar collapses to hamburger toggle on viewports < 768px with slide animation and backdrop overlay.
+- **Routes:** CV Builder (`/cv-builder`) and Job Search (`/job-search`) nested under `_app` layout route, each with empty state placeholders. Landing page hero buttons navigate directly to both routes.
+- **Database Engine:** `better-sqlite3` v12.10.0 with `sqlite-vec` v0.1.9 for vector support. `DatabaseManager` singleton with configurable path and `:memory:` test support.
+- **Migrations:** Idempotent DDL (`IF NOT EXISTS`) for 4 structural tables (`users`, `cv_profiles`, `cv_profile_versions`, `job_postings`) and 2 virtual vector tables (`vec_cv_profile_versions`, `vec_job_postings`). Structural migrations work without the sqlite-vec extension; vector migrations require it.
+- **Debug Endpoint:** `GET /api/internal/debug/db-schema` — returns JSON with all table names and column info. Decoupled handler at `src/lib/server/db-schema.ts` for unit testability.
+- **Server Init:** Database initialized on server boot via dynamic import in `router.tsx` (guarded against browser-side execution).
+- **Testing:** 50 tests, 14 test files. 92.45% component coverage, 81.48% DB layer coverage. Port changed from 3000 to 3001 (`pnpm dev`).
+- **Deviation (2026-05-21):** Original plan listed `npm`. Changed to `pnpm` per developer preference.
+- **Deviation (2026-05-21):** Vitest coverage exclusion narrowed — `src/routes/**` removed from exclude list to track route coverage.
+
 ### Track 0.1 — Project Scaffold (Completed: 2026-05-21)
 - **Framework:** TanStack Start v1.168.8 (React 19) with TypeScript strict mode
 - **Routing:** TanStack Router v1.170.6 (file-based routing)
