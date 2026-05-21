@@ -86,4 +86,35 @@ describe('CollapsibleSection', () => {
     render(<CollapsibleSection title="Projects" defaultOpen />);
     expect(screen.queryByRole('button', { name: /add/i })).toBeNull();
   });
+
+  it('should toggle aria-expanded attribute on header click', () => {
+    render(
+      <CollapsibleSection title="Certifications">
+        <p>Content</p>
+      </CollapsibleSection>,
+    );
+    const header = screen.getByText('Certifications');
+    const button = header.closest('button')!;
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    fireEvent.click(header);
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+
+    fireEvent.click(header);
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('should work with React.Fragment as children', () => {
+    render(
+      <CollapsibleSection title="Skills" defaultOpen>
+        <>Fragment content</>
+      </CollapsibleSection>,
+    );
+    expect(screen.getByText('Fragment content')).toBeTruthy();
+  });
+
+  it('should render default empty text when not provided', () => {
+    render(<CollapsibleSection title="Empty" defaultOpen />);
+    expect(screen.getByText(/No entries yet/i)).toBeTruthy();
+  });
 });

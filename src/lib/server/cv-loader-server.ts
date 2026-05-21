@@ -4,10 +4,28 @@ import { loadOrCreateProfile } from './cv-loader';
 
 type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 
-interface CvProfileData {
+export interface CvProfileData {
   profileId: number;
   activeVersionId: number;
   full_cv_json: Record<string, JsonValue>;
+}
+
+/**
+ * Loads or creates a CV profile — the core handler logic.
+ *
+ * Extracted from the server function so it can be unit tested directly.
+ * Accepts an optional Database parameter for testability with in-memory DB.
+ */
+export function loadCvProfileData(
+  db?: ReturnType<typeof DatabaseManager.getInstance>,
+): CvProfileData {
+  const database = db ?? DatabaseManager.getInstance();
+  const result = loadOrCreateProfile(database);
+  return {
+    profileId: result.profileId,
+    activeVersionId: result.activeVersionId,
+    full_cv_json: result.full_cv_json as Record<string, JsonValue>,
+  };
 }
 
 /**
@@ -19,11 +37,5 @@ interface CvProfileData {
  * This is the server-side entry point for the cv-builder route loader.
  */
 export const getCvProfileData = createServerFn().handler(async (): Promise<CvProfileData> => {
-  const db = DatabaseManager.getInstance();
-  const result = loadOrCreateProfile(db);
-  return {
-    profileId: result.profileId,
-    activeVersionId: result.activeVersionId,
-    full_cv_json: result.full_cv_json as Record<string, JsonValue>,
-  };
+  return loadCvProfileData();
 });

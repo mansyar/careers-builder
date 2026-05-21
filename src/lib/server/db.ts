@@ -8,10 +8,6 @@ export interface DatabaseConfig {
 export class DatabaseManager {
   private static instance: DatabaseType | undefined;
 
-  private constructor() {
-    // Singleton — use getInstance()
-  }
-
   static getInstance(config?: DatabaseConfig): DatabaseType {
     if (!DatabaseManager.instance) {
       const dbPath = config?.path ?? './data/local_vault.db';
