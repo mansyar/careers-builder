@@ -45,3 +45,10 @@
   - Pre-push: TypeScript typecheck (`tsc --noEmit`), coverage threshold (`≥ 80%`)
 - **Modularity Check:** Custom `scripts/check-file-size.mjs` enforces 500-line limit on `src/` and `scripts/` files
 - **Combined Check:** `pnpm check:all` runs lint + format check + typecheck + tests with coverage in sequence
+- **Test Coverage Exclusions:** Route files under `src/routes/api/cv*` are excluded from coverage as they are thin wiring wrappers around tested handler functions.
+
+## Implementation Notes
+
+- **Deviation Note (2026-05-21):** Track 'CV Profile & Version API' implements `POST /api/cv` which was not defined in the original TDD §4. This endpoint was added to provide the initial profile creation step required for the copy-on-write flow.
+- **Deviation Note (2026-05-21):** The `PUT /api/cv/:cvProfileId/version/:versionId` response includes `versionLabel`, `createdAt`, and `full_cv_json` in addition to `id` and `versionNumber` specified in TDD §4. This reduces client round-trips.
+- **Deviation Note (2026-05-21):** The `PUT /api/cv/:cvProfileId/version/:versionId` request accepts an optional `versionLabel` field beyond the `patch` field defined in TDD §4. This allows clients to label versions meaningfully.

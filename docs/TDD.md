@@ -162,36 +162,82 @@ Request:
 Response: HTML string (SSR-rendered template)
 ```
 
-#### `GET /api/cv/:cvProfileId/versions` — List Versions
+#### `POST /api/cv` — Create CV Profile *(Implemented — Track 1.1)*
+Creates a new CV profile with a first empty version. Auto-creates default user (id=1) if it doesn't exist. All operations wrapped in a transaction.
 ```
-Response:
+Request: {}  // Empty body
+
+Response (201):
 {
-  versions: Array<{
-    id: number,
-    versionNumber: number,
-    versionLabel: string,
-    createdAt: string
-  }>,
-  activeVersionId: number
+  "id": number,
+  "activeVersionId": number
 }
 ```
+Route at `src/routes/api/cv.ts` calling `createCvProfile()` handler. Added as a deviation from the original TDD §4 — required to provide the initial profile creation step required for copy-on-write semantics.
 
-#### `PUT /api/cv/:cvProfileId/version/:versionId` — Update Version (Manual Edit)
-Accepts partial JSON patches to `full_cv_json` fields. Used by the adjacent form editor during pause/resume and by offline editing.
+#### `GET /api/cv/:cvProfileId/versions` — List Versions *(Implemented — Track 1.1)*
+Returns all versions for a CV profile, ordered by `version_number DESC`. Returns empty array if the profile does not exist.
+```
+Response (200):
+{
+  "versions": Array<{
+    "id": number,
+    "versionNumber": number,
+    "versionLabel": string | null,
+    "createdAt": string
+  }>,
+  "activeVersionId": number | null
+}
+```
+Decoupled handler at `src/lib/server/cv-profiles.ts` (`listVersions`), wrapped by thin TanStack Start server route at `src/routes/api/cv/$cvProfileId/versions.ts`.
+
+#### `GET /api/cv/:cvProfileId/version/:versionId` — Get Single Version *(Implemented — Track 1.1)*
+Fetches a single CV profile version with full `full_cv_json`. Returns 404 if the profile or version does not exist, or if the version belongs to a different profile.
+```
+Response (200):
+{
+  "id": number,
+  "versionNumber": number,
+  "versionLabel": string | null,
+  "createdAt": string,
+  "full_cv_json": Record<string, unknown>
+}
+
+Response (404):
+{
+  "error": "CV version not found",
+  "code": "NOT_FOUND"
+}
+```
+Decoupled handler at `src/lib/server/cv-profiles.ts` (`getVersion`), wrapped by thin TanStack Start server route at `src/routes/api/cv/$cvProfileId/version/$versionId.ts`.
+
+#### `PUT /api/cv/:cvProfileId/version/:versionId` — Update Version (Manual Edit) *(Implemented — Track 1.1)*
+Accepts partial JSON patches to `full_cv_json` fields. Used by the adjacent form editor during pause/resume and by offline editing. Merges patch into existing `full_cv_json` using structured deep merge. Copy-on-write: editing the active version creates a new version row (immutability). Editing a historical version mutates in-place.
 ```
 Request:
 {
-  patch: Record<string, unknown>  // Partial CV JSON fields to merge
+  "patch": Record<string, unknown>,     // Required — Partial CV JSON fields to deep merge
+  "versionLabel": string | undefined    // Optional — Label for the resulting version
 }
 
-Response:
+Response (200):
 {
-  id: number,
-  versionNumber: number,
-  full_cv_json: Record<string, unknown>  // Full merged result
+  "id": number,
+  "versionNumber": number,
+  "versionLabel": string | null,
+  "createdAt": string,
+  "full_cv_json": Record<string, unknown>  // Full merged result
 }
+
+Error Responses:
+- 404: { "error": "...", "code": "NOT_FOUND" }        — Profile or version not found
+- 400: { "error": "...", "code": "BAD_REQUEST" }       — Missing required "patch" field
+- 409: { "error": "...", "code": "CONFLICT" }          — Version belongs to a different profile
 ```
-Merges patch into existing `full_cv_json` using deep merge. Creates a new `cv_profile_versions` row if the active version is being edited (copy-on-write).
+**Deviations from TDD §4:**
+- Added `versionLabel` and `createdAt` to the response (reduces client round-trips)
+- Added optional `versionLabel` field to the request body (allows meaningful version naming)
+- Added 400 and 409 error response codes beyond the original 404 spec
 
 #### `POST /api/cv/export` — Export PDF
 Single Server Function: renders the React template component to HTML via `renderToString` (with the same minimal provider shell as the preview endpoint), injects template CSS, then passes the full HTML to Playwright's `page.setContent()` and calls `page.pdf()`.
