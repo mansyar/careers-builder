@@ -4,7 +4,7 @@ Implementation follows the existing decoupled pattern: write handler functions i
 
 ---
 
-## Phase 1 - CV Profile Handler Layer [checkpoint: TBD]
+## Phase 1 - CV Profile Handler Layer [checkpoint: 68c25de]
 
 Goal: Create all decoupled, testable handler functions for CV profile and version operations. Each handler accepts a `Database` instance and returns typed results — no HTTP/routing concerns.
 
@@ -55,7 +55,7 @@ Goal: Create all decoupled, testable handler functions for CV profile and versio
     - [x] Write failing test: throws error when version belongs to a different profile
     - [x] Implement updateVersion(db, cvProfileId, versionId, patch, versionLabel?) handler
     - [x] Verify all tests pass
-- [ ] Task 1.6: Conductor - User Manual Verification 'Phase 1 - CV Profile Handler Layer' (Protocol in workflow.md)
+- [x] Task 1.6: Conductor - User Manual Verification 'Phase 1 - CV Profile Handler Layer' (Protocol in workflow.md)
 
 ---
 
