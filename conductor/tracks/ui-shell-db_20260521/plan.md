@@ -26,18 +26,18 @@ Goal: Create the persistent sidebar navigation component, update Header, use Tan
     - [ ] Layout renders: `<Sidebar />` on the left, `<div className="flex-1 ..."><Outlet /></div>` on the right
     - [ ] Nested routes (`/cv-builder`, `/job-search`) are children of this layout; `/` and `/about` remain direct children of root
     - [ ] Verify tests pass
-- [ ] Task 1.4: Create CV Builder route (`src/routes/cv-builder.tsx`)
-    - [ ] Write failing test (jsdom env): route renders empty state message
-    - [ ] Implement file route using `createFileRoute('/cv-builder')` — nested under `_app` layout
-    - [ ] Render empty state: "No CV yet. Start the guided interview to build your CV."
-    - [ ] Include a styled CTA button (link to future chat route or disabled with "Coming soon")
-    - [ ] Verify tests pass
-- [ ] Task 1.5: Create Job Search route (`src/routes/job-search.tsx`)
-    - [ ] Write failing test (jsdom env): route renders empty state message
-    - [ ] Implement file route using `createFileRoute('/job-search')` — nested under `_app` layout
-    - [ ] Render empty state: "No job searches yet. Create a CV first to start searching."
-    - [ ] Include relevant messaging and placeholder UI
-    - [ ] Verify tests pass
+- [x] Task 1.4: Create CV Builder route (`src/routes/_app/cv-builder.tsx`) [5883814]
+    - [x] Write failing test (jsdom env): route renders empty state message
+    - [x] Implement file route using `createFileRoute('/_app/cv-builder')` — nested under `_app` layout
+    - [x] Render empty state: "No CV yet. Start the guided interview to build your CV."
+    - [x] Include a styled CTA button (link to future chat route or disabled with "Coming soon")
+    - [x] Verify tests pass
+- [x] Task 1.5: Create Job Search route (`src/routes/_app/job-search.tsx`) [5883814]
+    - [x] Write failing test (jsdom env): route renders empty state message
+    - [x] Implement file route using `createFileRoute('/_app/job-search')` — nested under `_app` layout
+    - [x] Render empty state: "No job searches yet. Create a CV first to start searching."
+    - [x] Include relevant messaging and placeholder UI
+    - [x] Verify tests pass
 - [ ] Task 1.6: Implement responsive sidebar behavior
     - [ ] Write failing test (jsdom env): hamburger button visible on mobile viewport (< 768px)
     - [ ] Write failing test (jsdom env): clicking hamburger toggles sidebar visibility
