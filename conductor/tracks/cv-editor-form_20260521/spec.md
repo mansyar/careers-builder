@@ -7,9 +7,10 @@ Build a manual CV editor form at `/cv-builder` that renders all CV sections (Con
 ## Functional Requirements
 
 ### FR1: Profile Initialization
-- When a user visits `/cv-builder` for the first time and no CV profile exists, the app calls `POST /api/cv` to create a new profile with an empty first version.
-- The profile ID and active version ID are stored in the TanStack Router loader state for subsequent requests.
-- On subsequent visits, the loader fetches the existing active version via `GET /api/cv/:cvProfileId/version/:activeVersionId`.
+- When a user visits `/cv-builder` for the first time and no CV profile exists, the route loader calls `createCvProfile()` (imported from `src/lib/server/cv-profiles.ts`) to create a new profile with an empty first version. This follows the project's established decoupled handler pattern — no HTTP fetch to the API route.
+- After creation, the `profileId` is persisted to `localStorage` so subsequent visits can look it up without a database query.
+- On subsequent visits, the loader reads `profileId` from `localStorage`. If found, it calls `getVersion()` directly to fetch the active version's data. If not found in localStorage (cache cleared or new device), it falls back to querying `SELECT id FROM cv_profiles WHERE user_id = 1 ORDER BY id DESC LIMIT 1`.
+- The profile ID and active version ID are available to the component via the loader's return data.
 
 ### FR2: CV Form Sections
 
@@ -30,9 +31,8 @@ Build a manual CV editor form at `/cv-builder` that renders all CV sections (Con
 - User can add and remove entries.
 
 **FR2.5 — Skills**
-- Array of skill strings (e.g., `["Python", "TypeScript", "React"]`).
+- Array of flat skill strings (e.g., `["Python", "TypeScript", "React"]`).
 - Simple tag-style input: type skill name, press Enter/comma to add, click X to remove.
-- Optional categorization support via an adjacent text field per category group.
 
 **FR2.6 — Projects (repeatable)**
 - Array of entries, each with: `name` (text), `role` (text), `description` (textarea), `technologies` (tag-style array), `url` (url, optional)
@@ -48,7 +48,7 @@ Build a manual CV editor form at `/cv-builder` that renders all CV sections (Con
 - A "Save Changes" button at the top of the form (and/or at the bottom) triggers a `PUT /api/cv/:cvProfileId/version/:activeVersionId` with the full form data as the `patch` payload.
 - Each save creates a new version (copy-on-write, already implemented server-side).
 - After save, the loader updates with the new `activeVersionId` and `full_cv_json`.
-- A "Saved" confirmation toast/indicator appears on success.
+- A brief inline "Saved!" badge (green checkmark with text, auto-fades after 2 seconds) appears next to the Save button on success. No toast/notification infrastructure is required — a simple CSS-animated state change on a nearby element.
 - Error state shows an inline error banner with a retry button.
 
 ### FR5: Offline Support
@@ -90,3 +90,4 @@ Build a manual CV editor form at `/cv-builder` that renders all CV sections (Con
 - Template preview rendering (handled in Phase 3 tracks).
 - PDF export (handled in Phase 3 tracks).
 - CV version history view (current version only).
+- Skill categorization (Skills section is a flat array of strings — grouped/categorized skills deferred to a future iteration).
