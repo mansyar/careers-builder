@@ -14,13 +14,13 @@ Goal: Create all decoupled, testable handler functions for CV profile and versio
 - `src/lib/server/cv-profiles.ts` — Handler functions
 - `src/lib/server/cv-profiles.spec.ts` — Tests
 
-- [ ] Task 1.1: deepMerge utility function
-    - [ ] Write failing test: merges nested objects (existing keys preserved, new keys added)
-    - [ ] Write failing test: arrays in source replace (not merge) arrays in target
-    - [ ] Write failing test: null/undefined patch values do not throw
-    - [ ] Write failing test: primitive values in patch replace primitives in target
-    - [ ] Implement deepMerge(target, source) in `src/lib/server/deep-merge.ts`
-    - [ ] Verify all tests pass
+- [x] Task 1.1: deepMerge utility function (1b3b4bb)
+    - [x] Write failing test: merges nested objects (existing keys preserved, new keys added)
+    - [x] Write failing test: arrays in source replace (not merge) arrays in target
+    - [x] Write failing test: null/undefined patch values do not throw
+    - [x] Write failing test: primitive values in patch replace primitives in target
+    - [x] Implement deepMerge(target, source) in `src/lib/server/deep-merge.ts`
+    - [x] Verify all tests pass
 - [ ] Task 1.2: createCvProfile handler — create profile + first empty version
     - [ ] Write failing test: auto-creates default user (id=1) if missing
     - [ ] Write failing test: creates a cv_profiles row with user_id=1
