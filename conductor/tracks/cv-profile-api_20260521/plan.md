@@ -40,18 +40,21 @@ Goal: Create all decoupled, testable handler functions for CV profile and versio
     - [x] Write failing test: validates that version belongs to the specified profile
     - [x] Implement getVersion(db, cvProfileId, versionId) handler
     - [x] Verify all tests pass
-- [ ] Task 1.5: updateVersion handler — deep merge + copy-on-write
-    - [ ] Write failing test: deep merges patch into existing full_cv_json
-    - [ ] Write failing test: arrays in patch replace (not merge) arrays in existing
-    - [ ] Write failing test: copy-on-write creates new version row when updating active version
-    - [ ] Write failing test: copy-on-write updates cv_profiles.active_version_id
-    - [ ] Write failing test: copy-on-write copies version_label from previous version when not provided
-    - [ ] Write failing test: copy-on-write uses provided versionLabel when given
-    - [ ] Write failing test: in-place mutation when updating historical (non-active) version
-    - [ ] Write failing test: handles null/undefined in patch gracefully
-    - [ ] Write failing test: returns full version object with merged data
-    - [ ] Implement updateVersion(db, cvProfileId, versionId, patch, versionLabel?) handler
-    - [ ] Verify all tests pass
+- [x] Task 1.5: updateVersion handler — deep merge + copy-on-write (c6c19ec)
+    - [x] Write failing test: deep merges patch into existing full_cv_json
+    - [x] Write failing test: arrays in patch replace (not merge) arrays in existing
+    - [x] Write failing test: copy-on-write creates new version row when updating active version
+    - [x] Write failing test: copy-on-write updates cv_profiles.active_version_id
+    - [x] Write failing test: copy-on-write copies version_label from previous version when not provided
+    - [x] Write failing test: copy-on-write uses provided versionLabel when given
+    - [x] Write failing test: in-place mutation when updating historical (non-active) version
+    - [x] Write failing test: handles null/undefined in patch gracefully
+    - [x] Write failing test: returns full version object with merged data
+    - [x] Write failing test: throws error when profile does not exist
+    - [x] Write failing test: throws error when version does not exist
+    - [x] Write failing test: throws error when version belongs to a different profile
+    - [x] Implement updateVersion(db, cvProfileId, versionId, patch, versionLabel?) handler
+    - [x] Verify all tests pass
 - [ ] Task 1.6: Conductor - User Manual Verification 'Phase 1 - CV Profile Handler Layer' (Protocol in workflow.md)
 
 ---
