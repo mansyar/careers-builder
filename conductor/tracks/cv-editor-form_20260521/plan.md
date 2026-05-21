@@ -88,3 +88,6 @@
     - [x] Write failing test: empty array fields show "No entries yet" placeholder
     - [x] Implement: empty state per section with add button
     - [x] Verify tests pass (Green phase)
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions 6df5d53
