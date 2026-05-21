@@ -10,8 +10,8 @@ Goal: Build the server-side encryption service, provider settings CRUD, validati
 
 **JSON structure note:** Per TDD §4, all provider settings are nested under a `provider` key: `{ provider: { apiKey, baseUrl, modelId } }`. The `users.target_settings` column already exists from Track 0.3 — no schema migration needed.
 
-- [ ] Task 1.1: Install AI SDK dependencies
-    - [ ] Run `pnpm add ai @ai-sdk/openai`
+- [x] Task 1.1: Install AI SDK dependencies [5bebd79]
+    - [x] Run `pnpm add ai @ai-sdk/openai`
 
 - [ ] Task 1.2: Write tests for encryption module (Red phase)
     - [ ] Create `src/lib/server/encryption.spec.ts`
