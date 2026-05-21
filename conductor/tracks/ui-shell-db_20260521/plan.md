@@ -20,7 +20,7 @@ Goal: Create the persistent sidebar navigation component, update Header, use Tan
     - [ ] Style with Tailwind: vertical left panel, fixed width (~240px on desktop), full viewport height
     - [ ] Ensure all type-only imports use `import type` (matching `verbatimModuleSyntax` strict mode)
     - [ ] Verify tests pass
-- [ ] Task 1.3: Create `_app.tsx` layout route with sidebar (`src/routes/_app.tsx`)
+- [x] Task 1.3: Create `_app.tsx` layout route with sidebar (`src/routes/_app.tsx`) [0fc2a61]
     - [ ] Write failing test (jsdom env): layout route renders Sidebar alongside child content via `<Outlet />`
     - [ ] Implement TanStack Router layout route using `createFileRoute('/_app')` (route group convention with `_` prefix)
     - [ ] Layout renders: `<Sidebar />` on the left, `<div className="flex-1 ..."><Outlet /></div>` on the right
