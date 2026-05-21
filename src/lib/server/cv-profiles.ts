@@ -14,6 +14,53 @@ export interface CreateCvProfileResult {
  * - Updates cv_profiles.active_version_id to point to the new version
  * - All operations wrapped in a transaction
  */
+export interface ListVersionsResult {
+  versions: Array<{
+    id: number;
+    versionNumber: number;
+    versionLabel: string | null;
+    createdAt: string;
+  }>;
+  activeVersionId: number | null;
+}
+
+/**
+ * Lists all versions for a CV profile, ordered by version_number DESC.
+ * Returns null activeVersionId if the profile does not exist.
+ */
+export function listVersions(db: Database.Database, cvProfileId: number): ListVersionsResult {
+  const profile = db
+    .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+    .get(cvProfileId) as { active_version_id: number | null } | undefined;
+
+  if (!profile) {
+    return { versions: [], activeVersionId: null };
+  }
+
+  const rows = db
+    .prepare(
+      `SELECT id, version_number, version_label, created_at
+       FROM cv_profile_versions
+       WHERE cv_profile_id = ?
+       ORDER BY version_number DESC`,
+    )
+    .all(cvProfileId) as Array<{
+    id: number;
+    version_number: number;
+    version_label: string | null;
+    created_at: string;
+  }>;
+
+  const versions = rows.map((row) => ({
+    id: row.id,
+    versionNumber: row.version_number,
+    versionLabel: row.version_label,
+    createdAt: row.created_at,
+  }));
+
+  return { versions, activeVersionId: profile.active_version_id };
+}
+
 export function createCvProfile(db: Database.Database): CreateCvProfileResult {
   const result = db.transaction(() => {
     // Ensure default user exists

@@ -1,7 +1,14 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import type Database from 'better-sqlite3';
 import { DatabaseManager } from './db';
 import { runStructuralMigrations } from './migrations';
-import { createCvProfile } from './cv-profiles';
+import { createCvProfile, listVersions } from './cv-profiles';
+
+// Helper to set up a fresh DB with a profile
+function setupProfile(db: Database.Database): number {
+  runStructuralMigrations(db);
+  return createCvProfile(db).id;
+}
 
 describe('createCvProfile', () => {
   beforeEach(() => {
@@ -122,6 +129,49 @@ describe('createCvProfile', () => {
     // Verify no partial state: no user was created
     const users = db.prepare('SELECT COUNT(*) as count FROM users').get() as { count: number };
     expect(users.count).toBe(0);
+    db.close();
+  });
+});
+
+describe('listVersions', () => {
+  beforeEach(() => {
+    DatabaseManager.resetInstance();
+  });
+
+  it('should return versions array ordered by version_number DESC', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+
+    // Insert an additional version to test ordering
+    db.prepare(
+      `INSERT INTO cv_profile_versions (cv_profile_id, version_number, version_label, full_cv_json)
+       VALUES (?, 2, 'V2', '{"name":"test"}')`,
+    ).run(profileId);
+
+    const result = listVersions(db, profileId);
+    expect(result.versions).toHaveLength(2);
+    expect(result.versions[0].versionNumber).toBe(2);
+    expect(result.versions[1].versionNumber).toBe(1);
+    db.close();
+  });
+
+  it('should return activeVersionId from cv_profiles', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+
+    const result = listVersions(db, profileId);
+    expect(result).toHaveProperty('activeVersionId');
+    expect(typeof result.activeVersionId).toBe('number');
+    db.close();
+  });
+
+  it('should return empty versions array for non-existent profile', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    runStructuralMigrations(db);
+
+    const result = listVersions(db, 999);
+    expect(result.versions).toEqual([]);
+    expect(result.activeVersionId).toBeNull();
     db.close();
   });
 });
