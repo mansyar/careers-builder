@@ -26,43 +26,42 @@
     - [x] Implement: rely on TanStack Router's built-in client-side data caching. Configure `staleTime: 30_000` for preloading behavior. Router loaders cache data automatically across SPA navigation.
     - [x] Verify tests pass (Green phase)
 
-## Phase 2: Section Form Components
+## Phase 2: Section Form Components [checkpoint: 201e1b1]
 
 **Goal:** Build reusable section panel components for all 6 CV sections, each with proper field mappings, validation, and interactive behaviors.
 
-- [ ] **Task: CollapsibleSection component**
-    - [ ] Write failing test: component renders header, expands/collapses on click, animates
-    - [ ] Implement: `CollapsibleSection` with header, toggle button, content slot, smooth animation
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: TagInput component**
-    - [ ] Write failing test: Enter key adds tag, X removes tag, keyboard-only flow works
-    - [ ] Implement: `TagInput` component with add-on-Enter, remove-on-click, empty state
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: ContactSection component**
-    - [ ] Write failing test: renders all contact fields, maps to/from full_cv_json shape
-    - [ ] Implement: ContactSection with name, email, phone, location, linkedin, website fields
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: ExecutiveSummarySection component**
-    - [ ] Write failing test: renders textarea, shows word count, enforces 500-word max
-    - [ ] Implement: ExecutiveSummarySection with textarea and word counter
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: ExperienceSection component**
-    - [ ] Write failing test: add/remove/reorder entries, "Currently working" hides endDate
-    - [ ] Implement: ExperienceSection with repeatable entries, company/role/location/dates/description fields, current checkbox
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: EducationSection component**
-    - [ ] Write failing test: add/remove entries, all fields render correctly
-    - [ ] Implement: EducationSection with repeatable entries, institution/degree/field/dates/gpa fields
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: SkillsSection component**
-    - [ ] Write failing test: TagInput integration, skills array maps correctly
-    - [ ] Implement: SkillsSection with TagInput for skill list
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: ProjectsSection component**
-    - [ ] Write failing test: add/remove/reorder entries, TagInput for technologies
-    - [ ] Implement: ProjectsSection with repeatable entries, name/role/description/technologies/url fields
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)**
+- [x] **Task: CollapsibleSection component**
+    - [x] Write failing test: component renders header, expands/collapses on click, animates
+    - [x] Implement: `CollapsibleSection` with header, toggle button, content slot, smooth animation
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: TagInput component**
+    - [x] Write failing test: Enter key adds tag, X removes tag, keyboard-only flow works
+    - [x] Implement: `TagInput` component with add-on-Enter, remove-on-click, empty state
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: ContactSection component**
+    - [x] Write failing test: renders all contact fields, maps to/from full_cv_json shape
+    - [x] Implement: ContactSection with name, email, phone, location, linkedin, website fields
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: ExecutiveSummarySection component**
+    - [x] Write failing test: renders textarea, shows word count, enforces 500-word max
+    - [x] Implement: ExecutiveSummarySection with textarea and word counter
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: ExperienceSection component**
+    - [x] Write failing test: add/remove/reorder entries, "Currently working" hides endDate
+    - [x] Implement: ExperienceSection with repeatable entries, company/role/location/dates/description fields, current checkbox
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: EducationSection component**
+    - [x] Write failing test: add/remove entries, all fields render correctly
+    - [x] Implement: EducationSection with repeatable entries, institution/degree/field/dates/gpa fields
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: SkillsSection component**
+    - [x] Write failing test: TagInput integration, skills array maps correctly
+    - [x] Implement: SkillsSection with TagInput for skill list
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: ProjectsSection component**
+    - [x] Write failing test: add/remove/reorder entries, TagInput for technologies
+    - [x] Implement: ProjectsSection with repeatable entries, name/role/description/technologies/url fields
+    - [x] Verify tests pass (Green phase)
 
 ## Phase 3: Form Integration, Save Flow & Polish
 
