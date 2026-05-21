@@ -63,29 +63,28 @@
     - [x] Implement: ProjectsSection with repeatable entries, name/role/description/technologies/url fields
     - [x] Verify tests pass (Green phase)
 
-## Phase 3: Form Integration, Save Flow & Polish
+## Phase 3: Form Integration, Save Flow & Polish [checkpoint: 461114c]
 
 **Goal:** Wire sections into the cv-builder page, implement the save flow with PUT endpoint, handle offline/error states, and add polish.
 
-- [ ] **Task: CvBuilder page integration**
-    - [ ] Write failing test: page renders all 6 section panels, populated from loader data
-    - [ ] Implement: wire sections into cv-builder route, pass loader data as props, manage form state
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: Update existing placeholder tests**
-    - [ ] Update `src/routes/__tests__/cv-builder.spec.tsx`: replace the 3 placeholder tests (checking "Coming Soon" button and old empty state text) with tests matching the new form behavior
-    - [ ] Verify updated tests pass (Green phase)
-- [ ] **Task: Save button & PUT call**
-    - [ ] Write failing test: save button calls PUT with correct payload, handles success/error
-    - [ ] Implement: "Save Changes" button, PUT call with patch payload, success indicator, error banner with retry
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: Offline & error states**
-    - [ ] Write failing test: save button disabled when offline, error banner shows on failure
-    - [ ] Implement: `navigator.onLine` detection, disabled state with tooltip, inline error banner
-    - [ ] Write failing test: skeleton loading state renders when loader is pending
-    - [ ] Implement: skeleton shimmer panels during loading
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: Empty section placeholders**
-    - [ ] Write failing test: empty array fields show "No entries yet" placeholder
-    - [ ] Implement: empty state per section with add button
-    - [ ] Verify tests pass (Green phase)
-- [ ] **Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)**
+- [x] **Task: CvBuilder page integration**
+    - [x] Write failing test: page renders all 6 section panels, populated from loader data
+    - [x] Implement: wire sections into cv-builder route, pass loader data as props, manage form state
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: Update existing placeholder tests**
+    - [x] Update `src/routes/__tests__/cv-builder.spec.tsx`: replace the 3 placeholder tests (checking "Coming Soon" button and old empty state text) with tests matching the new form behavior
+    - [x] Verify updated tests pass (Green phase)
+- [x] **Task: Save button & PUT call**
+    - [x] Write failing test: save button calls PUT with correct payload, handles success/error
+    - [x] Implement: "Save Changes" button, PUT call with patch payload, success indicator, error banner with retry
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: Offline & error states**
+    - [x] Write failing test: save button disabled when offline, error banner shows on failure
+    - [x] Implement: `navigator.onLine` detection, disabled state with tooltip, inline error banner
+    - [x] Write failing test: skeleton loading state renders when loader is pending
+    - [x] Implement: skeleton shimmer panels during loading
+    - [x] Verify tests pass (Green phase)
+- [x] **Task: Empty section placeholders**
+    - [x] Write failing test: empty array fields show "No entries yet" placeholder
+    - [x] Implement: empty state per section with add button
+    - [x] Verify tests pass (Green phase)
