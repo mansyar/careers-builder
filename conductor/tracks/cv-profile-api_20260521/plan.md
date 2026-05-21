@@ -28,12 +28,12 @@ Goal: Create all decoupled, testable handler functions for CV profile and versio
     - [x] Write failing test: returns { id, activeVersionId }
     - [x] Implement createCvProfile(db) handler
     - [x] Verify all tests pass
-- [ ] Task 1.3: listVersions handler — list all versions for a profile
-    - [ ] Write failing test: returns versions array ordered by version_number DESC
-    - [ ] Write failing test: returns activeVersionId from cv_profiles
-    - [ ] Write failing test: returns empty versions array for non-existent profile
-    - [ ] Implement listVersions(db, cvProfileId) handler
-    - [ ] Verify all tests pass
+- [x] Task 1.3: listVersions handler — list all versions for a profile (e3f358c)
+    - [x] Write failing test: returns versions array ordered by version_number DESC
+    - [x] Write failing test: returns activeVersionId from cv_profiles
+    - [x] Write failing test: returns empty versions array for non-existent profile
+    - [x] Implement listVersions(db, cvProfileId) handler
+    - [x] Verify all tests pass
 - [ ] Task 1.4: getVersion handler — fetch single version with full_cv_json
     - [ ] Write failing test: returns full version object with all fields
     - [ ] Write failing test: returns null indicator when version does not exist
