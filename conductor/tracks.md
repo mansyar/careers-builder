@@ -4,7 +4,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: CV Profile & Version API**
+- [~] **Track: CV Profile & Version API**
 *Link: [./tracks/cv-profile-api_20260521/](./tracks/cv-profile-api_20260521/)*
 
 
