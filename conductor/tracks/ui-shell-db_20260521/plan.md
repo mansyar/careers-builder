@@ -38,13 +38,13 @@ Goal: Create the persistent sidebar navigation component, update Header, use Tan
     - [x] Render empty state: "No job searches yet. Create a CV first to start searching."
     - [x] Include relevant messaging and placeholder UI
     - [x] Verify tests pass
-- [ ] Task 1.6: Implement responsive sidebar behavior
-    - [ ] Write failing test (jsdom env): hamburger button visible on mobile viewport (< 768px)
-    - [ ] Write failing test (jsdom env): clicking hamburger toggles sidebar visibility
-    - [ ] Implement mobile toggle with state management (open/closed)
-    - [ ] Overlay backdrop on mobile when sidebar is open
-    - [ ] Sidebar collapses off-screen on mobile, slides in when toggled
-    - [ ] Verify tests pass
+- [x] Task 1.6: Implement responsive sidebar behavior [923722c]
+    - [x] Write failing test (jsdom env): hamburger button visible on mobile viewport (< 768px)
+    - [x] Write failing test (jsdom env): clicking hamburger toggles sidebar visibility
+    - [x] Implement mobile toggle with state management (open/closed)
+    - [x] Overlay backdrop on mobile when sidebar is open
+    - [x] Sidebar collapses off-screen on mobile, slides in when toggled
+    - [x] Verify tests pass
 - [ ] Task 1.7: Conductor — User Manual Verification 'Phase 1 — Sidebar Navigation & Routes' (Protocol in workflow.md)
     - [ ] Verify: `pnpm dev` boots without errors
     - [ ] Verify: Landing page loads with sidebar visible (persistent)

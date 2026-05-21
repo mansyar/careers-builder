@@ -4,6 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: UI Shell + Database Bootstrap**
+- [~] **Track: UI Shell + Database Bootstrap**
 *Link: [./tracks/ui-shell-db_20260521/](./tracks/ui-shell-db_20260521/)*
 

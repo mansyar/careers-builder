@@ -10,12 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as AppJobSearchRouteImport } from './routes/_app/job-search'
+import { Route as AppCvBuilderRouteImport } from './routes/_app/cv-builder'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -28,33 +35,58 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
   path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppJobSearchRoute = AppJobSearchRouteImport.update({
+  id: '/job-search',
+  path: '/job-search',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCvBuilderRoute = AppCvBuilderRouteImport.update({
+  id: '/cv-builder',
+  path: '/cv-builder',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cv-builder': typeof AppCvBuilderRoute
+  '/job-search': typeof AppJobSearchRoute
   '/api/health': typeof ApiHealthRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cv-builder': typeof AppCvBuilderRoute
+  '/job-search': typeof AppJobSearchRoute
   '/api/health': typeof ApiHealthRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
   '/about': typeof AboutRoute
+  '/_app/cv-builder': typeof AppCvBuilderRoute
+  '/_app/job-search': typeof AppJobSearchRoute
   '/api/health': typeof ApiHealthRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/api/health'
+  fullPaths: '/' | '/about' | '/cv-builder' | '/job-search' | '/api/health'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/api/health'
-  id: '__root__' | '/' | '/about' | '/api/health'
+  to: '/' | '/about' | '/cv-builder' | '/job-search' | '/api/health'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/about'
+    | '/_app/cv-builder'
+    | '/_app/job-search'
+    | '/api/health'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
   AboutRoute: typeof AboutRoute
   ApiHealthRoute: typeof ApiHealthRoute
 }
@@ -66,6 +98,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -82,11 +121,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/job-search': {
+      id: '/_app/job-search'
+      path: '/job-search'
+      fullPath: '/job-search'
+      preLoaderRoute: typeof AppJobSearchRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/cv-builder': {
+      id: '/_app/cv-builder'
+      path: '/cv-builder'
+      fullPath: '/cv-builder'
+      preLoaderRoute: typeof AppCvBuilderRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppCvBuilderRoute: typeof AppCvBuilderRoute
+  AppJobSearchRoute: typeof AppJobSearchRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppCvBuilderRoute: AppCvBuilderRoute,
+  AppJobSearchRoute: AppJobSearchRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
   AboutRoute: AboutRoute,
   ApiHealthRoute: ApiHealthRoute,
 }
