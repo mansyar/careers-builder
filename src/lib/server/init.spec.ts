@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { DatabaseManager } from './db';
 
 describe('database initialization integration', () => {
@@ -30,5 +30,40 @@ describe('database initialization integration', () => {
     const row = db2.prepare('SELECT val FROM shared').get() as { val: number };
     expect(row.val).toBe(42);
     db1.close();
+  });
+});
+
+describe('initDatabase', () => {
+  beforeEach(() => {
+    DatabaseManager.resetInstance();
+    vi.restoreAllMocks();
+  });
+
+  it('should initialize database without throwing when data directory exists', async () => {
+    // initDatabase calls DatabaseManager.getInstance() and runMigrations()
+    // with default path - should not throw
+    const { initDatabase } = await import('./init');
+    expect(() => initDatabase()).not.toThrow();
+  });
+
+  it('should handle errors gracefully when database path is invalid', async () => {
+    // Temporarily break DatabaseManager to simulate failure
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const originalGetInstance = DatabaseManager.getInstance.bind(DatabaseManager);
+
+    // Mock getInstance to throw
+    DatabaseManager.getInstance = vi.fn().mockImplementation(() => {
+      throw new Error('Mock database error');
+    });
+
+    const { initDatabase } = await import('./init');
+    initDatabase();
+
+    expect(consoleSpy).toHaveBeenCalled();
+    expect(consoleSpy.mock.calls[0][0]).toContain('Failed to initialize database');
+
+    // Restore
+    DatabaseManager.getInstance = originalGetInstance;
+    consoleSpy.mockRestore();
   });
 });

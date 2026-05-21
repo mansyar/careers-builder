@@ -1,6 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { DatabaseManager } from '../../../../lib/server/db';
 import { getDbSchema } from '../../../../lib/server/db-schema';
+import type Database from 'better-sqlite3';
+
+/**
+ * Debug DB schema handler — extracted for direct testability.
+ * Returns a JSON response listing all database tables and their columns.
+ */
+export function handleDbSchema(db?: Database.Database): Response {
+  const database = db ?? DatabaseManager.getInstance();
+  const schema = getDbSchema(database);
+  return Response.json(schema);
+}
 
 /**
  * Internal debug route at GET /api/internal/debug/db-schema.
@@ -11,9 +22,7 @@ export const Route = createFileRoute('/api/internal/debug/db-schema')({
   server: {
     handlers: {
       GET: async () => {
-        const db = DatabaseManager.getInstance();
-        const schema = getDbSchema(db);
-        return Response.json(schema);
+        return handleDbSchema();
       },
     },
   },

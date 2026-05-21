@@ -30,6 +30,18 @@ A private, full-stack desktop web application that serves as both an AI-powered 
 - Streaming responses with visual highlights of the section being extracted.
 - Users can pause the interview, edit parsed information manually in an adjacent form, and resume the conversation.
 
+#### Manual CV Editor
+- Full-featured CV editing form at `/cv-builder` with 6 collapsible sections.
+- **Contact:** name, email, phone, location, LinkedIn, website.
+- **Executive Summary:** textarea with 500-word limit and word counter.
+- **Experience:** repeatable entries with add/remove/reorder, "Currently working here" checkbox hides endDate field.
+- **Education:** repeatable entries with institution, degree, field, start/end dates, GPA.
+- **Skills:** tag-style input — type a skill and press Enter to add, click X to remove.
+- **Projects:** repeatable entries with name, role, description, technologies (tag input), URL.
+- All sections editable fully offline; "Save Changes" triggers PUT endpoint which creates a new version (copy-on-write).
+- Inline "Saved!" indicator, error banner with retry button on failure.
+- Skeleton shimmer panels during initial data load.
+
 #### Multi-Template Visual Engine
 - User data serializes into a unified, version-controlled schema decoupled from presentation layers.
 - Multi-column visual toggle for template selection (Modern Minimalist, Executive Traditional, Creative Tech).
