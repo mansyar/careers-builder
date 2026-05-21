@@ -51,19 +51,19 @@ Goal: Build the server-side encryption service, provider settings CRUD, validati
     - [x] Implement `validateSettings({ apiKey, baseUrl, modelId })`: construct `openai(modelId, { baseURL })`, call `streamText({ model, prompt: 'Hi', maxTokens: 5 })`, return result
     - [x] Run tests and confirm they pass
 
-- [ ] Task 1.6: Write tests for server functions (Red phase)
-    - [ ] Create `src/lib/server/provider-settings-server.spec.ts`
-    - [ ] Write test: `getProviderSettings` returns settings with masked apiKey
-    - [ ] Write test: `saveProviderSettings` encrypts and persists
-    - [ ] Write test: `validateProviderSettings` calls through to validateSettings
-    - [ ] Run tests and confirm they fail
+- [x] Task 1.6: Write tests for server functions (Red phase) [03fb768]
+    - [x] Create `src/lib/server/provider-settings-server.spec.ts`
+    - [x] Write test: `getProviderSettings` returns settings with masked apiKey
+    - [x] Write test: `saveProviderSettings` encrypts and persists
+    - [x] Write test: `validateProviderSettings` calls through to validateSettings
+    - [x] Run tests and confirm they fail
 
-- [ ] Task 1.7: Implement server functions (`src/lib/server/provider-settings-server.ts`)
-    - [ ] Implement `getProviderSettings` as `createServerFn({ type: 'server' })`
-    - [ ] Implement `saveProviderSettings` as `createServerFn({ type: 'server' })`
-    - [ ] Implement `validateProviderSettings` as `createServerFn({ type: 'server' })`
-    - [ ] Follow the same decoupled pattern as `cv-loader-server.ts` (handler function + thin `createServerFn` wrapper)
-    - [ ] Run tests and confirm they pass
+- [x] Task 1.7: Implement server functions (`src/lib/server/provider-settings-server.ts`) [03fb768]
+    - [x] Implement `getProviderSettings` as `createServerFn`
+    - [x] Implement `saveProviderSettings` as `createServerFn`
+    - [x] Implement `validateProviderSettings` as `createServerFn`
+    - [x] Follow the same decoupled pattern as `cv-loader-server.ts` (handler function + thin `createServerFn` wrapper)
+    - [x] Run tests and confirm they pass
 
 - [ ] Task 1.8: Conductor — User Manual Verification 'Encryption Module & Provider Settings Backend' (Protocol in workflow.md)
 
