@@ -57,12 +57,16 @@ Goal: Full CRUD for CV profiles and versions. Manual editing works. No AI yet.
 - Full TDD cycle (Red → Green) for all 4 handlers: deepMerge, createCvProfile, listVersions, getVersion, updateVersion
 - **Test:** 102 tests passing, 88.23% overall coverage (handler layer at 91%). Create profile → add data via PUT → verify via GET → copy-on-write creates new version → historical versions remain immutable.
 
-### Track 1.2 — Manual CV Editor Form
-- Frontend form renders all CV sections (Contact, Executive Summary, Experience, Education, Skills, Projects)
-- Each section is a collapsible panel with fields mapped from `full_cv_json`
-- Save button calls `PUT` endpoint
-- Form works fully offline (model data cached in TanStack Router loader)
-- **Test:** Fill form → save → refresh page → data persists → edit again → new version created
+### Track 1.2 — Manual CV Editor Form ✅ *(Complete — 2026-05-22)*
+- Frontend form at `/cv-builder` renders all 6 CV sections (Contact, Executive Summary, Experience, Education, Skills, Projects) as collapsible panels with fields mapped from `full_cv_json`
+- Each section: Contact (name required + 5 optional fields), Executive Summary (textarea with 500-word counter), Experience (repeatable with add/remove/reorder, current checkbox hides endDate), Education (repeatable with institution/degree/field/dates/GPA), Skills (tag-style input with Enter to add / X to remove), Projects (repeatable with name/role/description/technologies/URL)
+- Profile initialization: auto-creates CV profile on first visit via server function, persists `profileId` to localStorage, re-fetches via TanStack Router loader on subsequent visits with built-in SPA caching (`staleTime: 30s`)
+- Save button calls `PUT /api/cv/:profileId/version/:activeVersionId` with full form payload as `patch` — copy-on-write creates new version on each save
+- Inline "Saved!" badge (auto-fades after 2s) on success; error banner with "Retry" button on failure
+- Offline detection: all form fields editable without network, Save button shows disabled state with tooltip when offline
+- Skeleton shimmer panels during initial data load
+- Decoupled architecture: server function (`createServerFn` in `cv-loader-server.ts`) wraps `cv-loader.ts` logic; reusable section components in `src/components/`
+- **Test:** 197 tests passing, 30 test files, >83% statement/branch/line coverage. Form renders all sections with data, PUT call on save, error handling, offline mode, collapsible toggle, localStorage persistence.
 
 ---
 
