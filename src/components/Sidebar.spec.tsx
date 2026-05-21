@@ -1,15 +1,15 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { Sidebar } from './Sidebar';
 
 afterEach(() => {
   cleanup();
 });
 
-// Mock TanStack Router Link to avoid needing router context in unit tests
+// Mock TanStack Router Link
 vi.mock('@tanstack/react-router', () => ({
   Link: ({
     children,
@@ -32,7 +32,31 @@ vi.mock('@tanstack/react-router', () => ({
   ),
 }));
 
-describe('Sidebar', () => {
+function setDesktopViewport() {
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: query.includes('767') === false, // >= 768px = desktop
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }));
+}
+
+function setMobileViewport() {
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: query.includes('767'), // < 768px = mobile
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }));
+}
+
+describe('Sidebar - desktop viewport', () => {
+  beforeEach(() => {
+    setDesktopViewport();
+  });
+
   it('should render with three navigation items', () => {
     render(<Sidebar />);
     expect(screen.getByText('Home')).toBeTruthy();
@@ -70,5 +94,63 @@ describe('Sidebar', () => {
       expect(parsed).toHaveProperty('className');
       expect(parsed.className).toContain('is-active');
     }
+  });
+
+  it('should not render a hamburger button on desktop', () => {
+    render(<Sidebar />);
+    expect(screen.queryByLabelText('Open navigation menu')).toBeNull();
+  });
+});
+
+describe('Sidebar - mobile viewport', () => {
+  beforeEach(() => {
+    setMobileViewport();
+  });
+
+  it('should render a hamburger button', () => {
+    render(<Sidebar />);
+    expect(screen.getByLabelText('Open navigation menu')).toBeTruthy();
+  });
+
+  it('should have sidebar hidden by default on mobile', () => {
+    const { container } = render(<Sidebar />);
+    const aside = container.querySelector('aside');
+    expect(aside?.className).toContain('-translate-x-full');
+  });
+
+  it('should toggle sidebar visibility when hamburger is clicked', () => {
+    const { container } = render(<Sidebar />);
+    const button = screen.getByLabelText('Open navigation menu');
+
+    fireEvent.click(button);
+    let aside = container.querySelector('aside');
+    expect(aside?.className).toContain('translate-x-0');
+
+    fireEvent.click(button);
+    aside = container.querySelector('aside');
+    expect(aside?.className).toContain('-translate-x-full');
+  });
+
+  it('should show a backdrop when sidebar is open', () => {
+    render(<Sidebar />);
+    const button = screen.getByLabelText('Open navigation menu');
+    fireEvent.click(button);
+
+    // Backdrop is a div with aria-hidden="true" and bg-black/30 class
+    const backdrop = document.querySelector('[aria-hidden="true"]');
+    expect(backdrop).not.toBeNull();
+  });
+
+  it('should close sidebar when backdrop is clicked', () => {
+    const { container } = render(<Sidebar />);
+    const button = screen.getByLabelText('Open navigation menu');
+    fireEvent.click(button);
+
+    const backdrop = document.querySelector('[aria-hidden="true"]');
+    expect(backdrop).not.toBeNull();
+
+    fireEvent.click(backdrop!);
+    const aside = container.querySelector('aside');
+    expect(aside?.className).toContain('-translate-x-full');
   });
 });
