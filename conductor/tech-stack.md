@@ -38,4 +38,10 @@
   - *Deviation Note (2026-05-21):* Original spec listed npm. Changed to pnpm per developer preference. All commands use `pnpm` instead of `npm`.
 - **Build Tool:** Vite
 - **Type Checking:** TypeScript (strict mode)
-- **Linting:** ESLint + TypeScript-ESLint
+- **Linting:** ESLint + TypeScript-ESLint (flat config at `eslint.config.js`, excludes generated files)
+- **Formatting:** Prettier (single quotes, trailing commas, print width 100, configured at `.prettierrc`)
+- **Git Hooks:** Husky + lint-staged
+  - Pre-commit: ESLint fix, Prettier format, file size check (≤ 500 lines per file)
+  - Pre-push: TypeScript typecheck (`tsc --noEmit`), coverage threshold (`≥ 80%`)
+- **Modularity Check:** Custom `scripts/check-file-size.mjs` enforces 500-line limit on `src/` and `scripts/` files
+- **Combined Check:** `pnpm check:all` runs lint + format check + typecheck + tests with coverage in sequence
