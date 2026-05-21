@@ -95,3 +95,6 @@ Goal: Wrap handler functions as thin TanStack Start server routes. Route tests a
     - [x] Add deviation note: PUT response includes versionLabel + createdAt
     - [x] Add deviation note: PUT request accepts optional versionLabel
 - [x] Task 2.6: Conductor - User Manual Verification 'Phase 2 - API Route Wiring & Acceptance' (Protocol in workflow.md)
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions (743a9a5)
