@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import type Database from 'better-sqlite3';
 import { DatabaseManager } from './db';
 import { runStructuralMigrations } from './migrations';
-import { createCvProfile, listVersions, getVersion } from './cv-profiles';
+import { createCvProfile, listVersions, getVersion, updateVersion } from './cv-profiles';
 
 // Helper to set up a fresh DB with a profile
 function setupProfile(db: Database.Database): number {
@@ -221,6 +221,250 @@ describe('getVersion', () => {
     // Try to get it via profile 2
     const result = getVersion(db, profileId2, versionRow.id);
     expect(result).toBeNull();
+    db.close();
+  });
+});
+
+describe('updateVersion', () => {
+  beforeEach(() => {
+    DatabaseManager.resetInstance();
+  });
+
+  it('should deep merge patch into existing full_cv_json', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+
+    // Add initial data
+    const profile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    // First PUT on active version creates a new version (copy-on-write)
+    const result1 = updateVersion(db, profileId, profile.active_version_id, {
+      contact: { name: 'John' },
+    });
+    expect(result1.full_cv_json).toEqual({ contact: { name: 'John' } });
+
+    // Second PUT merges
+    const result2 = updateVersion(db, profileId, result1.id, {
+      contact: { email: 'john@test.com' },
+    });
+    expect(result2.full_cv_json).toEqual({
+      contact: { name: 'John', email: 'john@test.com' },
+    });
+    db.close();
+  });
+
+  it('should replace (not merge) arrays in patch', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+    const profile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    const result1 = updateVersion(db, profileId, profile.active_version_id, {
+      skills: ['a', 'b'],
+    });
+
+    const result2 = updateVersion(db, profileId, result1.id, {
+      skills: ['c'],
+    });
+
+    expect(result2.full_cv_json.skills).toEqual(['c']);
+    db.close();
+  });
+
+  it('should create new version row (copy-on-write) when updating active version', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+    const profile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    const result = updateVersion(db, profileId, profile.active_version_id, {
+      contact: { name: 'Jane' },
+    });
+
+    // Should be a new version
+    expect(result.id).not.toBe(profile.active_version_id);
+    expect(result.versionNumber).toBe(2);
+
+    // Original version should still have empty JSON
+    const original = db
+      .prepare('SELECT full_cv_json FROM cv_profile_versions WHERE id = ?')
+      .get(profile.active_version_id) as { full_cv_json: string };
+    expect(JSON.parse(original.full_cv_json)).toEqual({});
+    db.close();
+  });
+
+  it('should update cv_profiles.active_version_id after copy-on-write', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+    const profile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    const result = updateVersion(db, profileId, profile.active_version_id, {
+      contact: { name: 'Jane' },
+    });
+
+    const updatedProfile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    expect(updatedProfile.active_version_id).toBe(result.id);
+    db.close();
+  });
+
+  it('should copy version_label from previous version when not provided', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+    const profile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    const result = updateVersion(db, profileId, profile.active_version_id, {
+      contact: { name: 'Jane' },
+    });
+
+    expect(result.versionLabel).toBe('Initial');
+    db.close();
+  });
+
+  it('should use provided versionLabel when given', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+    const profile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    const result = updateVersion(
+      db,
+      profileId,
+      profile.active_version_id,
+      { contact: { name: 'Jane' } },
+      'Software Engineer V2',
+    );
+
+    expect(result.versionLabel).toBe('Software Engineer V2');
+    db.close();
+  });
+
+  it('should mutate in-place when updating historical (non-active) version', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+    const profile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    // Create v2 (copy-on-write)
+    const v2 = updateVersion(db, profileId, profile.active_version_id, {
+      contact: { name: 'Jane' },
+    });
+
+    // Update the historical v1 in-place
+    updateVersion(db, profileId, profile.active_version_id, {
+      contact: { name: 'Original' },
+    });
+
+    // The version count should still be 2 (no new version created since
+    // profile.active_version_id is the original v1, which is now historical)
+    const allVersions = db
+      .prepare(
+        'SELECT version_number FROM cv_profile_versions WHERE cv_profile_id = ? ORDER BY version_number',
+      )
+      .all(profileId) as Array<{ version_number: number }>;
+    expect(allVersions).toHaveLength(2);
+
+    // active version should still point to v2
+    const updatedProfile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+    expect(updatedProfile.active_version_id).toBe(v2.id);
+    db.close();
+  });
+
+  it('should handle null/undefined in patch gracefully', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+    const profile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    expect(() =>
+      updateVersion(
+        db,
+        profileId,
+        profile.active_version_id,
+        null as unknown as Record<string, unknown>,
+      ),
+    ).not.toThrow();
+
+    expect(() =>
+      updateVersion(
+        db,
+        profileId,
+        profile.active_version_id,
+        undefined as unknown as Record<string, unknown>,
+      ),
+    ).not.toThrow();
+    db.close();
+  });
+
+  it('should return full version object with merged data', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+    const profile = db
+      .prepare('SELECT active_version_id FROM cv_profiles WHERE id = ?')
+      .get(profileId) as { active_version_id: number };
+
+    const result = updateVersion(
+      db,
+      profileId,
+      profile.active_version_id,
+      { experience: [{ company: 'Acme' }] },
+      'Engineer V1',
+    );
+
+    expect(result).toHaveProperty('id');
+    expect(result).toHaveProperty('versionNumber');
+    expect(result).toHaveProperty('versionLabel');
+    expect(result).toHaveProperty('createdAt');
+    expect(result).toHaveProperty('full_cv_json');
+    expect(result.versionNumber).toBe(2);
+    expect(result.versionLabel).toBe('Engineer V1');
+    expect(result.full_cv_json).toEqual({ experience: [{ company: 'Acme' }] });
+    db.close();
+  });
+
+  it('should throw 404-style error when profile does not exist', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    runStructuralMigrations(db);
+
+    expect(() => updateVersion(db, 999, 1, { name: 'test' })).toThrow(/not found/i);
+    db.close();
+  });
+
+  it('should throw 404-style error when version does not exist', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId = setupProfile(db);
+
+    expect(() => updateVersion(db, profileId, 999, { name: 'test' })).toThrow(/not found/i);
+    db.close();
+  });
+
+  it('should throw 409-style error when version belongs to a different profile', () => {
+    const db = DatabaseManager.getInstance({ path: ':memory:' });
+    const profileId1 = setupProfile(db);
+    const profileId2 = createCvProfile(db).id;
+
+    const version1 = db
+      .prepare('SELECT id FROM cv_profile_versions WHERE cv_profile_id = ?')
+      .get(profileId1) as { id: number };
+
+    expect(() => updateVersion(db, profileId2, version1.id, { name: 'test' })).toThrow(
+      /belongs to another profile/i,
+    );
     db.close();
   });
 });
