@@ -13,23 +13,23 @@ Goal: Build the server-side encryption service, provider settings CRUD, validati
 - [x] Task 1.1: Install AI SDK dependencies [5bebd79]
     - [x] Run `pnpm add ai @ai-sdk/openai`
 
-- [ ] Task 1.2: Write tests for encryption module (Red phase)
-    - [ ] Create `src/lib/server/encryption.spec.ts`
-    - [ ] Mock `fs` operations for the secret file path (keep encryption/decryption logic real with injected key)
-    - [ ] Write test: `encrypt` returns `{ encrypted, iv, tag }` for a given plaintext
-    - [ ] Write test: `decrypt` with correct IV and tag returns original plaintext
-    - [ ] Write test: `decrypt` with wrong IV/tag throws or returns wrong data (GCM auth tag verification)
-    - [ ] Write test: missing secret file throws descriptive error
-    - [ ] Run tests and confirm they fail (no implementation yet)
+- [x] Task 1.2: Write tests for encryption module (Red phase) [9e04c26]
+    - [x] Create `src/lib/server/encryption.spec.ts`
+    - [x] Mock `fs` operations for the secret file path (keep encryption/decryption logic real with injected key)
+    - [x] Write test: `encrypt` returns `{ encrypted, iv, tag }` for a given plaintext
+    - [x] Write test: `decrypt` with correct IV and tag returns original plaintext
+    - [x] Write test: `decrypt` with wrong IV/tag throws or returns wrong data (GCM auth tag verification)
+    - [x] Write test: missing secret file throws descriptive error
+    - [x] Run tests and confirm they fail (no implementation yet)
 
-- [ ] Task 1.3: Implement encryption module (`src/lib/server/encryption.ts`)
-    - [ ] Define `SECRET_FILE_PATH = path.join(process.cwd(), 'data', '.secret')`
-    - [ ] Implement `generateOrLoadSecret(path)`: check if file exists, if not create with `crypto.randomBytes(64)`
-    - [ ] Implement `deriveKey(secret)`: SHA-256 hash of first 32 bytes → 256-bit key
-    - [ ] Implement `encrypt(plaintext, secretFilePath?)`: AES-256-GCM with random IV, return `{ encrypted (hex), iv (hex), tag (hex) }`
-    - [ ] Implement `decrypt(encrypted, iv, tag, secretFilePath?)`: AES-256-GCM decrypt with auth tag verification
-    - [ ] Handle missing secret file: throw descriptive error with recovery guidance
-    - [ ] Run tests and confirm they pass
+- [x] Task 1.3: Implement encryption module (`src/lib/server/encryption.ts`) [9e04c26]
+    - [x] Define `SECRET_FILE_PATH = path.join(process.cwd(), 'data', '.secret')`
+    - [x] Implement `generateOrLoadSecret(path)`: check if file exists, if not create with `crypto.randomBytes(64)`
+    - [x] Implement `deriveKey(secret)`: SHA-256 hash of first 32 bytes → 256-bit key
+    - [x] Implement `encrypt(plaintext, secretFilePath?)`: AES-256-GCM with random IV, return `{ encrypted (hex), iv (hex), tag (hex) }`
+    - [x] Implement `decrypt(encrypted, iv, tag, secretFilePath?)`: AES-256-GCM decrypt with auth tag verification
+    - [x] Handle missing secret file: throw descriptive error with recovery guidance
+    - [x] Run tests and confirm they pass
 
 - [ ] Task 1.4: Write tests for provider settings handler (Red phase)
     - [ ] Create `src/lib/server/provider-settings.spec.ts`
