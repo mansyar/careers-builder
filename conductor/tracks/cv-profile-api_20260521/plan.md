@@ -80,18 +80,14 @@ Goal: Wrap handler functions as thin TanStack Start server routes. Route tests a
     - [x] Implement GET handler at `src/routes/api/cv/$cvProfileId/version/$versionId.ts` calling getVersion
     - [x] Implement PUT handler calling updateVersion
     - [x] Verify route is registered
-- [~] Task 2.4: Write full-flow acceptance test
-    - [ ] Create profile → verify { id, activeVersionId }
-    - [ ] Add CV data via PUT → verify merged full_cv_json
-    - [ ] Verify data via GET single version → matches PUT response
-    - [ ] PUT again to trigger copy-on-write → verify new version_number
-    - [ ] Verify activeVersionId updated after copy-on-write
-    - [ ] Verify historical version GET still returns old data (immutable)
-    - [ ] Verify all handler tests pass
-    - [ ] Verify coverage meets 80% threshold
-    - [ ] Run `CI=true pnpm test -- --coverage` and confirm
-- [ ] Task 2.5: Document deviations in tech-stack.md
-    - [ ] Add deviation note: POST /api/cv added (not in TDD §4)
-    - [ ] Add deviation note: PUT response includes versionLabel + createdAt
-    - [ ] Add deviation note: PUT request accepts optional versionLabel
-- [ ] Task 2.6: Conductor - User Manual Verification 'Phase 2 - API Route Wiring & Acceptance' (Protocol in workflow.md)
+- [x] Task 2.4: Write full-flow acceptance test (f045d0f)
+    - [x] Create profile → verify { id, activeVersionId }
+    - [x] Add CV data via PUT → verify merged full_cv_json
+    - [x] Verify data via GET single version → matches PUT response
+    - [x] PUT again to trigger copy-on-write → verify new version_number
+    - [x] Verify activeVersionId updated after copy-on-write
+    - [x] Verify historical version GET still returns old data (immutable)
+    - [x] Verify all handler tests pass
+    - [x] Verify coverage meets 80% threshold
+    - [x] Run `CI=true pnpm test -- --coverage` and confirm
+- [~] Task 2.5: Document deviations in tech-stack.md
