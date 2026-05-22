@@ -87,7 +87,7 @@ A private, full-stack desktop web application running on the user's laptop, serv
 - LLM streaming interruptions must gracefully degrade: retry with exponential backoff (max 3 attempts), then surface a manual re-try button.
 
 ### 5.4 Usability
-- First-run wizard guides the user through LLM provider setup in under 3 steps: API key (required), base URL (optional, defaults to OpenAI), and model ID (optional, defaults to gpt-4o).
+- First-run wizard: 2-step setup (API Key + Provider URL → Model ID). API key is password-masked with show toggle. "Test Connection" button validates credentials using the entered URL. Wizard is non-dismissable until valid settings are saved. After configuration, settings are editable via a dismissable modal from the sidebar "Configure AI Provider" button.
 - Guided interview must require no prior AI/chatbot experience.
 - Job search must surface at least 5 results per sweep when public sources contain relevant listings for the user's industry and location.
 

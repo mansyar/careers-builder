@@ -18,8 +18,8 @@ Containerized local web server running an isomorphic full-stack TypeScript frame
 
 ### Core Backend & Utilities
 - **Server Core:** Embedded Nitro server engine bundled via Vite inside TanStack Start's compile pipeline.
-- **AI SDK Core:** `ai` package providing `streamText`, `generateText`, `generateObject`, `tool`, `convertToModelMessages`, `stepCountIs`.
-- **LLM Adapter:** `@ai-sdk/openai` (or `@ai-sdk/gateway` via Vercel AI Gateway) for OpenAI-compatible provider access.
+- **AI SDK Core:** `ai` (v6.0.190) package providing `streamText`, `generateText`, `generateObject`, `tool`, `convertToModelMessages`, `stepCountIs`.
+- **LLM Adapter:** `@ai-sdk/openai` (v3.0.65) for OpenAI-compatible provider access.
 - **PDF Generator:** Server-side Playwright print pipeline — renders the selected template in headless Chromium, exports to PDF using `page.pdf()` with A4/Letter dimensions. Reuses the same Playwright dependency from the scraping layer.
 - **Network Scrapers:** Playwright wrapped in a task runner with evasion defaults (headless Chromium, user-agent masking, request spacing) for unauthenticated career page scraping.
 
@@ -429,3 +429,16 @@ Benchmarks target a reference machine: Apple M1 MacBook Air, 8 GB RAM, macOS 14.
 - All user data, embeddings, and ONNX model cache are confined to the mounted volume.
 - No process outside the container accesses the database directly.
 - LLM API keys are encrypted via Node `crypto.createCipheriv` (AES-256-GCM) before writing to `better-sqlite3`. The encryption key is derived from a machine-local secret file at `{vault_data}/.secret` (64 random bytes generated on first run). If this file is deleted, all encrypted data becomes unrecoverable — the user must re-enter API keys through the first-run wizard.
+
+### Server-Client Code Separation
+- TanStack Start's `.server.ts` / `.functions.ts` convention prevents server-only modules (`better-sqlite3`, `sqlite-vec`) from being bundled into the client:
+  - **`.server.ts`** files: server-only helpers (DatabaseManager, native module imports). Excluded from client bundles.
+  - **`.functions.ts`** files: `createServerFn` wrappers. Safe to import from client code — build process compiles them to RPC stubs.
+  - Located in `src/lib/` per TanStack Start documentation pattern.
+- API route files with `server.handlers` must use dynamic `await import(...)` inside handler bodies for server-only modules, not static top-level imports.
+
+### Implementation Notes
+- **Deviation (2026-05-22):** The encryption module uses `crypto.createCipheriv('aes-256-gcm', key, iv)` with random 12-byte IV per encryption operation. The auth tag is stored alongside the ciphertext and IV. All three components (encrypted, iv, tag) are hex-encoded and stored as a JSON object under `provider.apiKey`.
+- **Deviation (2026-05-22):** The `loadSettings` handler defaults to `gpt-4o` model and `https://api.openai.com/v1` base URL when no settings exist — matching TDD §4.
+- **Deviation (2026-05-22):** Provider settings use `maxOutputTokens` (not `maxTokens`) when calling `streamText` for validation, matching the AI SDK v6 API.
+- **Deviation (2026-05-22):** The first-run wizard uses 2 steps (merged URL into Step 1) rather than the originally specified 3, so the Test Connection validates against the actual provider URL.
