@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Eye, EyeOff, Check, X, ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
 
 export interface WizardSettings {
@@ -46,7 +46,7 @@ export function ProviderWizard({
   const [modelId, setModelId] = useState(initialSettings.modelId ?? 'gpt-4o');
   const [validation, setValidation] = useState<ValidationState>({ status: 'idle' });
 
-  const handleTestConnection = useCallback(async () => {
+  const handleTestConnection = async () => {
     if (!apiKey.trim()) {
       setValidation({ status: 'error', message: 'Please enter an API key' });
       return;
@@ -72,11 +72,11 @@ export function ProviderWizard({
     } catch {
       setValidation({ status: 'error', message: 'Connection test failed' });
     }
-  }, [apiKey, baseUrl, modelId]);
+  };
 
-  const handleFinish = useCallback(() => {
+  const handleFinish = () => {
     onSave({ apiKey, baseUrl, modelId });
-  }, [apiKey, baseUrl, modelId, onSave]);
+  };
 
   const canProceedFromStep1 = apiKey.trim().length > 0;
   const isValidated = validation.status === 'success';
