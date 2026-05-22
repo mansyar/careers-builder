@@ -48,27 +48,26 @@ Goal: Build the decoupled chat handler and `POST /api/chat` server route that lo
 
 Goal: Build the ChatPanel component using `useChat` and integrate it into the `/cv-builder` route.
 
-- [ ] Task 2.1: Write tests for ChatPanel component (Red phase)
-    - [ ] Create `src/components/ChatPanel.spec.tsx` following project convention
-    - [ ] Write test: renders welcome message when no messages exist
-    - [ ] Write test: renders a list of messages (AI left-aligned, user right-aligned)
-    - [ ] Write test: input field is disabled while AI is streaming
-    - [ ] Write test: pressing Enter sends a message
-    - [ ] Write test: error state shows "Connection lost" banner with Retry button
-    - [ ] Write test: missing provider shows placeholder with link to settings
-    - [ ] Write test: "Done — extract this section" button renders on AI messages (placeholder for Track 2.3)
-    - [ ] Run tests and confirm they fail
-
-- [ ] Task 2.2: Implement ChatPanel component (`src/components/ChatPanel.tsx`)
-    - [ ] Implement chat message list with scrollable container
-    - [ ] Implement streaming cursor animation on AI messages
-    - [ ] Implement input field with send button (Enter to send, disabled while streaming)
-    - [ ] Implement auto-scroll to latest message
-    - [ ] Implement empty state with AI welcome message
-    - [ ] Implement error state with "Connection lost" banner and Retry button
-    - [ ] Implement missing provider placeholder with link to settings
-    - [ ] Implement "Done — extract this section" placeholder button on AI messages
-    - [ ] Run tests and confirm they pass
+- [x] Task 2.1: Write tests for ChatPanel component (Red phase)
+    - [x] Create `src/components/ChatPanel.spec.tsx` following project convention
+    - [x] Write test: renders welcome message when no messages exist
+    - [x] Write test: renders a list of messages (AI left-aligned, user right-aligned)
+    - [x] Write test: input field is disabled while AI is streaming
+    - [x] Write test: pressing Enter sends a message
+    - [x] Write test: error state shows "Connection lost" banner with Retry button
+    - [x] Write test: missing provider shows placeholder with link to settings
+    - [x] Write test: "Done — extract this section" button renders on AI messages (placeholder for Track 2.3)
+    - [x] Run tests and confirm they fail
+- [x] Task 2.2: Implement ChatPanel component (`src/components/ChatPanel.tsx`) [09bdeb1]
+    - [x] Implement chat message list with scrollable container
+    - [x] Implement streaming cursor animation on AI messages
+    - [x] Implement input field with send button (Enter to send, disabled while streaming)
+    - [x] Implement auto-scroll to latest message
+    - [x] Implement empty state with AI welcome message
+    - [x] Implement error state with "Connection lost" banner and Retry button
+    - [x] Implement missing provider placeholder with link to settings
+    - [x] Implement "Done — extract this section" placeholder button on AI messages
+    - [x] Run tests and confirm they pass
 
 - [ ] Task 2.3: Write tests for CV Builder integration (Red phase)
     - [ ] Create new test file or extend `src/routes/__tests__/cv-builder.spec.tsx`
