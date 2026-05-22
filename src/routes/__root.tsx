@@ -5,7 +5,6 @@ import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { ProviderSettingsProvider, useProviderSettings } from '../lib/provider-settings-context';
 import { ProviderWizard } from '../components/ProviderWizard';
-import { saveProviderSettings } from '../lib/server/provider-settings-server';
 
 import appCss from '../styles.css?url';
 
@@ -38,6 +37,11 @@ export const Route = createRootRoute({
 function RootContent({ children }: { children: React.ReactNode }) {
   const { isWizardOpen, isSettingsOpen, closeWizard, closeSettings } = useProviderSettings();
 
+  const handleSave = async (settings: { apiKey: string; baseUrl: string; modelId: string }) => {
+    const { persistProviderSettings } = await import('../lib/provider-settings-client');
+    await persistProviderSettings(settings);
+  };
+
   return (
     <>
       {children}
@@ -45,7 +49,7 @@ function RootContent({ children }: { children: React.ReactNode }) {
         <ProviderWizard
           dismissable={false}
           onSave={async (settings) => {
-            await saveProviderSettings(settings);
+            await handleSave(settings);
             closeWizard();
           }}
         />
@@ -55,7 +59,7 @@ function RootContent({ children }: { children: React.ReactNode }) {
           dismissable
           onDismiss={closeSettings}
           onSave={async (settings) => {
-            await saveProviderSettings(settings);
+            await handleSave(settings);
             closeSettings();
           }}
         />

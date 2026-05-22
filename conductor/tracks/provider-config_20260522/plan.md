@@ -106,9 +106,9 @@ Goal: Build the client-side UI components (wizard, settings modal), create React
     - [ ] Recovery mode: pre-fills baseUrl/modelId, skips to Step 2, API key blank + focused
     - [ ] Run tests and confirm they pass
 
-- [~] Task 2.4: Write tests for sidebar integration (Red phase)
-- [~] Task 2.5: Implement sidebar integration
-- [~] Task 2.6: Wire app-level wizard trigger and context
+- [x] Task 2.4: Write tests for sidebar integration (Red phase) [8a247ca]
+- [x] Task 2.5: Implement sidebar integration [8a247ca]
+- [x] Task 2.6: Wire app-level wizard trigger and context [8a247ca]
 
 - [ ] Task 2.7: Conductor — User Manual Verification 'First-Run Wizard & Settings Modal' (Protocol in workflow.md)
 

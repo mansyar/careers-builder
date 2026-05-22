@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import { getProviderSettings } from './server/provider-settings-server';
 
 export interface ProviderSettingsContextValue {
   isWizardOpen: boolean;
@@ -12,20 +11,25 @@ export interface ProviderSettingsContextValue {
 const ProviderSettingsContext = createContext<ProviderSettingsContextValue | null>(null);
 
 export function ProviderSettingsProvider({ children }: { children: ReactNode }) {
-  const [isWizardOpen, setIsWizardOpen] = useState(true); // Default to open until proven configured
+  const [isWizardOpen, setIsWizardOpen] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  // On mount, check if provider is already configured
+  // Use dynamic import to avoid pulling server-only modules into the client bundle
   useEffect(() => {
     let cancelled = false;
-    getProviderSettings().then((settings) => {
-      if (cancelled) return;
-      if (settings.apiKey && settings.apiKey !== '****') {
-        // Already configured — no wizard needed
-        setIsWizardOpen(false);
-      }
-      // If apiKey is empty or masked, leave wizard open
-    });
+    import('./provider-settings-client')
+      .then((mod) => mod.loadProviderSettings())
+      .then((settings) => {
+        if (cancelled) return;
+        // If there's a valid (non-empty, non-masked) API key, the provider is configured
+        if (settings.apiKey && settings.apiKey !== '' && settings.apiKey !== '****') {
+          setIsWizardOpen(false);
+        }
+      })
+      .catch(() => {
+        // Server function unavailable — leave wizard open by default
+        if (!cancelled) setIsWizardOpen(true);
+      });
     return () => {
       cancelled = true;
     };

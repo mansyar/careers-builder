@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { Eye, EyeOff, Check, X, ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
-import { validateProviderSettings } from '../lib/server/provider-settings-server';
 
 export interface WizardSettings {
   apiKey: string;
@@ -54,11 +53,8 @@ export function ProviderWizard({
     }
     setValidation({ status: 'validating' });
     try {
-      const result = await (
-        validateProviderSettings as unknown as (opts: {
-          data: WizardSettings;
-        }) => Promise<{ valid: boolean; error?: string }>
-      )({ data: { apiKey, baseUrl, modelId } });
+      const { checkProviderSettings } = await import('../lib/provider-settings-client');
+      const result = await checkProviderSettings({ apiKey, baseUrl, modelId });
       if (result.valid) {
         setValidation({ status: 'success' });
       } else {

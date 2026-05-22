@@ -9,12 +9,14 @@ afterEach(() => {
   cleanup();
 });
 
-vi.mock('../lib/server/provider-settings-server', () => ({
-  validateProviderSettings: vi.fn(),
+vi.mock('../lib/provider-settings-client', () => ({
+  checkProviderSettings: vi.fn(),
+  loadProviderSettings: vi.fn(),
+  persistProviderSettings: vi.fn(),
 }));
 
 const mockValidate = vi.mocked(
-  (await import('../lib/server/provider-settings-server')).validateProviderSettings,
+  (await import('../lib/provider-settings-client')).checkProviderSettings,
 );
 
 const noop = () => {};
