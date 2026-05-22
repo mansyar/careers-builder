@@ -80,21 +80,21 @@ Goal: Build the client-side UI components (wizard, settings modal), create React
     - [x] Create `ProviderSettingsProvider` component that manages state
     - [x] Export `useProviderSettings` hook
 
-- [ ] Task 2.2: Write tests for ProviderWizard component (Red phase)
-    - [ ] Create `src/components/ProviderWizard.spec.tsx`
-    - [ ] Write test: wizard renders 3 steps with step indicators
-    - [ ] Write test: Step 1 shows API key input with password masking and show toggle
-    - [ ] Write test: Step 2 shows base URL input pre-filled with default
-    - [ ] Write test: Step 3 shows model ID input pre-filled with default
-    - [ ] Write test: "Test Connection" button calls validateProviderSettings
-    - [ ] Write test: invalid key shows error and blocks proceeding to next step
-    - [ ] Write test: valid key shows success and allows next step
-    - [ ] Write test: wizard mode (`dismissable={false}`) has no close button
-    - [ ] Write test: settings mode (`dismissable={true}`) has close button
-    - [ ] Write test: recovery mode pre-fills baseUrl and modelId from stored settings, autoFocus on API key
-    - [ ] Run tests and confirm they fail
+- [x] Task 2.2: Write tests for ProviderWizard component (Red phase)
+    - [x] Create `src/components/ProviderWizard.spec.tsx`
+    - [x] Write test: wizard renders 3 steps with step indicators
+    - [x] Write test: Step 1 shows API key input with password masking and show toggle
+    - [x] Write test: Step 2 shows base URL input pre-filled with default
+    - [x] Write test: Step 3 shows model ID input pre-filled with default
+    - [x] Write test: "Test Connection" button calls validateProviderSettings
+    - [x] Write test: invalid key shows error and blocks proceeding to next step
+    - [x] Write test: valid key shows success and allows next step
+    - [x] Write test: wizard mode (`dismissable={false}`) has no close button
+    - [x] Write test: settings mode (`dismissable={true}`) has close button
+    - [x] Write test: recovery mode pre-fills baseUrl and modelId from stored settings, autoFocus on API key
+    - [x] Run tests and confirm they fail
 
-- [ ] Task 2.3: Implement ProviderWizard component (`src/components/ProviderWizard.tsx`)
+- [x] Task 2.3: Implement ProviderWizard component (`src/components/ProviderWizard.tsx`)
     - [ ] Build 3-step wizard: API Key → Base URL → Model ID
     - [ ] Step 1: password-masked input with eye toggle, "Test Connection" button, inline success/error, `autoFocus`
     - [ ] Step 2: text input pre-filled with `https://api.openai.com/v1` (or stored value in recovery mode)
