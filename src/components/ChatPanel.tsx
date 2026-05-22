@@ -52,6 +52,7 @@ export function ChatPanel({ onOpenSettings }: { onOpenSettings?: () => void }) {
         </p>
         <button
           type="button"
+          onClick={onOpenSettings}
           className="rounded-full bg-[var(--sea-ink)] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
         >
           Open Settings
@@ -68,7 +69,7 @@ export function ChatPanel({ onOpenSettings }: { onOpenSettings?: () => void }) {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4" aria-live="polite" role="log">
         {messages.length === 0 ? (
           /* Empty State: Welcome message */
           <div className="flex items-start gap-3">
@@ -109,7 +110,9 @@ export function ChatPanel({ onOpenSettings }: { onOpenSettings?: () => void }) {
                   <button
                     type="button"
                     className="mt-2 rounded-md bg-[var(--sea-ink)] px-3 py-1 text-xs font-medium text-white transition-opacity hover:opacity-90"
-                    onClick={onOpenSettings}
+                    onClick={() => {
+                      console.log('Extract section:', msg.content);
+                    }}
                   >
                     Done — extract this section
                   </button>
@@ -135,7 +138,10 @@ export function ChatPanel({ onOpenSettings }: { onOpenSettings?: () => void }) {
       {/* Error Banner */}
       {error && !hasProviderError && (
         <div className="mx-4 mb-2 flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-          <p className="text-xs text-red-700">Connection to the AI provider was lost.</p>
+          <p className="text-xs text-red-700">
+            Connection to the AI provider was lost. Your chat progress is saved. You can retry or
+            come back later.
+          </p>
           <button
             type="button"
             onClick={handleRetry}

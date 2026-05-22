@@ -38,7 +38,7 @@ export async function handleChatRequest(
       baseURL: settings.baseUrl,
     });
 
-    const modelMessages = convertToModelMessages(messages);
+    const modelMessages = await convertToModelMessages(messages);
 
     const result = streamText({
       model: openai(settings.modelId),
@@ -47,13 +47,7 @@ export async function handleChatRequest(
     });
 
     return result.toUIMessageStreamResponse();
-  } catch (error) {
-    if (error instanceof Error && error.message) {
-      return Response.json(
-        { error: 'AI provider is currently unavailable', code: 'PROVIDER_UNAVAILABLE' },
-        { status: 502 },
-      );
-    }
+  } catch {
     return Response.json(
       { error: 'AI provider is currently unavailable', code: 'PROVIDER_UNAVAILABLE' },
       { status: 502 },
