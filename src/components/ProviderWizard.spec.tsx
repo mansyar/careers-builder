@@ -96,26 +96,22 @@ describe('ProviderWizard - multi-step navigation', () => {
     mockCheck.mockResolvedValue({ valid: true });
   });
 
-  it('navigates through steps 1→2→3→finish', async () => {
+  it('navigates through steps 1→2→finish', async () => {
     const onSave = vi.fn();
     render(<ProviderWizard onSave={onSave} />);
 
-    // Step 1: Enter and validate key
+    // Step 1: Enter API key, test, proceed
     fireEvent.change(screen.getByPlaceholderText('sk-...'), {
       target: { value: 'sk-valid-key' },
     });
     fireEvent.click(screen.getByText('Test Connection'));
     expect(await screen.findByText('Connection successful')).toBeTruthy();
 
-    // Go to Step 2
-    fireEvent.click(screen.getByText('Next'));
-    expect(screen.getByPlaceholderText('https://api.openai.com/v1')).toBeTruthy();
-
-    // Step 2: Go to Step 3
+    // Go to Step 2 (Model ID)
     fireEvent.click(screen.getByText('Next'));
     expect(screen.getByPlaceholderText('gpt-4o')).toBeTruthy();
 
-    // Step 3: Finish
+    // Step 2: Finish
     fireEvent.click(screen.getByText('Finish'));
     expect(onSave).toHaveBeenCalledWith({
       apiKey: 'sk-valid-key',
@@ -126,8 +122,8 @@ describe('ProviderWizard - multi-step navigation', () => {
 
   it('shows step 2 when initial apiKey is provided', () => {
     render(<ProviderWizard onSave={noop} initialSettings={{ apiKey: 'sk-existing' }} />);
-    // Should show step 2 indicator
-    expect(screen.getByDisplayValue('https://api.openai.com/v1')).toBeTruthy();
+    // Should show step 2 (modelId input)
+    expect(screen.getByPlaceholderText('gpt-4o')).toBeTruthy();
   });
 });
 

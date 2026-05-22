@@ -9,22 +9,9 @@ export interface WizardSettings {
 }
 
 export interface ProviderWizardProps {
-  /**
-   * Initial settings to pre-fill (used in recovery/settings mode).
-   */
   initialSettings?: Partial<WizardSettings>;
-  /**
-   * Whether the wizard/modal can be dismissed (settings mode).
-   * When false (wizard mode), no close button is shown.
-   */
   dismissable?: boolean;
-  /**
-   * Callback when the wizard completes with valid settings.
-   */
   onSave: (settings: WizardSettings) => void;
-  /**
-   * Callback when the wizard is dismissed (only if dismissable).
-   */
   onDismiss?: () => void;
 }
 
@@ -85,7 +72,7 @@ export function ProviderWizard({
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-[var(--sea-ink)]">
-            {step <= 1 ? 'AI Provider Configuration' : `Step ${step} of 3`}
+            AI Provider Configuration
           </h2>
           {dismissable && onDismiss && (
             <button
@@ -101,7 +88,7 @@ export function ProviderWizard({
 
         {/* Step indicators */}
         <div className="mb-6 flex items-center gap-2">
-          {[1, 2, 3].map((s) => (
+          {[1, 2].map((s) => (
             <div key={s} className="flex items-center gap-2">
               <div
                 className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium ${
@@ -112,88 +99,98 @@ export function ProviderWizard({
               >
                 {s}
               </div>
-              {s < 3 && <div className="h-px w-8 bg-[var(--line)]" />}
+              {s < 2 && <div className="h-px w-8 bg-[var(--line)]" />}
             </div>
           ))}
         </div>
 
-        {/* Step 1: API Key */}
+        {/* Step 1: API Key + Base URL */}
         {step === 1 && (
           <div className="space-y-4">
-            <label className="block text-sm font-medium text-[var(--sea-ink)]">API Key</label>
-            <div className="relative">
-              <input
-                type={showApiKey ? 'text' : 'password'}
-                value={apiKey}
-                onChange={(e) => {
-                  setApiKey(e.target.value);
-                  setValidation({ status: 'idle' });
-                }}
-                autoFocus
-                placeholder="sk-..."
-                className="w-full rounded-lg border border-[var(--line)] bg-[var(--input-bg)] px-3 py-2 pr-10 text-sm text-[var(--sea-ink)] outline-none focus:border-[var(--accent)]"
-              />
-              <button
-                type="button"
-                onClick={() => setShowApiKey((v) => !v)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--sea-ink-soft)] hover:text-[var(--sea-ink)]"
-                aria-label={showApiKey ? 'Hide API key' : 'Show API key'}
-              >
-                {showApiKey ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
+            {/* API Key Field */}
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-[var(--sea-ink)]">
+                API Key
+              </label>
+              <div className="relative">
+                <input
+                  type={showApiKey ? 'text' : 'password'}
+                  value={apiKey}
+                  onChange={(e) => {
+                    setApiKey(e.target.value);
+                    setValidation({ status: 'idle' });
+                  }}
+                  autoFocus
+                  placeholder="sk-..."
+                  className="w-full rounded-lg border border-[var(--line)] bg-[var(--input-bg)] px-3 py-2 pr-10 text-sm text-[var(--sea-ink)] outline-none focus:border-[var(--accent)]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowApiKey((v) => !v)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--sea-ink-soft)] hover:text-[var(--sea-ink)]"
+                  aria-label={showApiKey ? 'Hide API key' : 'Show API key'}
+                >
+                  {showApiKey ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
-            <button
-              type="button"
-              onClick={handleTestConnection}
-              disabled={!canProceedFromStep1 || validation.status === 'validating'}
-              className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
-            >
-              {validation.status === 'validating' ? (
-                <>
-                  <Loader2 size={16} className="animate-spin" />
-                  Testing...
-                </>
-              ) : (
-                'Test Connection'
+            {/* Base URL Field */}
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-[var(--sea-ink)]">
+                Provider URL
+              </label>
+              <input
+                type="text"
+                value={baseUrl}
+                onChange={(e) => {
+                  setBaseUrl(e.target.value);
+                  setValidation({ status: 'idle' });
+                }}
+                placeholder="https://api.openai.com/v1"
+                className="w-full rounded-lg border border-[var(--line)] bg-[var(--input-bg)] px-3 py-2 text-sm text-[var(--sea-ink)] outline-none focus:border-[var(--accent)]"
+              />
+              <p className="mt-1 text-xs text-[var(--sea-ink-soft)]">
+                For custom providers, enter your API endpoint URL.
+              </p>
+            </div>
+
+            {/* Test Connection */}
+            <div className="flex items-center gap-3 pt-1">
+              <button
+                type="button"
+                onClick={handleTestConnection}
+                disabled={!canProceedFromStep1 || validation.status === 'validating'}
+                className="flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+              >
+                {validation.status === 'validating' ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Testing...
+                  </>
+                ) : (
+                  'Test Connection'
+                )}
+              </button>
+
+              {validation.status === 'success' && (
+                <span className="flex items-center gap-1 text-sm text-green-600">
+                  <Check size={16} />
+                  Connection successful
+                </span>
               )}
-            </button>
-
-            {validation.status === 'success' && (
-              <div className="flex items-center gap-2 text-sm text-green-600">
-                <Check size={16} />
-                Connection successful
-              </div>
-            )}
-
-            {validation.status === 'error' && (
-              <div className="flex items-center gap-2 text-sm text-red-500">
-                <X size={16} />
-                {validation.message}
-              </div>
-            )}
+              {validation.status === 'error' && (
+                <span className="flex items-center gap-1 text-sm text-red-500">
+                  <X size={16} />
+                  {validation.message}
+                </span>
+              )}
+            </div>
           </div>
         )}
 
-        {/* Step 2: Base URL */}
+        {/* Step 2: Model ID */}
         {step === 2 && (
-          <div className="space-y-4">
-            <label className="block text-sm font-medium text-[var(--sea-ink)]">
-              Provider URL (optional)
-            </label>
-            <input
-              type="text"
-              value={baseUrl}
-              onChange={(e) => setBaseUrl(e.target.value)}
-              placeholder="https://api.openai.com/v1"
-              autoFocus
-              className="w-full rounded-lg border border-[var(--line)] bg-[var(--input-bg)] px-3 py-2 text-sm text-[var(--sea-ink)] outline-none focus:border-[var(--accent)]"
-            />
-          </div>
-        )}
-
-        {/* Step 3: Model ID */}
-        {step === 3 && (
           <div className="space-y-4">
             <label className="block text-sm font-medium text-[var(--sea-ink)]">
               Model ID (optional)
@@ -221,7 +218,7 @@ export function ProviderWizard({
             Back
           </button>
 
-          {step < 3 ? (
+          {step < 2 ? (
             <button
               type="button"
               onClick={() => setStep((s) => s + 1)}
