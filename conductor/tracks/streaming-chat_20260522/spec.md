@@ -6,29 +6,42 @@ Build the conversational AI chat interface for the CV Builder. Users interact wi
 
 **Dependencies:** Track 2.1 (AI Provider Configuration) — the chat relies on the user's saved LLM provider settings (API key, base URL, model ID) to make streaming calls.
 
+**New dependency required:** `@ai-sdk/react` — provides the `useChat` hook for the ChatPanel component (not yet installed).
+
 ---
 
 ## Functional Requirements
 
 ### FR1: Chat API Endpoint (`POST /api/chat`)
 
-- **Route:** `src/routes/api/chat.ts` — TanStack Start server route
-- **Request body:** `{ messages: UIMessage[] }` — the conversation history from `useChat`
-- **Server behavior:**
+Following the project's decoupled handler pattern (as used by `health.ts` / `provider-settings.ts`), the business logic is extracted into a testable module, with a thin server route wrapping it.
+
+#### Handler (`src/lib/server/chat.ts`)
+- **Signature:** `handleChatRequest(messages: UIMessage[], db?: Database.Database)` — accepts optional DB injection for testability
+- **Behavior:**
   1. Loads the user's AI provider settings from the database (via `loadSettings` in `src/lib/server/provider-settings.ts`)
-  2. Constructs an OpenAI-compatible client using `openai(modelId, { baseURL })` from `@ai-sdk/openai`
-  3. Calls `streamText({ model, messages, system })` where:
+  2. If no API key is configured, returns a 400 Response with `{ error: "AI provider not configured", code: "PROVIDER_NOT_CONFIGURED" }`
+  3. Constructs an OpenAI-compatible client via `createOpenAI({ apiKey, baseURL: baseUrl })` from `@ai-sdk/openai`
+  4. Calls `streamText({ model: openai(modelId), messages: convertToModelMessages(messages), system })` where:
      - `system`: "You are an executive resume writer helping a professional build their CV. Guide the user section by section — start with Contact, then Executive Summary, Experience, Education, Skills, and Projects. Ask one question at a time. Be encouraging and professional. After each section, suggest when to click 'Done — extract this section'."
-     - `messages`: converted from `UIMessage[]` via `convertToCoreMessages()`
-  4. Returns streaming response via `toUIMessageStreamResponse()`
+     - `messages`: converted from `UIMessage[]` via `convertToModelMessages()` (AI SDK v6 API)
+  5. Returns a streaming Response via `createUIMessageStreamResponse()` (AI SDK v6 API, replaces legacy `toUIMessageStreamResponse`)
 - **Error handling:**
-  - If provider settings are missing or invalid, return HTTP 400 with `{ error: "AI provider not configured", code: "PROVIDER_NOT_CONFIGURED" }`
-  - If the LLM call fails (network, auth), return HTTP 502 with `{ error: "Failed to reach AI provider", code: "PROVIDER_UNAVAILABLE" }`
+  - If provider settings are missing or invalid, return HTTP 400 Response with `PROVIDER_NOT_CONFIGURED`
+  - If the LLM call fails (network, auth), return HTTP 502 Response with `PROVIDER_UNAVAILABLE`
   - All errors surface in the UI via the `useChat` hook's error state
+
+#### Server Route (`src/routes/api/chat.ts`)
+- Thin TanStack Start server route using `createFileRoute` with `server.handlers.POST`
+- Uses dynamic `await import(...)` inside the handler to avoid bundling `better-sqlite3` into the client (following the existing pattern from `cv.ts`, `provider-settings/index.ts`)
+- Delegates to `handleChatRequest` from `src/lib/server/chat.ts`
+
+**Note on server route vs server function:** A `createFileRoute` with `server.handlers` is used instead of a `createServerFn` because the endpoint returns a streaming `Response` object (via `createUIMessageStreamResponse`), which is the standard Web API pattern for streaming. A `createServerFn` expects JSON serialization, making it unsuitable for streaming responses.
 
 ### FR2: Chat UI Component
 
 - **Component:** `ChatPanel` in `src/components/ChatPanel.tsx`
+- **AI SDK dependency:** Requires `@ai-sdk/react` (not yet installed) — provides the `useChat` hook
 - **Integration:** Rendered inside `/cv-builder` above the existing manual CV editor form, matching the PRD's "adjacent form" pattern
 - **Behavior:**
   - Uses `useChat` from `@ai-sdk/react` with `api: '/api/chat'`
