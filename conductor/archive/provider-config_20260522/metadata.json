@@ -1,0 +1,8 @@
+{
+  "track_id": "provider-config_20260522",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-05-22T08:38:53Z",
+  "updated_at": "2026-05-22T08:38:53Z",
+  "description": "Implement Provider Configuration — first-run wizard, settings modal, API key encryption, and provider validation. Phase 2, Track 2.1 of the project roadmap."
+}
