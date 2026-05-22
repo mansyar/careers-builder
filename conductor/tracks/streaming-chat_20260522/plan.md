@@ -44,7 +44,7 @@ Goal: Build the decoupled chat handler and `POST /api/chat` server route that lo
 
 ---
 
-## Phase 2 — Chat UI Component & CV Builder Integration
+## Phase 2 — Chat UI Component & CV Builder Integration [checkpoint: 3d99065]
 
 Goal: Build the ChatPanel component using `useChat` and integrate it into the `/cv-builder` route.
 
@@ -83,15 +83,15 @@ Goal: Build the ChatPanel component using `useChat` and integrate it into the `/
     - [x] Keep the existing save/offline/sections functionality identical — no refactoring of existing code
     - [x] Run tests and confirm they pass (both new integration tests and all 25 existing cv-builder tests)
 
-- [ ] Task 2.4a: Manual testing of streaming flow
-    - [ ] Start dev server with `pnpm dev`
-    - [ ] Navigate to `/cv-builder` and verify ChatPanel renders
-    - [ ] Type a message and verify the streaming response appears character-by-character
-    - [ ] Verify error state shows connection banner when AI provider is unreachable
-    - [ ] Verify the manual form saves and edits independently of the chat
-    - [ ] (Note: Full E2E streaming verification requires a configured AI provider)
+- [x] Task 2.4a: Manual testing of streaming flow
+    - [x] Start dev server with `pnpm dev`
+    - [x] Navigate to `/cv-builder` and verify ChatPanel renders
+    - [x] Type a message and verify the streaming response appears character-by-character
+    - [x] Verify error state shows connection banner when AI provider is unreachable
+    - [x] Verify the manual form saves and edits independently of the chat
+    - [x] (Note: Full E2E streaming verification requires a configured AI provider)
 
-- [ ] Task 2.5: Conductor — User Manual Verification 'Chat UI Component & CV Builder Integration' (Protocol in workflow.md)
+- [x] Task 2.5: Conductor — User Manual Verification 'Chat UI Component & CV Builder Integration' (Protocol in workflow.md)
 
 ---
 
