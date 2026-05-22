@@ -17,6 +17,7 @@ import { Route as ApiCvRouteImport } from './routes/api/cv'
 import { Route as AppJobSearchRouteImport } from './routes/_app/job-search'
 import { Route as AppCvBuilderRouteImport } from './routes/_app/cv-builder'
 import { Route as ApiProviderSettingsIndexRouteImport } from './routes/api/provider-settings/index'
+import { Route as ApiProviderSettingsValidateRouteImport } from './routes/api/provider-settings/validate'
 import { Route as ApiInternalDebugDbSchemaRouteImport } from './routes/api/internal/debug/db-schema'
 import { Route as ApiCvCvProfileIdVersionsRouteImport } from './routes/api/cv/$cvProfileId/versions'
 import { Route as ApiCvCvProfileIdVersionVersionIdRouteImport } from './routes/api/cv/$cvProfileId/version/$versionId'
@@ -61,6 +62,12 @@ const ApiProviderSettingsIndexRoute =
     path: '/api/provider-settings/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiProviderSettingsValidateRoute =
+  ApiProviderSettingsValidateRouteImport.update({
+    id: '/api/provider-settings/validate',
+    path: '/api/provider-settings/validate',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiInternalDebugDbSchemaRoute =
   ApiInternalDebugDbSchemaRouteImport.update({
     id: '/api/internal/debug/db-schema',
@@ -87,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/job-search': typeof AppJobSearchRoute
   '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
+  '/api/provider-settings/validate': typeof ApiProviderSettingsValidateRoute
   '/api/provider-settings/': typeof ApiProviderSettingsIndexRoute
   '/api/cv/$cvProfileId/versions': typeof ApiCvCvProfileIdVersionsRoute
   '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
@@ -99,6 +107,7 @@ export interface FileRoutesByTo {
   '/job-search': typeof AppJobSearchRoute
   '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
+  '/api/provider-settings/validate': typeof ApiProviderSettingsValidateRoute
   '/api/provider-settings': typeof ApiProviderSettingsIndexRoute
   '/api/cv/$cvProfileId/versions': typeof ApiCvCvProfileIdVersionsRoute
   '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
@@ -113,6 +122,7 @@ export interface FileRoutesById {
   '/_app/job-search': typeof AppJobSearchRoute
   '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
+  '/api/provider-settings/validate': typeof ApiProviderSettingsValidateRoute
   '/api/provider-settings/': typeof ApiProviderSettingsIndexRoute
   '/api/cv/$cvProfileId/versions': typeof ApiCvCvProfileIdVersionsRoute
   '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/job-search'
     | '/api/cv'
     | '/api/health'
+    | '/api/provider-settings/validate'
     | '/api/provider-settings/'
     | '/api/cv/$cvProfileId/versions'
     | '/api/internal/debug/db-schema'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/job-search'
     | '/api/cv'
     | '/api/health'
+    | '/api/provider-settings/validate'
     | '/api/provider-settings'
     | '/api/cv/$cvProfileId/versions'
     | '/api/internal/debug/db-schema'
@@ -152,6 +164,7 @@ export interface FileRouteTypes {
     | '/_app/job-search'
     | '/api/cv'
     | '/api/health'
+    | '/api/provider-settings/validate'
     | '/api/provider-settings/'
     | '/api/cv/$cvProfileId/versions'
     | '/api/internal/debug/db-schema'
@@ -164,6 +177,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ApiCvRoute: typeof ApiCvRouteWithChildren
   ApiHealthRoute: typeof ApiHealthRoute
+  ApiProviderSettingsValidateRoute: typeof ApiProviderSettingsValidateRoute
   ApiProviderSettingsIndexRoute: typeof ApiProviderSettingsIndexRoute
   ApiInternalDebugDbSchemaRoute: typeof ApiInternalDebugDbSchemaRoute
 }
@@ -226,6 +240,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiProviderSettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/provider-settings/validate': {
+      id: '/api/provider-settings/validate'
+      path: '/api/provider-settings/validate'
+      fullPath: '/api/provider-settings/validate'
+      preLoaderRoute: typeof ApiProviderSettingsValidateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/internal/debug/db-schema': {
       id: '/api/internal/debug/db-schema'
       path: '/api/internal/debug/db-schema'
@@ -280,6 +301,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ApiCvRoute: ApiCvRouteWithChildren,
   ApiHealthRoute: ApiHealthRoute,
+  ApiProviderSettingsValidateRoute: ApiProviderSettingsValidateRoute,
   ApiProviderSettingsIndexRoute: ApiProviderSettingsIndexRoute,
   ApiInternalDebugDbSchemaRoute: ApiInternalDebugDbSchemaRoute,
 }

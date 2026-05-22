@@ -109,8 +109,9 @@ Goal: Build the client-side UI components (wizard, settings modal), create React
 - [x] Task 2.4: Write tests for sidebar integration (Red phase) [8a247ca]
 - [x] Task 2.5: Implement sidebar integration [8a247ca]
 - [x] Task 2.6: Wire app-level wizard trigger and context [8a247ca]
+- [x] Task 2.7 (partial): Switch to API route pattern to avoid server module bundling [0754d4a]
 
-- [ ] Task 2.7: Conductor — User Manual Verification 'First-Run Wizard & Settings Modal' (Protocol in workflow.md)
+- [~] Task 2.7b: Conductor — User Manual Verification 'First-Run Wizard & Settings Modal' (Protocol in workflow.md)
 
 ---
 
