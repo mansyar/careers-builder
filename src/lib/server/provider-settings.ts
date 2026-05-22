@@ -113,7 +113,7 @@ export async function validateSettings(
     await streamText({
       model: openai(config.modelId),
       prompt: 'Hi',
-      maxTokens: 5,
+      maxOutputTokens: 5,
     });
     return { valid: true };
   } catch (err) {
