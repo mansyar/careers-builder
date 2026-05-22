@@ -27,7 +27,7 @@ export async function loadProviderSettings(): Promise<ProviderConfig> {
 export async function persistProviderSettings(
   settings: ProviderConfig,
 ): Promise<ProviderConfig> {
-  return saveProviderSettings(settings);
+  return saveProviderSettings({ data: settings });
 }
 
 /**
@@ -36,5 +36,5 @@ export async function persistProviderSettings(
 export async function checkProviderSettings(
   config: ProviderConfig,
 ): Promise<{ valid: boolean; error?: string }> {
-  return validateProviderSettings(config);
+  return validateProviderSettings({ data: config });
 }
