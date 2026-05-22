@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import { useEffect, useState, useCallback } from 'react';
-import { getCvProfileData } from '../../lib/server/cv-loader-server';
+import { getCvProfileData } from '../../lib/cv-loader.functions';
 import { CollapsibleSection } from '../../components/CollapsibleSection';
 import { ContactSection } from '../../components/ContactSection';
 import { ExecutiveSummarySection } from '../../components/ExecutiveSummarySection';

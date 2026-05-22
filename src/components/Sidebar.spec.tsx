@@ -5,6 +5,8 @@ import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { Sidebar } from './Sidebar';
 
+const noop = () => {};
+
 afterEach(() => {
   cleanup();
 });
@@ -99,6 +101,23 @@ describe('Sidebar - desktop viewport', () => {
   it('should not render a hamburger button on desktop', () => {
     render(<Sidebar />);
     expect(screen.queryByLabelText('Open navigation menu')).toBeNull();
+  });
+
+  it('should render "Configure AI Provider" button when onOpenSettings provided', () => {
+    render(<Sidebar onOpenSettings={noop} />);
+    expect(screen.getByText('Configure AI Provider')).toBeTruthy();
+  });
+
+  it('should not render "Configure AI Provider" button when onOpenSettings is not provided', () => {
+    render(<Sidebar />);
+    expect(screen.queryByText('Configure AI Provider')).toBeNull();
+  });
+
+  it('should fire onOpenSettings when button is clicked', () => {
+    const onOpenSettings = vi.fn();
+    render(<Sidebar onOpenSettings={onOpenSettings} />);
+    fireEvent.click(screen.getByText('Configure AI Provider'));
+    expect(onOpenSettings).toHaveBeenCalledOnce();
   });
 });
 

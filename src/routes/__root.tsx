@@ -3,6 +3,8 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
+import { ProviderSettingsProvider, useProviderSettings } from '../lib/provider-settings-context';
+import { ProviderWizard } from '../components/ProviderWizard';
 
 import appCss from '../styles.css?url';
 
@@ -32,6 +34,40 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 });
 
+function RootContent({ children }: { children: React.ReactNode }) {
+  const { isWizardOpen, isSettingsOpen, closeWizard, closeSettings } = useProviderSettings();
+
+  const handleSave = async (settings: { apiKey: string; baseUrl: string; modelId: string }) => {
+    const { persistProviderSettings } = await import('../lib/provider-settings-client');
+    await persistProviderSettings(settings);
+  };
+
+  return (
+    <>
+      {children}
+      {isWizardOpen && (
+        <ProviderWizard
+          dismissable={false}
+          onSave={async (settings) => {
+            await handleSave(settings);
+            closeWizard();
+          }}
+        />
+      )}
+      {isSettingsOpen && (
+        <ProviderWizard
+          dismissable
+          onDismiss={closeSettings}
+          onSave={async (settings) => {
+            await handleSave(settings);
+            closeSettings();
+          }}
+        />
+      )}
+    </>
+  );
+}
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -40,9 +76,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(79,184,178,0.24)]">
-        <Header />
-        {children}
-        <Footer />
+        <ProviderSettingsProvider>
+          <Header />
+          <RootContent>{children}</RootContent>
+          <Footer />
+        </ProviderSettingsProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',

@@ -22,6 +22,17 @@ vi.mock('../../components/Sidebar', () => ({
   Sidebar: () => <nav data-testid="sidebar">Sidebar mock</nav>,
 }));
 
+// Mock the provider settings context hook used by AppLayout
+vi.mock('../../lib/provider-settings-context', () => ({
+  useProviderSettings: () => ({
+    openSettings: () => {},
+    isWizardOpen: false,
+    isSettingsOpen: false,
+    closeWizard: () => {},
+    closeSettings: () => {},
+  }),
+}));
+
 describe('_app layout route', () => {
   it('should render the Sidebar', async () => {
     const { Route } = await import('../_app');

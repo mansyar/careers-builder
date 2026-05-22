@@ -22,6 +22,8 @@ export default defineConfig({
         'src/**/*.test.ts',
         'src/**/*.test.tsx',
         'src/routes/api/cv*',
+        'src/routes/api/provider-settings*',
+        'src/**/*.functions.ts',
       ],
     },
   },

@@ -1,7 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { DatabaseManager } from '../../../../../lib/server/db';
-import { runStructuralMigrations } from '../../../../../lib/server/migrations';
-import { getVersion, updateVersion } from '../../../../../lib/server/cv-profiles';
 
 /**
  * Server route at GET /api/cv/:cvProfileId/version/:versionId.
@@ -14,6 +11,9 @@ export const Route = createFileRoute('/api/cv/$cvProfileId/version/$versionId')(
   server: {
     handlers: {
       GET: async ({ params: { cvProfileId, versionId } }) => {
+        const { DatabaseManager } = await import('../../../../../lib/server/db');
+        const { runStructuralMigrations } = await import('../../../../../lib/server/migrations');
+        const { getVersion } = await import('../../../../../lib/server/cv-profiles');
         try {
           const db = DatabaseManager.getInstance();
           runStructuralMigrations(db);
@@ -31,6 +31,9 @@ export const Route = createFileRoute('/api/cv/$cvProfileId/version/$versionId')(
         }
       },
       PUT: async ({ params: { cvProfileId, versionId }, request }) => {
+        const { DatabaseManager } = await import('../../../../../lib/server/db');
+        const { runStructuralMigrations } = await import('../../../../../lib/server/migrations');
+        const { updateVersion } = await import('../../../../../lib/server/cv-profiles');
         try {
           const body = (await request.json()) as {
             patch?: Record<string, unknown>;
@@ -54,7 +57,6 @@ export const Route = createFileRoute('/api/cv/$cvProfileId/version/$versionId')(
           return Response.json(result, { status: 200 });
         } catch (error) {
           const message = error instanceof Error ? error.message : 'Internal server error';
-          // Map known handler errors to HTTP status codes
           if (message === 'CV profile not found' || message === 'CV version not found') {
             return Response.json({ error: message, code: 'NOT_FOUND' }, { status: 404 });
           }

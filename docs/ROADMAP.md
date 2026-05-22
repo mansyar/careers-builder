@@ -74,12 +74,26 @@ Goal: Full CRUD for CV profiles and versions. Manual editing works. No AI yet.
 
 Goal: LLM connection configured, streaming chat works, structured extraction saves to DB.
 
-### Track 2.1 — Provider Configuration
-- First-run wizard component: API key, base URL, model ID
-- Validates key by making a test `streamText` call
-- Settings saved to `users.target_settings` (encrypted)
-- Settings UI accessible from sidebar
-- **Test:** Enter invalid key → error shown. Enter valid key → saved. Restart → key persists (encrypted).
+### Track 2.1 — Provider Configuration ✅ *(Complete — 2026-05-22)*
+- AES-256-GCM encryption module with secret key management (`encryption.ts`):
+  - 64-byte secret file at `data/.secret`, auto-generated on first use
+  - SHA-256 key derivation from first 32 bytes
+  - `encrypt(plaintext)` returns `{ encrypted, iv, tag }` (hex-encoded)
+  - `decrypt(encrypted, iv, tag)` with GCM auth tag verification
+  - Dependency injection of secret file path for testability
+- Provider settings CRUD (`provider-settings.ts`):
+  - `loadSettings(db)`: reads `users.target_settings`, decrypts `provider.apiKey`, returns defaults if none stored
+  - `saveSettings(db, config)`: encrypts API key, persists as `{ provider: { apiKey: <encrypted>, baseUrl, modelId } }`
+  - `validateSettings(config)`: test `streamText({ prompt: 'Hi', maxOutputTokens: 5 })` call to verify credentials
+  - Decryption failure recovery: returns `apiKey: ''` with baseUrl/modelId intact
+  - `maskApiKey(key)`: shows first 4 + `...` + last 4 chars, `'****'` for keys ≤ 8 chars
+- TanStack Start server functions (`createServerFn` wrappers): `getProviderSettings`, `saveProviderSettings`, `validateProviderSettings`
+- `.server.ts` / `.functions.ts` convention for server-client code separation (prevents `better-sqlite3` from being bundled to client)
+- First-run wizard (2-step, non-dismissable): API Key + Provider URL → Model ID, with "Test Connection" button
+- Settings modal (dismissable): pre-fills fields from saved settings, accessible via sidebar "Configure AI Provider" button
+- `ProviderSettingsContext` at root level for cross-component wizard/modal state
+- Refactored all pre-existing API route files to use dynamic imports (fixed `better-sqlite3` client bundling)
+- **Test:** 249 tests passing, 36 test files, >78% coverage. Wizard renders → test connection validates → settings persist encrypted → restart preserves settings → recovery mode works on corrupt secret.
 
 ### Track 2.2 — Streaming Chat Endpoint
 - `POST /api/chat` Server Function using `streamText()` → `toUIMessageStreamResponse()`
