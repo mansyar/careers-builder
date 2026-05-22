@@ -12,7 +12,14 @@ Goal: Build the decoupled chat handler and `POST /api/chat` server route that lo
 - [x] Task 0.0: Install new dependency [1901fe6]
     - [x] Run `pnpm add @ai-sdk/react` (provides `useChat` hook for ChatPanel in Phase 2)
 
-- [ ] Task 1.1: Write tests for chat handler (Red phase)
+- [x] Task 1.1: Write tests for chat handler (Red phase)
+    - [x] Create `src/lib/server/chat.spec.ts`
+    - [x] Write test: `handleChatRequest` with valid provider settings returns a streaming Response
+    - [x] Write test: `handleChatRequest` with no API key returns 400 with `PROVIDER_NOT_CONFIGURED`
+    - [x] Write test: `handleChatRequest` when LLM provider is unreachable returns 502 with `PROVIDER_UNAVAILABLE`
+    - [x] Write test: handler loads settings from DB (mock `loadSettings` with injected `db`)
+    - [x] Write test: handler calls `streamText` with correct model, system prompt, and `convertToModelMessages()`
+    - [x] Run tests and confirm they fail (no implementation yet)
     - [ ] Create `src/lib/server/chat.spec.ts`
     - [ ] Write test: `handleChatRequest` with valid provider settings returns a streaming Response
     - [ ] Write test: `handleChatRequest` with no API key returns 400 with `PROVIDER_NOT_CONFIGURED`
@@ -21,17 +28,17 @@ Goal: Build the decoupled chat handler and `POST /api/chat` server route that lo
     - [ ] Write test: handler calls `streamText` with correct model, system prompt, and `convertToModelMessages()`
     - [ ] Run tests and confirm they fail (no implementation yet)
 
-- [ ] Task 1.2: Implement chat handler (`src/lib/server/chat.ts`) + server route (`src/routes/api/chat.ts`)
-    - [ ] Create `src/lib/server/chat.ts` with exported `handleChatRequest(messages, db?)` function
-    - [ ] Import `loadSettings` from `./provider-settings` to get provider config (accepts injected `db` for testability)
-    - [ ] If no API key configured, return `Response.json({ error, code }, { status: 400 })`
-    - [ ] Construct OpenAI client: `createOpenAI({ apiKey, baseURL: baseUrl })` then use `openai(modelId)` as the model
-    - [ ] Call `streamText({ model: openai(modelId), messages: convertToModelMessages(messages), system })` with the executive resume writer system prompt
-    - [ ] Return streaming Response via `createUIMessageStreamResponse()` (AI SDK v6 API)
-    - [ ] Catch LLM failures and return 502 with `PROVIDER_UNAVAILABLE`
-    - [ ] Run tests and confirm they pass
-    - [ ] Create `src/routes/api/chat.ts` — thin TanStack Start server route wrapping `handleChatRequest` with dynamic imports (following `cv.ts` / `provider-settings/index.ts` pattern)
-    - [ ] Verify the route file exports a valid `Route` with `server.handlers.POST`
+- [x] Task 1.2: Implement chat handler (`src/lib/server/chat.ts`) + server route (`src/routes/api/chat.ts`) [faa77f0]
+    - [x] Create `src/lib/server/chat.ts` with exported `handleChatRequest(messages, db?)` function
+    - [x] Import `loadSettings` from `./provider-settings` to get provider config (accepts injected `db` for testability)
+    - [x] If no API key configured, return `Response.json({ error, code }, { status: 400 })`
+    - [x] Construct OpenAI client: `createOpenAI({ apiKey, baseURL: baseUrl })` then use `openai(modelId)` as the model
+    - [x] Call `streamText({ model: openai(modelId), messages: convertToModelMessages(messages), system })` with the executive resume writer system prompt
+    - [x] Return streaming Response via `result.toUIMessageStreamResponse()` (AI SDK v6 API)
+    - [x] Catch LLM failures and return 502 with `PROVIDER_UNAVAILABLE`
+    - [x] Run tests and confirm they pass
+    - [x] Create `src/routes/api/chat.ts` — thin TanStack Start server route wrapping `handleChatRequest` with dynamic imports (following `cv.ts` / `provider-settings/index.ts` pattern)
+    - [x] Verify the route file exports a valid `Route` with `server.handlers.POST`
 
 - [ ] Task 1.3: Conductor — User Manual Verification 'Chat API Endpoint' (Protocol in workflow.md)
 
