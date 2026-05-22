@@ -97,19 +97,14 @@ Goal: Build the ChatPanel component using `useChat` and integrate it into the `/
 
 ## Phase 3 — Verify Coverage, Finalize & Archive
 
-- [ ] Task 3.1: Run full test suite and check coverage
-    - [ ] Execute `pnpm test -- --coverage`
-    - [ ] Verify all tests pass
-    - [ ] Verify coverage ≥ 80% (update coverage exclusions in `vitest.config.ts` if needed)
-    - [ ] Fix any failures
+- [x] Task 3.1: Run full test suite and check coverage
+    - [x] Execute `pnpm test -- --coverage`
+    - [x] Verify all tests pass
+    - [x] Verify coverage ≥ 80% (update coverage exclusions in `vitest.config.ts` if needed)
+    - [x] Fix any failures
 
-- [ ] Task 3.2: Document deviations in `tech-stack.md`
-    - [ ] Note: Chat system prompt details and any deviations from spec
-    - [ ] Note: Any architecture patterns introduced (e.g., server-side provider loading in chat route)
+- [x] Task 3.2: Document deviations in `tech-stack.md`
+    - [x] Note: Chat system prompt details and any deviations from spec
+    - [x] Note: Any architecture patterns introduced (e.g., server-side provider loading in chat route)
 
-- [ ] Task 3.3: Archive track
-    - [ ] Update `conductor/tracks.md`: mark track as complete with commit SHA
-    - [ ] Update `metadata.json` status to "completed"
-    - [ ] Commit plan update with message `conductor(plan): Mark Track 2.2 as complete`
-
-- [ ] Task 3.4: Conductor — User Manual Verification 'Verify Coverage & Finalize' (Protocol in workflow.md)
+- [ ] Task 3.3: Conductor — User Manual Verification 'Verify Coverage & Finalize' (Protocol in workflow.md)

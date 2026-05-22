@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Streaming Chat Endpoint**
+- [x] **Track: Streaming Chat Endpoint** (Completed: 3d99065)
 *Link: [./tracks/streaming-chat_20260522/](./tracks/streaming-chat_20260522/)*
