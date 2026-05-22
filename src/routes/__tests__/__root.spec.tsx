@@ -69,4 +69,16 @@ describe('RootDocument', () => {
     render(<Component>Hello World</Component>);
     expect(screen.getByText('Hello World')).toBeTruthy();
   });
+
+  it('should render provider wizard modal (isWizardOpen by default)', async () => {
+    const { Route } = await import('../__root');
+    const Component = getRootComponent(Route);
+    render(<Component>child</Component>);
+    // The wizard modal should show because isWizardOpen defaults to true
+    expect(screen.getByText('AI Provider Configuration')).toBeTruthy();
+    // API key input should be visible
+    expect(screen.getByPlaceholderText('sk-...')).toBeTruthy();
+    // Provider URL input should be visible on step 1
+    expect(screen.getByPlaceholderText('https://api.openai.com/v1')).toBeTruthy();
+  });
 });
