@@ -5,6 +5,9 @@ import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
 import type { CvProfilerLoaderData } from '../_app/cv-builder';
 
+// Mock scrollIntoView (not implemented in JSDOM)
+window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
 const mockLoaderData: CvProfilerLoaderData = {
   profileId: 1,
   activeVersionId: 1,
@@ -82,6 +85,12 @@ vi.mock('@tanstack/react-router', () => ({
   useLoaderData: () => mockLoaderData,
 }));
 
+// Mock @ai-sdk/react useChat hook (used by ChatPanel when integrated into cv-builder)
+const mockUseChat = vi.fn();
+vi.mock('@ai-sdk/react', () => ({
+  useChat: (...args: unknown[]) => mockUseChat(...args),
+}));
+
 afterEach(() => {
   cleanup();
   localStorage.clear();
@@ -92,6 +101,14 @@ beforeEach(() => {
   localStorage.clear();
   mockFetch.mockReset();
   Object.defineProperty(navigator, 'onLine', { value: true, configurable: true, writable: true });
+  // Set default useChat mock return value so ChatPanel renders without errors
+  mockUseChat.mockReturnValue({
+    messages: [],
+    sendMessage: vi.fn(),
+    status: 'ready',
+    error: undefined,
+    clearError: vi.fn(),
+  });
 });
 
 describe('CV Builder route', () => {
@@ -329,5 +346,69 @@ describe('CV Builder route', () => {
     const Component = Route.options.component!;
     render(<Component />);
     expect(screen.getByText('Save Changes')).toBeTruthy();
+  });
+
+  // --- ChatPanel Integration Tests ---
+
+  it('should render ChatPanel above the manual form when integrated', async () => {
+    mockUseChat.mockReturnValue({
+      messages: [],
+      sendMessage: vi.fn(),
+      status: 'ready',
+      error: undefined,
+      clearError: vi.fn(),
+    });
+
+    // Reset scrollIntoView mock for the ChatPanel's useEffect
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
+    const { Route } = await import('../_app/cv-builder');
+    const Component = Route.options.component!;
+    render(<Component />);
+
+    // ChatPanel header should be present
+    expect(screen.getByText('AI Resume Writer')).toBeTruthy();
+    // Manual form should still be present
+    expect(screen.getByText('Contact')).toBeTruthy();
+    expect(screen.getByText('Executive Summary')).toBeTruthy();
+  });
+
+  it('should render ChatPanel welcome message with AI greeting', async () => {
+    mockUseChat.mockReturnValue({
+      messages: [],
+      sendMessage: vi.fn(),
+      status: 'ready',
+      error: undefined,
+      clearError: vi.fn(),
+    });
+
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
+    const { Route } = await import('../_app/cv-builder');
+    const Component = Route.options.component!;
+    render(<Component />);
+
+    expect(screen.getByText(/Welcome! I'll be your executive resume writer/i)).toBeTruthy();
+  });
+
+  it('should render manual form sections with ChatPanel present', async () => {
+    mockUseChat.mockReturnValue({
+      messages: [],
+      sendMessage: vi.fn(),
+      status: 'ready',
+      error: undefined,
+      clearError: vi.fn(),
+    });
+
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
+    const { Route } = await import('../_app/cv-builder');
+    const Component = Route.options.component!;
+    render(<Component />);
+
+    // All existing sections should render
+    expect(screen.getByDisplayValue('John')).toBeTruthy();
+    expect(screen.getByDisplayValue('Acme')).toBeTruthy();
+    expect(screen.getByDisplayValue('MIT')).toBeTruthy();
   });
 });
