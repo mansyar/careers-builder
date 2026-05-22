@@ -53,8 +53,14 @@ export function ProviderWizard({
     }
     setValidation({ status: 'validating' });
     try {
-      const { checkProviderSettings } = await import('../lib/provider-settings-client');
-      const result = await checkProviderSettings({ apiKey, baseUrl, modelId });
+      const res = await fetch('/api/provider-settings/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiKey, baseUrl, modelId }),
+      });
+      const result = res.ok
+        ? await res.json()
+        : { valid: false, error: `Server error (${res.status})` };
       if (result.valid) {
         setValidation({ status: 'success' });
       } else {
