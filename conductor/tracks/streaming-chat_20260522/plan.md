@@ -9,8 +9,8 @@
 
 Goal: Build the decoupled chat handler and `POST /api/chat` server route that loads provider settings from DB and streams LLM responses.
 
-- [ ] Task 0.0: Install new dependency
-    - [ ] Run `pnpm add @ai-sdk/react` (provides `useChat` hook for ChatPanel in Phase 2)
+- [x] Task 0.0: Install new dependency [1901fe6]
+    - [x] Run `pnpm add @ai-sdk/react` (provides `useChat` hook for ChatPanel in Phase 2)
 
 - [ ] Task 1.1: Write tests for chat handler (Red phase)
     - [ ] Create `src/lib/server/chat.spec.ts`
