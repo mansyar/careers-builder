@@ -41,6 +41,12 @@ vi.mock('@tanstack/react-devtools', () => ({
   TanStackDevtools: () => null,
 }));
 
+// Mock server function used by ProviderSettingsProvider
+vi.mock('../../lib/server/provider-settings-server', () => ({
+  getProviderSettings: () => Promise.resolve({ apiKey: '', baseUrl: '', modelId: '' }),
+  saveProviderSettings: () => Promise.resolve({ apiKey: '', baseUrl: '', modelId: '' }),
+}));
+
 describe('RootDocument', () => {
   it('should render the Header', async () => {
     const { Route } = await import('../__root');

@@ -106,28 +106,9 @@ Goal: Build the client-side UI components (wizard, settings modal), create React
     - [ ] Recovery mode: pre-fills baseUrl/modelId, skips to Step 2, API key blank + focused
     - [ ] Run tests and confirm they pass
 
-- [ ] Task 2.4: Write tests for sidebar integration (Red phase)
-    - [ ] Update `src/components/Sidebar.spec.tsx`
-    - [ ] Write test: sidebar renders 4 items including "Configure AI Provider"
-    - [ ] Write test: "Configure AI Provider" is a button (not a Link)
-    - [ ] Write test: clicking button fires onOpenSettings callback
-    - [ ] Run tests and confirm they fail
-
-- [ ] Task 2.5: Implement sidebar integration
-    - [ ] Add "Configure AI Provider" button to `Sidebar.tsx` below existing NAV_ITEMS
-    - [ ] Style as secondary action (muted styling, smaller font, distinct from nav links)
-    - [ ] Accept `onOpenSettings` callback prop
-    - [ ] Update the NAV_ITEMS constant to 4 (existing tests check count)
-    - [ ] Run tests and confirm they pass
-
-- [ ] Task 2.6: Wire app-level wizard trigger and context (`src/routes/__root.tsx` and `_app.tsx`)
-    - [ ] Wrap `<RootDocument>` children with `<ProviderSettingsProvider>`
-    - [ ] In the provider, on mount call `getProviderSettings` server function
-    - [ ] If `apiKey` is empty, set `isWizardOpen = true` (show non-dismissable wizard)
-    - [ ] If `apiKey` is present, set `isWizardOpen = false` (user can open settings via sidebar)
-    - [ ] In `_app.tsx`, wire sidebar button to `openSettings()` from context
-    - [ ] Render `<ProviderWizard>` modals at the root level based on context state
-    - [ ] Run tests and confirm they pass
+- [~] Task 2.4: Write tests for sidebar integration (Red phase)
+- [~] Task 2.5: Implement sidebar integration
+- [~] Task 2.6: Wire app-level wizard trigger and context
 
 - [ ] Task 2.7: Conductor — User Manual Verification 'First-Run Wizard & Settings Modal' (Protocol in workflow.md)
 

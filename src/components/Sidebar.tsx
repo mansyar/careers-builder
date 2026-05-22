@@ -9,7 +9,7 @@ const NAV_ITEMS = [
 
 const DESKTOP_BREAKPOINT = 768;
 
-function SidebarContent() {
+function SidebarContent({ onOpenSettings }: { onOpenSettings?: () => void }) {
   return (
     <nav className="flex flex-col gap-1 px-3">
       {NAV_ITEMS.map(({ to, label }) => (
@@ -25,11 +25,20 @@ function SidebarContent() {
           {label}
         </Link>
       ))}
+      {onOpenSettings && (
+        <button
+          type="button"
+          onClick={onOpenSettings}
+          className="mt-2 rounded-lg px-3 py-2 text-xs font-medium text-[var(--sea-ink-soft)] opacity-70 transition hover:opacity-100"
+        >
+          Configure AI Provider
+        </button>
+      )}
     </nav>
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ onOpenSettings }: { onOpenSettings?: () => void }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -51,7 +60,7 @@ export function Sidebar() {
   if (!isMobile) {
     return (
       <aside className="flex h-full w-60 flex-shrink-0 flex-col border-r border-[var(--line)] bg-[var(--surface)] py-4">
-        <SidebarContent />
+        <SidebarContent onOpenSettings={onOpenSettings} />
       </aside>
     );
   }
@@ -102,7 +111,7 @@ export function Sidebar() {
         }`}
       >
         <div onClick={handleNavClick}>
-          <SidebarContent />
+          <SidebarContent onOpenSettings={onOpenSettings} />
         </div>
       </aside>
     </>
