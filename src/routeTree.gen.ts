@@ -16,6 +16,7 @@ import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiCvRouteImport } from './routes/api/cv'
 import { Route as AppJobSearchRouteImport } from './routes/_app/job-search'
 import { Route as AppCvBuilderRouteImport } from './routes/_app/cv-builder'
+import { Route as ApiProviderSettingsIndexRouteImport } from './routes/api/provider-settings/index'
 import { Route as ApiInternalDebugDbSchemaRouteImport } from './routes/api/internal/debug/db-schema'
 import { Route as ApiCvCvProfileIdVersionsRouteImport } from './routes/api/cv/$cvProfileId/versions'
 import { Route as ApiCvCvProfileIdVersionVersionIdRouteImport } from './routes/api/cv/$cvProfileId/version/$versionId'
@@ -54,6 +55,12 @@ const AppCvBuilderRoute = AppCvBuilderRouteImport.update({
   path: '/cv-builder',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiProviderSettingsIndexRoute =
+  ApiProviderSettingsIndexRouteImport.update({
+    id: '/api/provider-settings/',
+    path: '/api/provider-settings/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiInternalDebugDbSchemaRoute =
   ApiInternalDebugDbSchemaRouteImport.update({
     id: '/api/internal/debug/db-schema',
@@ -80,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/job-search': typeof AppJobSearchRoute
   '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
+  '/api/provider-settings/': typeof ApiProviderSettingsIndexRoute
   '/api/cv/$cvProfileId/versions': typeof ApiCvCvProfileIdVersionsRoute
   '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
   '/api/cv/$cvProfileId/version/$versionId': typeof ApiCvCvProfileIdVersionVersionIdRoute
@@ -91,6 +99,7 @@ export interface FileRoutesByTo {
   '/job-search': typeof AppJobSearchRoute
   '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
+  '/api/provider-settings': typeof ApiProviderSettingsIndexRoute
   '/api/cv/$cvProfileId/versions': typeof ApiCvCvProfileIdVersionsRoute
   '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
   '/api/cv/$cvProfileId/version/$versionId': typeof ApiCvCvProfileIdVersionVersionIdRoute
@@ -104,6 +113,7 @@ export interface FileRoutesById {
   '/_app/job-search': typeof AppJobSearchRoute
   '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
+  '/api/provider-settings/': typeof ApiProviderSettingsIndexRoute
   '/api/cv/$cvProfileId/versions': typeof ApiCvCvProfileIdVersionsRoute
   '/api/internal/debug/db-schema': typeof ApiInternalDebugDbSchemaRoute
   '/api/cv/$cvProfileId/version/$versionId': typeof ApiCvCvProfileIdVersionVersionIdRoute
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/job-search'
     | '/api/cv'
     | '/api/health'
+    | '/api/provider-settings/'
     | '/api/cv/$cvProfileId/versions'
     | '/api/internal/debug/db-schema'
     | '/api/cv/$cvProfileId/version/$versionId'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/job-search'
     | '/api/cv'
     | '/api/health'
+    | '/api/provider-settings'
     | '/api/cv/$cvProfileId/versions'
     | '/api/internal/debug/db-schema'
     | '/api/cv/$cvProfileId/version/$versionId'
@@ -140,6 +152,7 @@ export interface FileRouteTypes {
     | '/_app/job-search'
     | '/api/cv'
     | '/api/health'
+    | '/api/provider-settings/'
     | '/api/cv/$cvProfileId/versions'
     | '/api/internal/debug/db-schema'
     | '/api/cv/$cvProfileId/version/$versionId'
@@ -151,6 +164,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ApiCvRoute: typeof ApiCvRouteWithChildren
   ApiHealthRoute: typeof ApiHealthRoute
+  ApiProviderSettingsIndexRoute: typeof ApiProviderSettingsIndexRoute
   ApiInternalDebugDbSchemaRoute: typeof ApiInternalDebugDbSchemaRoute
 }
 
@@ -204,6 +218,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/cv-builder'
       preLoaderRoute: typeof AppCvBuilderRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/api/provider-settings/': {
+      id: '/api/provider-settings/'
+      path: '/api/provider-settings'
+      fullPath: '/api/provider-settings/'
+      preLoaderRoute: typeof ApiProviderSettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/internal/debug/db-schema': {
       id: '/api/internal/debug/db-schema'
@@ -259,6 +280,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ApiCvRoute: ApiCvRouteWithChildren,
   ApiHealthRoute: ApiHealthRoute,
+  ApiProviderSettingsIndexRoute: ApiProviderSettingsIndexRoute,
   ApiInternalDebugDbSchemaRoute: ApiInternalDebugDbSchemaRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,35 +1,62 @@
 /**
- * Client-safe wrapper for provider settings server functions.
+ * Client-safe API for provider settings.
  *
- * These are thin wrappers using dynamic import to avoid pulling
- * server-only dependencies (better-sqlite3, DatabaseManager) into
- * the client bundle.
+ * Uses fetch() to call API routes instead of importing server functions
+ * directly, avoiding bundling Node.js modules (better-sqlite3) into the client.
  */
 
-import type { ProviderConfig } from './server/provider-settings';
+export interface ProviderConfig {
+  apiKey: string;
+  baseUrl: string;
+  modelId: string;
+}
 
 /**
  * Load provider settings from the server with masked API key.
  */
 export async function loadProviderSettings(): Promise<ProviderConfig> {
-  const mod = await import('./server/provider-settings-server');
-  return mod.getProviderSettings();
+  const res = await fetch('/api/provider-settings');
+  if (!res.ok) {
+    throw new Error(`Failed to load provider settings: ${res.status}`);
+  }
+  return res.json() as Promise<ProviderConfig>;
 }
 
 /**
  * Save provider settings to the server.
  */
-export async function persistProviderSettings(settings: ProviderConfig): Promise<ProviderConfig> {
-  const mod = await import('./server/provider-settings-server');
-  return mod.saveProviderSettings(settings);
+export async function persistProviderSettings(
+  settings: ProviderConfig,
+): Promise<ProviderConfig> {
+  const res = await fetch('/api/provider-settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(settings),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to save provider settings: ${res.status}`);
+  }
+  return res.json() as Promise<ProviderConfig>;
 }
 
 /**
  * Validate provider settings by making a test API call.
+ * Returns { valid: true } or { valid: false, error }.
  */
 export async function checkProviderSettings(
   config: ProviderConfig,
 ): Promise<{ valid: boolean; error?: string }> {
-  const mod = await import('./server/provider-settings-server');
-  return mod.validateProviderSettings(config);
+  try {
+    const res = await fetch('/api/provider-settings/validate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config),
+    });
+    if (!res.ok) {
+      return { valid: false, error: `Server returned ${res.status}` };
+    }
+    return (await res.json()) as { valid: boolean; error?: string };
+  } catch {
+    return { valid: false, error: 'Connection test failed' };
+  }
 }
