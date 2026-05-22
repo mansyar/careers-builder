@@ -5,7 +5,7 @@
 
 ---
 
-## Phase 1 — Chat API Endpoint
+## Phase 1 — Chat API Endpoint [checkpoint: 4a7647a]
 
 Goal: Build the decoupled chat handler and `POST /api/chat` server route that loads provider settings from DB and streams LLM responses.
 
@@ -40,7 +40,7 @@ Goal: Build the decoupled chat handler and `POST /api/chat` server route that lo
     - [x] Create `src/routes/api/chat.ts` — thin TanStack Start server route wrapping `handleChatRequest` with dynamic imports (following `cv.ts` / `provider-settings/index.ts` pattern)
     - [x] Verify the route file exports a valid `Route` with `server.handlers.POST`
 
-- [ ] Task 1.3: Conductor — User Manual Verification 'Chat API Endpoint' (Protocol in workflow.md)
+- [x] Task 1.3: Conductor — User Manual Verification 'Chat API Endpoint' (Protocol in workflow.md)
 
 ---
 
