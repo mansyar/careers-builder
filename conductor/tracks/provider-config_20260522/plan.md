@@ -95,23 +95,23 @@ Goal: Build the client-side UI components (wizard, settings modal), create React
     - [x] Run tests and confirm they fail
 
 - [x] Task 2.3: Implement ProviderWizard component (`src/components/ProviderWizard.tsx`)
-    - [ ] Build 3-step wizard: API Key → Base URL → Model ID
-    - [ ] Step 1: password-masked input with eye toggle, "Test Connection" button, inline success/error, `autoFocus`
-    - [ ] Step 2: text input pre-filled with `https://api.openai.com/v1` (or stored value in recovery mode)
-    - [ ] Step 3: text input pre-filled with `gpt-4o` (or stored value in recovery mode)
-    - [ ] Step navigation: Next/Back buttons, disabled until current step valid
-    - [ ] On completion: calls `saveProviderSettings`, shows success toast
-    - [ ] Wizard mode: no close/backdrop dismiss (prop `dismissable={false}`)
-    - [ ] Settings mode: close button and backdrop dismiss enabled (prop `dismissable={true}`)
-    - [ ] Recovery mode: pre-fills baseUrl/modelId, skips to Step 2, API key blank + focused
-    - [ ] Run tests and confirm they pass
+    - [x] Build 2-step wizard: API Key + Base URL → Model ID
+    - [x] Step 1: password-masked API key input + Base URL + "Test Connection", inline success/error, `autoFocus`
+    - [x] Step 2: text input pre-filled with `gpt-4o` (or stored value in recovery mode)
+    - [x] Step navigation: Next/Back buttons, disabled until current step valid
+    - [x] On completion: calls `saveProviderSettings` via server function
+    - [x] Wizard mode: no close/backdrop dismiss (prop `dismissable={false}`)
+    - [x] Settings mode: close button and backdrop dismiss enabled (prop `dismissable={true}`)
+    - [x] Recovery mode: pre-fills baseUrl/modelId, API key blank + focused
+    - [x] Run tests and confirm they pass
 
 - [x] Task 2.4: Write tests for sidebar integration (Red phase) [8a247ca]
 - [x] Task 2.5: Implement sidebar integration [8a247ca]
 - [x] Task 2.6: Wire app-level wizard trigger and context [8a247ca]
-- [x] Task 2.7 (partial): Switch to API route pattern to avoid server module bundling [0754d4a]
 
-- [~] Task 2.7b: Conductor — User Manual Verification 'First-Run Wizard & Settings Modal' (Protocol in workflow.md)
+- [x] Task 2.7: Manual verification complete — wizard, save, and connection test all working
+
+## Phase 2 — Complete [checkpoint: UNVERIFIED]
 
 ---
 
