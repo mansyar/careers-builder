@@ -14,6 +14,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiCvRouteImport } from './routes/api/cv'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AppJobSearchRouteImport } from './routes/_app/job-search'
 import { Route as AppCvBuilderRouteImport } from './routes/_app/cv-builder'
 import { Route as ApiProviderSettingsIndexRouteImport } from './routes/api/provider-settings/index'
@@ -44,6 +45,11 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
 const ApiCvRoute = ApiCvRouteImport.update({
   id: '/api/cv',
   path: '/api/cv',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppJobSearchRoute = AppJobSearchRouteImport.update({
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/cv-builder': typeof AppCvBuilderRoute
   '/job-search': typeof AppJobSearchRoute
+  '/api/chat': typeof ApiChatRoute
   '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
   '/api/provider-settings/validate': typeof ApiProviderSettingsValidateRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/cv-builder': typeof AppCvBuilderRoute
   '/job-search': typeof AppJobSearchRoute
+  '/api/chat': typeof ApiChatRoute
   '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
   '/api/provider-settings/validate': typeof ApiProviderSettingsValidateRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/_app/cv-builder': typeof AppCvBuilderRoute
   '/_app/job-search': typeof AppJobSearchRoute
+  '/api/chat': typeof ApiChatRoute
   '/api/cv': typeof ApiCvRouteWithChildren
   '/api/health': typeof ApiHealthRoute
   '/api/provider-settings/validate': typeof ApiProviderSettingsValidateRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/cv-builder'
     | '/job-search'
+    | '/api/chat'
     | '/api/cv'
     | '/api/health'
     | '/api/provider-settings/validate'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/cv-builder'
     | '/job-search'
+    | '/api/chat'
     | '/api/cv'
     | '/api/health'
     | '/api/provider-settings/validate'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/_app/cv-builder'
     | '/_app/job-search'
+    | '/api/chat'
     | '/api/cv'
     | '/api/health'
     | '/api/provider-settings/validate'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   AboutRoute: typeof AboutRoute
+  ApiChatRoute: typeof ApiChatRoute
   ApiCvRoute: typeof ApiCvRouteWithChildren
   ApiHealthRoute: typeof ApiHealthRoute
   ApiProviderSettingsValidateRoute: typeof ApiProviderSettingsValidateRoute
@@ -217,6 +230,13 @@ declare module '@tanstack/react-router' {
       path: '/api/cv'
       fullPath: '/api/cv'
       preLoaderRoute: typeof ApiCvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/job-search': {
@@ -299,6 +319,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   AboutRoute: AboutRoute,
+  ApiChatRoute: ApiChatRoute,
   ApiCvRoute: ApiCvRouteWithChildren,
   ApiHealthRoute: ApiHealthRoute,
   ApiProviderSettingsValidateRoute: ApiProviderSettingsValidateRoute,
