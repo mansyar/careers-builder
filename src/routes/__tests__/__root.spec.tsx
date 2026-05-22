@@ -41,10 +41,11 @@ vi.mock('@tanstack/react-devtools', () => ({
   TanStackDevtools: () => null,
 }));
 
-// Mock server function used by ProviderSettingsProvider
-vi.mock('../../lib/server/provider-settings-server', () => ({
-  getProviderSettings: () => Promise.resolve({ apiKey: '', baseUrl: '', modelId: '' }),
-  saveProviderSettings: () => Promise.resolve({ apiKey: '', baseUrl: '', modelId: '' }),
+// Mock client-safe module for provider settings
+vi.mock('../../lib/provider-settings-client', () => ({
+  loadProviderSettings: () => Promise.resolve({ apiKey: '', baseUrl: '', modelId: '' }),
+  persistProviderSettings: () => Promise.resolve({ apiKey: '', baseUrl: '', modelId: '' }),
+  checkProviderSettings: () => Promise.resolve({ valid: true }),
 }));
 
 describe('RootDocument', () => {

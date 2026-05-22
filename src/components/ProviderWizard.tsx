@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Check, X, ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
+import { checkProviderSettings } from '../lib/provider-settings-client';
 
 export interface WizardSettings {
   apiKey: string;
@@ -53,14 +54,7 @@ export function ProviderWizard({
     }
     setValidation({ status: 'validating' });
     try {
-      const res = await fetch('/api/provider-settings/validate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ apiKey, baseUrl, modelId }),
-      });
-      const result = res.ok
-        ? await res.json()
-        : { valid: false, error: `Server error (${res.status})` };
+      const result = await checkProviderSettings({ apiKey, baseUrl, modelId });
       if (result.valid) {
         setValidation({ status: 'success' });
       } else {

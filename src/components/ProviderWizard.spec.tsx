@@ -9,8 +9,15 @@ afterEach(() => {
   cleanup();
 });
 
-const mockFetch = vi.fn();
-globalThis.fetch = mockFetch;
+const mockCheck = vi.hoisted(() => vi.fn());
+const mockLoad = vi.hoisted(() => vi.fn());
+const mockPersist = vi.hoisted(() => vi.fn());
+
+vi.mock('../lib/provider-settings-client', () => ({
+  checkProviderSettings: mockCheck,
+  loadProviderSettings: mockLoad,
+  persistProviderSettings: mockPersist,
+}));
 
 const noop = () => {};
 
@@ -52,7 +59,7 @@ describe('ProviderWizard - wizard mode (dismissable=false)', () => {
 
   it('shows loading state while testing connection', async () => {
     // Return a promise that never resolves during this test
-    mockFetch.mockReturnValue(new Promise(() => {}));
+    mockCheck.mockReturnValue(new Promise(() => {}));
     render(<ProviderWizard onSave={noop} />);
     const input = screen.getByPlaceholderText('sk-...');
     fireEvent.change(input, { target: { value: 'sk-test-key' } });
@@ -61,10 +68,7 @@ describe('ProviderWizard - wizard mode (dismissable=false)', () => {
   });
 
   it('shows success message on valid key and enables Next', async () => {
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ valid: true }),
-    });
+    mockCheck.mockResolvedValue({ valid: true });
     render(<ProviderWizard onSave={noop} />);
     const input = screen.getByPlaceholderText('sk-...');
     fireEvent.change(input, { target: { value: 'sk-valid-key' } });
@@ -75,10 +79,7 @@ describe('ProviderWizard - wizard mode (dismissable=false)', () => {
   });
 
   it('shows error message on invalid key', async () => {
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ valid: false, error: '401 Unauthorized' }),
-    });
+    mockCheck.mockResolvedValue({ valid: false, error: '401 Unauthorized' });
     render(<ProviderWizard onSave={noop} />);
     const input = screen.getByPlaceholderText('sk-...');
     fireEvent.change(input, { target: { value: 'sk-bad-key' } });
@@ -92,10 +93,7 @@ describe('ProviderWizard - wizard mode (dismissable=false)', () => {
 describe('ProviderWizard - multi-step navigation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ valid: true }),
-    });
+    mockCheck.mockResolvedValue({ valid: true });
   });
 
   it('navigates through steps 1→2→3→finish', async () => {
