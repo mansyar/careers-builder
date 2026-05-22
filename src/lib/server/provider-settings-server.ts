@@ -49,8 +49,8 @@ export const getProviderSettings = createServerFn().handler(async (): Promise<Pr
  * Accepts ProviderConfig via the context data property.
  */
 export const saveProviderSettings = createServerFn({ method: 'POST' }).handler(
-  async (ctx: { data: ProviderConfig }): Promise<ProviderConfig> => {
-    return saveProviderSettingsHandler(ctx.data);
+  async (ctx: Record<string, unknown>): Promise<ProviderConfig> => {
+    return saveProviderSettingsHandler(ctx as unknown as ProviderConfig);
   },
 );
 
@@ -59,7 +59,7 @@ export const saveProviderSettings = createServerFn({ method: 'POST' }).handler(
  * Accepts ProviderConfig via the context data property.
  */
 export const validateProviderSettings = createServerFn({ method: 'POST' }).handler(
-  async (ctx: { data: ProviderConfig }): Promise<{ valid: boolean; error?: string }> => {
-    return validateProviderSettingsHandler(ctx.data);
+  async (ctx: Record<string, unknown>): Promise<{ valid: boolean; error?: string }> => {
+    return validateProviderSettingsHandler(ctx as unknown as ProviderConfig);
   },
 );

@@ -75,10 +75,10 @@ Goal: Build the client-side UI components (wizard, settings modal), create React
 
 **Architecture:** A `ProviderSettingsContext` at the root level avoids prop drilling. The sidebar calls `openSettings()` from context. The first-run check happens in a `useEffect` at the root.
 
-- [ ] Task 2.1: Create ProviderSettingsContext (`src/lib/provider-settings-context.tsx`)
-    - [ ] Define context shape: `{ isWizardOpen, isSettingsOpen, openSettings, closeWizard, closeSettings }`
-    - [ ] Create `ProviderSettingsProvider` component that manages state
-    - [ ] Export `useProviderSettings` hook
+- [x] Task 2.1: Create ProviderSettingsContext (`src/lib/provider-settings-context.tsx`)
+    - [x] Define context shape: `{ isWizardOpen, isSettingsOpen, openSettings, closeWizard, closeSettings }`
+    - [x] Create `ProviderSettingsProvider` component that manages state
+    - [x] Export `useProviderSettings` hook
 
 - [ ] Task 2.2: Write tests for ProviderWizard component (Red phase)
     - [ ] Create `src/components/ProviderWizard.spec.tsx`
