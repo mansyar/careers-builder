@@ -1,16 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { DatabaseManager } from '../../lib/server/db';
-import { runStructuralMigrations } from '../../lib/server/migrations';
-import { createCvProfile } from '../../lib/server/cv-profiles';
 
 /**
  * Server route at POST /api/cv.
  * Creates a new CV profile with a first empty version.
+ *
+ * Uses dynamic import from .server.ts to avoid bundling
+ * better-sqlite3 into the client bundle.
  */
 export const Route = createFileRoute('/api/cv')({
   server: {
     handlers: {
       POST: async () => {
+        const { DatabaseManager } = await import('../../lib/server/db');
+        const { runStructuralMigrations } = await import('../../lib/server/migrations');
+        const { createCvProfile } = await import('../../lib/server/cv-profiles');
         try {
           const db = DatabaseManager.getInstance();
           runStructuralMigrations(db);

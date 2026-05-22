@@ -33,7 +33,7 @@ describe('DbSchema route handlers', () => {
     const db = DatabaseManager.getInstance({ path: ':memory:' });
     runStructuralMigrations(db);
 
-    const { handleDbSchema } = await import('../api/internal/debug/db-schema');
+    const { handleDbSchema } = await import('../../lib/db-schema.server');
     const response = handleDbSchema(db);
     const data = await response.json();
     expect(data).toHaveProperty('tables');

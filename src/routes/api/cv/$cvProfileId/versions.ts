@@ -1,7 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { DatabaseManager } from '../../../../lib/server/db';
-import { runStructuralMigrations } from '../../../../lib/server/migrations';
-import { listVersions } from '../../../../lib/server/cv-profiles';
 
 /**
  * Server route at GET /api/cv/:cvProfileId/versions.
@@ -11,6 +8,9 @@ export const Route = createFileRoute('/api/cv/$cvProfileId/versions')({
   server: {
     handlers: {
       GET: async ({ params: { cvProfileId } }) => {
+        const { DatabaseManager } = await import('../../../../lib/server/db');
+        const { runStructuralMigrations } = await import('../../../../lib/server/migrations');
+        const { listVersions } = await import('../../../../lib/server/cv-profiles');
         try {
           const db = DatabaseManager.getInstance();
           runStructuralMigrations(db);
