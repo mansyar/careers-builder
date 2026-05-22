@@ -69,20 +69,19 @@ Goal: Build the ChatPanel component using `useChat` and integrate it into the `/
     - [x] Implement "Done — extract this section" placeholder button on AI messages
     - [x] Run tests and confirm they pass
 
-- [ ] Task 2.3: Write tests for CV Builder integration (Red phase)
-    - [ ] Create new test file or extend `src/routes/__tests__/cv-builder.spec.tsx`
-    - [ ] Add `vi.mock('@ai-sdk/react', ...)` to mock `useChat` hook (return `{ messages, input, handleInputChange, handleSubmit, isLoading, error, reload }`)
-    - [ ] Write test: `/cv-builder` renders ChatPanel above the manual form
-    - [ ] Write test: ChatPanel initializes with AI welcome message
-    - [ ] Write test: manual form sections (Contact, Experience, etc.) still render correctly with ChatPanel present
-    - [ ] Ensure existing 24 cv-builder tests still pass with the new mock
-    - [ ] Run tests and confirm they fail (new tests fail, existing pass)
-
-- [ ] Task 2.4: Integrate ChatPanel into `/cv-builder` route
-    - [ ] Modify `src/routes/_app/cv-builder.tsx` to import and render `<ChatPanel />` above the existing form
-    - [ ] Use a responsive split layout (flex/grid): ChatPanel on top for narrow viewports, side-by-side on wider screens
-    - [ ] Keep the existing save/offline/sections functionality identical — no refactoring of existing code
-    - [ ] Run tests and confirm they pass (both new integration tests and all 24 existing cv-builder tests)
+- [x] Task 2.3: Write tests for CV Builder integration (Red phase)
+    - [x] Extend `src/routes/__tests__/cv-builder.spec.tsx` with `@ai-sdk/react` mock
+    - [x] Add `vi.mock('@ai-sdk/react', ...)` to mock `useChat` hook
+    - [x] Write test: `/cv-builder` renders ChatPanel above the manual form
+    - [x] Write test: ChatPanel initializes with AI welcome message
+    - [x] Write test: manual form sections still render correctly with ChatPanel present
+    - [x] Ensure existing 25 cv-builder tests still pass with the new mock
+    - [x] Run tests and confirm they fail (new tests fail, existing pass)
+- [x] Task 2.4: Integrate ChatPanel into `/cv-builder` route [ff5529b]
+    - [x] Modify `src/routes/_app/cv-builder.tsx` to import and render `<ChatPanel />` above the existing form
+    - [x] Use a responsive split layout (flex/grid): ChatPanel on top for narrow viewports, side-by-side on wider screens
+    - [x] Keep the existing save/offline/sections functionality identical — no refactoring of existing code
+    - [x] Run tests and confirm they pass (both new integration tests and all 25 existing cv-builder tests)
 
 - [ ] Task 2.4a: Manual testing of streaming flow
     - [ ] Start dev server with `pnpm dev`
