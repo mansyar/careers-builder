@@ -4,7 +4,7 @@
 
 ---
 
-## Phase 1 — Encryption Module & Provider Settings Backend
+## Phase 1 — Encryption Module & Provider Settings Backend [checkpoint: 50c5d43]
 
 Goal: Build the server-side encryption service, provider settings CRUD, validation via test `streamText` call, and TanStack Start server function wrappers.
 
@@ -65,7 +65,7 @@ Goal: Build the server-side encryption service, provider settings CRUD, validati
     - [x] Follow the same decoupled pattern as `cv-loader-server.ts` (handler function + thin `createServerFn` wrapper)
     - [x] Run tests and confirm they pass
 
-- [ ] Task 1.8: Conductor — User Manual Verification 'Encryption Module & Provider Settings Backend' (Protocol in workflow.md)
+- [x] Task 1.8: Conductor — User Manual Verification 'Encryption Module & Provider Settings Backend' (Protocol in workflow.md) [50c5d43]
 
 ---
 
