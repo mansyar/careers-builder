@@ -31,9 +31,9 @@ export const getProviderSettings = createServerFn().handler(
  * Save provider settings (accepts ProviderConfig, returns with masked key).
  */
 export const saveProviderSettings = createServerFn({ method: 'POST' }).handler(
-  async (ctx: Record<string, unknown>): Promise<ProviderConfig> => {
-    const data = (ctx as { data: ProviderConfig }).data;
-    return saveProviderSettingsHandler(data);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async (ctx: any): Promise<ProviderConfig> => {
+    return saveProviderSettingsHandler(ctx.data as ProviderConfig);
   },
 );
 
@@ -43,10 +43,8 @@ export const saveProviderSettings = createServerFn({ method: 'POST' }).handler(
 export const validateProviderSettings = createServerFn({
   method: 'POST',
 }).handler(
-  async (
-    ctx: Record<string, unknown>,
-  ): Promise<{ valid: boolean; error?: string }> => {
-    const data = (ctx as { data: ProviderConfig }).data;
-    return validateProviderSettingsHandler(data);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async (ctx: any): Promise<{ valid: boolean; error?: string }> => {
+    return validateProviderSettingsHandler(ctx.data as ProviderConfig);
   },
 );

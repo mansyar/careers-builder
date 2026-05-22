@@ -27,7 +27,8 @@ export async function loadProviderSettings(): Promise<ProviderConfig> {
 export async function persistProviderSettings(
   settings: ProviderConfig,
 ): Promise<ProviderConfig> {
-  return saveProviderSettings({ data: settings });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (saveProviderSettings as any)({ data: settings });
 }
 
 /**
@@ -36,5 +37,6 @@ export async function persistProviderSettings(
 export async function checkProviderSettings(
   config: ProviderConfig,
 ): Promise<{ valid: boolean; error?: string }> {
-  return validateProviderSettings({ data: config });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (validateProviderSettings as any)({ data: config });
 }

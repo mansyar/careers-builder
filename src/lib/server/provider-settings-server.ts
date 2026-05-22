@@ -49,8 +49,9 @@ export const getProviderSettings = createServerFn().handler(async (): Promise<Pr
  * Accepts ProviderConfig via the context data property.
  */
 export const saveProviderSettings = createServerFn({ method: 'POST' }).handler(
-  async (ctx: Record<string, unknown>): Promise<ProviderConfig> => {
-    return saveProviderSettingsHandler(ctx as unknown as ProviderConfig);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async (ctx: any): Promise<ProviderConfig> => {
+    return saveProviderSettingsHandler(ctx.data as ProviderConfig);
   },
 );
 
@@ -59,7 +60,8 @@ export const saveProviderSettings = createServerFn({ method: 'POST' }).handler(
  * Accepts ProviderConfig via the context data property.
  */
 export const validateProviderSettings = createServerFn({ method: 'POST' }).handler(
-  async (ctx: Record<string, unknown>): Promise<{ valid: boolean; error?: string }> => {
-    return validateProviderSettingsHandler(ctx as unknown as ProviderConfig);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async (ctx: any): Promise<{ valid: boolean; error?: string }> => {
+    return validateProviderSettingsHandler(ctx.data as ProviderConfig);
   },
 );
