@@ -108,3 +108,8 @@ Goal: Build the ChatPanel component using `useChat` and integrate it into the `/
     - [x] Note: Any architecture patterns introduced (e.g., server-side provider loading in chat route)
 
 - [ ] Task 3.3: Conductor — User Manual Verification 'Verify Coverage & Finalize' (Protocol in workflow.md)
+
+---
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions [dc0abdb]
