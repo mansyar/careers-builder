@@ -9,8 +9,10 @@ const WELCOME_MESSAGE =
  *
  * Uses the useChat hook from @ai-sdk/react to manage messages and streaming.
  * Integrates with POST /api/chat for the AI provider connection.
+ *
+ * @param onOpenSettings - Optional callback to open the provider settings modal.
  */
-export function ChatPanel() {
+export function ChatPanel({ onOpenSettings }: { onOpenSettings?: () => void }) {
   const { messages, sendMessage, status, error, clearError } = useChat({
     api: '/api/chat',
   });
@@ -107,9 +109,7 @@ export function ChatPanel() {
                   <button
                     type="button"
                     className="mt-2 rounded-md bg-[var(--sea-ink)] px-3 py-1 text-xs font-medium text-white transition-opacity hover:opacity-90"
-                    onClick={() => {
-                      console.log('Extract section:', msg.content);
-                    }}
+                    onClick={onOpenSettings}
                   >
                     Done — extract this section
                   </button>

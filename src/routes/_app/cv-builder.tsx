@@ -9,6 +9,7 @@ import { EducationSection } from '../../components/EducationSection';
 import { SkillsSection } from '../../components/SkillsSection';
 import { ProjectsSection } from '../../components/ProjectsSection';
 import { ChatPanel } from '../../components/ChatPanel';
+import { useProviderSettings } from '../../lib/provider-settings-context';
 
 interface ContactData {
   name: string;
@@ -118,6 +119,7 @@ function CvBuilderSkeleton() {
 
 function CvBuilder() {
   const data = useLoaderData({ from: '/_app/cv-builder' });
+  const { openSettings } = useProviderSettings();
 
   const [formData, setFormData] = useState<CvFormData>(() =>
     data?.full_cv_json ? mapJsonToFormData(data.full_cv_json) : getDefaultFormData(),
@@ -209,7 +211,7 @@ function CvBuilder() {
       <div className="flex flex-col gap-6 lg:flex-row">
         {/* Chat Panel — takes ~2/5 width on large screens */}
         <div className="lg:w-2/5">
-          <ChatPanel />
+          <ChatPanel onOpenSettings={openSettings} />
         </div>
 
         {/* Manual CV Editor — takes ~3/5 width on large screens */}

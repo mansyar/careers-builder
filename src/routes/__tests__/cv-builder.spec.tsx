@@ -91,6 +91,15 @@ vi.mock('@ai-sdk/react', () => ({
   useChat: (...args: unknown[]) => mockUseChat(...args),
 }));
 
+// Mock provider settings context (used by ChatPanel for the Open Settings button)
+vi.mock('../../lib/provider-settings-context', () => ({
+  useProviderSettings: () => ({
+    openSettings: vi.fn(),
+    closeWizard: vi.fn(),
+    closeSettings: vi.fn(),
+  }),
+}));
+
 afterEach(() => {
   cleanup();
   localStorage.clear();
