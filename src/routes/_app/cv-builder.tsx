@@ -8,6 +8,8 @@ import { ExperienceSection } from '../../components/ExperienceSection';
 import { EducationSection } from '../../components/EducationSection';
 import { SkillsSection } from '../../components/SkillsSection';
 import { ProjectsSection } from '../../components/ProjectsSection';
+import { ChatPanel } from '../../components/ChatPanel';
+import { useProviderSettings } from '../../lib/provider-settings-context';
 
 interface ContactData {
   name: string;
@@ -117,6 +119,7 @@ function CvBuilderSkeleton() {
 
 function CvBuilder() {
   const data = useLoaderData({ from: '/_app/cv-builder' });
+  const { openSettings } = useProviderSettings();
 
   const [formData, setFormData] = useState<CvFormData>(() =>
     data?.full_cv_json ? mapJsonToFormData(data.full_cv_json) : getDefaultFormData(),
@@ -169,7 +172,8 @@ function CvBuilder() {
   const isOffline = typeof navigator !== 'undefined' && !navigator.onLine;
 
   return (
-    <div className="mx-auto max-w-3xl py-8">
+    <div className="mx-auto max-w-6xl py-8">
+      {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-[var(--sea-ink)]">CV Builder</h2>
         <div className="flex items-center gap-3">
@@ -203,117 +207,128 @@ function CvBuilder() {
         </div>
       </div>
 
-      <p className="mb-6 text-base text-[var(--sea-ink-soft)]">
-        Edit your CV details manually. All changes are saved locally until you click &ldquo;Save
-        Changes&rdquo;.
-      </p>
-
-      {saveStatus === 'error' && (
-        <div className="mb-4 flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-          <p className="text-sm text-red-700">Failed to save your changes. Please try again.</p>
-          <button
-            type="button"
-            onClick={handleSave}
-            className="ml-auto rounded-md bg-red-600 px-3 py-1 text-xs font-medium text-white transition-opacity hover:opacity-90"
-          >
-            Retry
-          </button>
+      {/* Responsive Split Layout: ChatPanel on top for narrow, side-by-side on wider screens */}
+      <div className="flex flex-col gap-6 lg:flex-row">
+        {/* Chat Panel — takes ~2/5 width on large screens */}
+        <div className="lg:w-2/5">
+          <ChatPanel onOpenSettings={openSettings} />
         </div>
-      )}
 
-      <div className="space-y-4">
-        <CollapsibleSection title="Contact" defaultOpen>
-          <ContactSection
-            data={formData.contact}
-            onChange={(contact) => setFormData((prev) => ({ ...prev, contact }))}
-          />
-        </CollapsibleSection>
+        {/* Manual CV Editor — takes ~3/5 width on large screens */}
+        <div className="lg:w-3/5">
+          <p className="mb-6 text-base text-[var(--sea-ink-soft)]">
+            Edit your CV details manually. All changes are saved locally until you click &ldquo;Save
+            Changes&rdquo;.
+          </p>
 
-        <CollapsibleSection title="Executive Summary" defaultOpen>
-          <ExecutiveSummarySection
-            data={formData.summary}
-            onChange={(summary) => setFormData((prev) => ({ ...prev, summary }))}
-          />
-        </CollapsibleSection>
+          {saveStatus === 'error' && (
+            <div className="mb-4 flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+              <p className="text-sm text-red-700">Failed to save your changes. Please try again.</p>
+              <button
+                type="button"
+                onClick={handleSave}
+                className="ml-auto rounded-md bg-red-600 px-3 py-1 text-xs font-medium text-white transition-opacity hover:opacity-90"
+              >
+                Retry
+              </button>
+            </div>
+          )}
 
-        <CollapsibleSection
-          title="Experience"
-          defaultOpen
-          emptyText="No experience entries yet. Add one?"
-          onAdd={() =>
-            setFormData((prev) => ({
-              ...prev,
-              experience: [
-                ...prev.experience,
-                {
-                  company: '',
-                  role: '',
-                  location: '',
-                  startDate: '',
-                  endDate: '',
-                  current: false,
-                  description: [],
-                },
-              ],
-            }))
-          }
-        >
-          <ExperienceSection
-            data={formData.experience}
-            onChange={(experience) => setFormData((prev) => ({ ...prev, experience }))}
-          />
-        </CollapsibleSection>
+          <div className="space-y-4">
+            <CollapsibleSection title="Contact" defaultOpen>
+              <ContactSection
+                data={formData.contact}
+                onChange={(contact) => setFormData((prev) => ({ ...prev, contact }))}
+              />
+            </CollapsibleSection>
 
-        <CollapsibleSection
-          title="Education"
-          defaultOpen
-          emptyText="No education entries yet. Add one?"
-          onAdd={() =>
-            setFormData((prev) => ({
-              ...prev,
-              education: [
-                ...prev.education,
-                { institution: '', degree: '', field: '', startDate: '', endDate: '', gpa: '' },
-              ],
-            }))
-          }
-        >
-          <EducationSection
-            data={formData.education}
-            onChange={(education) => setFormData((prev) => ({ ...prev, education }))}
-          />
-        </CollapsibleSection>
+            <CollapsibleSection title="Executive Summary" defaultOpen>
+              <ExecutiveSummarySection
+                data={formData.summary}
+                onChange={(summary) => setFormData((prev) => ({ ...prev, summary }))}
+              />
+            </CollapsibleSection>
 
-        <CollapsibleSection
-          title="Skills"
-          defaultOpen
-          emptyText="Type a skill below and press Enter to add it."
-        >
-          <SkillsSection
-            data={formData.skills}
-            onChange={(skills) => setFormData((prev) => ({ ...prev, skills }))}
-          />
-        </CollapsibleSection>
+            <CollapsibleSection
+              title="Experience"
+              defaultOpen
+              emptyText="No experience entries yet. Add one?"
+              onAdd={() =>
+                setFormData((prev) => ({
+                  ...prev,
+                  experience: [
+                    ...prev.experience,
+                    {
+                      company: '',
+                      role: '',
+                      location: '',
+                      startDate: '',
+                      endDate: '',
+                      current: false,
+                      description: [],
+                    },
+                  ],
+                }))
+              }
+            >
+              <ExperienceSection
+                data={formData.experience}
+                onChange={(experience) => setFormData((prev) => ({ ...prev, experience }))}
+              />
+            </CollapsibleSection>
 
-        <CollapsibleSection
-          title="Projects"
-          defaultOpen
-          emptyText="No projects yet. Add one?"
-          onAdd={() =>
-            setFormData((prev) => ({
-              ...prev,
-              projects: [
-                ...prev.projects,
-                { name: '', role: '', description: '', technologies: [], url: '' },
-              ],
-            }))
-          }
-        >
-          <ProjectsSection
-            data={formData.projects}
-            onChange={(projects) => setFormData((prev) => ({ ...prev, projects }))}
-          />
-        </CollapsibleSection>
+            <CollapsibleSection
+              title="Education"
+              defaultOpen
+              emptyText="No education entries yet. Add one?"
+              onAdd={() =>
+                setFormData((prev) => ({
+                  ...prev,
+                  education: [
+                    ...prev.education,
+                    { institution: '', degree: '', field: '', startDate: '', endDate: '', gpa: '' },
+                  ],
+                }))
+              }
+            >
+              <EducationSection
+                data={formData.education}
+                onChange={(education) => setFormData((prev) => ({ ...prev, education }))}
+              />
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              title="Skills"
+              defaultOpen
+              emptyText="Type a skill below and press Enter to add it."
+            >
+              <SkillsSection
+                data={formData.skills}
+                onChange={(skills) => setFormData((prev) => ({ ...prev, skills }))}
+              />
+            </CollapsibleSection>
+
+            <CollapsibleSection
+              title="Projects"
+              defaultOpen
+              emptyText="No projects yet. Add one?"
+              onAdd={() =>
+                setFormData((prev) => ({
+                  ...prev,
+                  projects: [
+                    ...prev.projects,
+                    { name: '', role: '', description: '', technologies: [], url: '' },
+                  ],
+                }))
+              }
+            >
+              <ProjectsSection
+                data={formData.projects}
+                onChange={(projects) => setFormData((prev) => ({ ...prev, projects }))}
+              />
+            </CollapsibleSection>
+          </div>
+        </div>
       </div>
     </div>
   );

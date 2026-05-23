@@ -23,6 +23,7 @@ export default defineConfig({
         'src/**/*.test.tsx',
         'src/routes/api/cv*',
         'src/routes/api/provider-settings*',
+        'src/routes/api/chat*',
         'src/**/*.functions.ts',
       ],
     },
