@@ -120,7 +120,7 @@ Response:
 ```
 Returns JSON listing all database tables and their columns. Uses a decoupled handler at `src/lib/server/db-schema.ts` (querying `sqlite_master` + `PRAGMA table_info`) wrapped by a thin TanStack Start server route at `src/routes/api/internal/debug/db-schema.ts`. Used by automated tests to verify database tables exist after boot.
 
-#### `POST /api/chat` — Conversational Interview
+#### `POST /api/chat` — Conversational Interview *(Implemented — Track 2.2)*
 ```
 Request:
 {
@@ -130,6 +130,7 @@ Request:
 Response: Stream<UIMessage>
 Uses streamText() → toUIMessageStreamResponse()
 ```
+Uses a `createFileRoute` with `server.handlers.POST` (not `createServerFn`) because the endpoint returns a streaming `Response` object. The handler at `src/lib/server/chat.ts` loads provider settings from the database, validates the API key, constructs an OpenAI-compatible client via `createOpenAI`, calls `streamText` with the executive resume writer system prompt, and returns a streaming Response via `result.toUIMessageStreamResponse()`. Errors: 400 `PROVIDER_NOT_CONFIGURED` (no API key) and 502 `PROVIDER_UNAVAILABLE` (LLM unreachable).
 
 #### `POST /api/chat/extract` — Structured Section Extraction
 Triggered by user clicking "Done — extract this section" button in the chat UI.
@@ -375,6 +376,7 @@ Missing or invalid API key renders all chat/extract endpoints inoperable — the
 
 ### Integration Tests
 - **Chat flow:** Test Server Function handler logic directly by calling the handler with mock request/response objects, rather than spawning a full HTTP server. Assert streaming response structure from the `streamText` result.
+- **Implemented *(Track 2.2)*:** 5 handler tests covering valid streaming, missing API key (400), LLM unreachable (502), DB injection, and system prompt verification. ChatPanel component tests (9 tests) covering all UI states: empty, messages, streaming, input disabled, Enter to send, error retry, missing provider placeholder, and extract button. CV builder integration tests (3 tests) verifying ChatPanel coexistence with manual form. Handler at 100% statement coverage, ChatPanel at 93.1%.
 - **Scraping:** Test Playwright scripts against static HTML fixtures (no live URLs).
 - **PDF generation:** Render a known template, assert PDF output has expected text content and page count using `pdf-parse` to extract text from the generated buffer.
 

@@ -95,12 +95,15 @@ Goal: LLM connection configured, streaming chat works, structured extraction sav
 - Refactored all pre-existing API route files to use dynamic imports (fixed `better-sqlite3` client bundling)
 - **Test:** 249 tests passing, 36 test files, >78% coverage. Wizard renders → test connection validates → settings persist encrypted → restart preserves settings → recovery mode works on corrupt secret.
 
-### Track 2.2 — Streaming Chat Endpoint
-- `POST /api/chat` Server Function using `streamText()` → `toUIMessageStreamResponse()`
-- Chat UI component using `useChat` hook from `@ai-sdk/react`
-- System prompt sets context: "You are an executive resume writer. Guide the user section by section."
-- Messages persisted to conversation history (in-memory per session)
-- **Test:** Type message → see streaming response → verify messages array updates
+### Track 2.2 — Streaming Chat Endpoint ✅ *(Complete — 2026-05-22)*
+- `POST /api/chat` server route using `createFileRoute` with `server.handlers.POST` (streaming Response cannot be serialized by `createServerFn`)
+- Decoupled handler at `src/lib/server/chat.ts`: `handleChatRequest(messages, db?)` loads provider settings from DB via `loadSettings`, constructs OpenAI client via `createOpenAI`, calls `streamText({ model, messages, system })` with executive resume writer system prompt, returns streaming Response via `result.toUIMessageStreamResponse()`
+- Error handling: 400 `PROVIDER_NOT_CONFIGURED` when no API key, 502 `PROVIDER_UNAVAILABLE` when LLM unreachable
+- ChatPanel component using AI SDK v6 `useChat` hook (`sendMessage({ text })` API, local `useState` for input, `status` for streaming state, `clearError` for error recovery)
+- Features: streaming message display with cursor animation, auto-scroll, empty state with welcome message, error banner with retry (includes recovery guidance), missing provider placeholder with "Open Settings" wired to `ProviderSettingsContext`, "Done — extract this section" placeholder button (for Track 2.3)
+- Responsive split layout in cv-builder: ChatPanel on top (narrow) / side-by-side at 2:5 ratio (wide)
+- New dependency: `@ai-sdk/react` (v3.0.192) for `useChat`
+- **Test:** 284 tests passing, 43 test files, >85% coverage. 41 track-specific tests: handler covers streaming/400/502/DB injection/system prompt, ChatPanel covers all 8 states (empty, messages, streaming, input disabled, Enter to send, error retry, missing provider, extract button), cv-builder integration verifies coexistence with manual form.
 
 ### Track 2.3 — Structured Section Extraction
 - User clicks "Done — extract this section" button in chat
