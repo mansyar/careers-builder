@@ -43,8 +43,18 @@ describe('ChatPanel', () => {
     mockUseChat.mockReturnValue({
       ...defaultMockChat,
       messages: [
-        { id: '1', role: 'assistant', content: 'Hello, how can I help?' },
-        { id: '2', role: 'user', content: 'I want to build my CV' },
+        {
+          id: '1',
+          role: 'assistant',
+          content: 'Hello, how can I help?',
+          parts: [{ type: 'text', text: 'Hello, how can I help?' }],
+        },
+        {
+          id: '2',
+          role: 'user',
+          content: 'I want to build my CV',
+          parts: [{ type: 'text', text: 'I want to build my CV' }],
+        },
       ],
     });
 
@@ -107,8 +117,13 @@ describe('ChatPanel', () => {
       sendMessage,
       clearError,
       messages: [
-        { id: '1', role: 'user', content: 'Hello' },
-        { id: '2', role: 'assistant', content: 'Hi there' },
+        { id: '1', role: 'user', content: 'Hello', parts: [{ type: 'text', text: 'Hello' }] },
+        {
+          id: '2',
+          role: 'assistant',
+          content: 'Hi there',
+          parts: [{ type: 'text', text: 'Hi there' }],
+        },
       ],
     });
 
@@ -127,7 +142,9 @@ describe('ChatPanel', () => {
     const { ChatPanel } = await import('./ChatPanel');
     mockUseChat.mockReturnValue({
       ...defaultMockChat,
-      messages: [{ id: '1', role: 'user', content: 'Hello' }],
+      messages: [
+        { id: '1', role: 'user', content: 'Hello', parts: [{ type: 'text', text: 'Hello' }] },
+      ],
       status: 'streaming',
     });
 
@@ -150,7 +167,14 @@ describe('ChatPanel', () => {
     const { ChatPanel } = await import('./ChatPanel');
     mockUseChat.mockReturnValue({
       ...defaultMockChat,
-      messages: [{ id: '1', role: 'assistant', content: 'What is your name?' }],
+      messages: [
+        {
+          id: '1',
+          role: 'assistant',
+          content: 'What is your name?',
+          parts: [{ type: 'text', text: 'What is your name?' }],
+        },
+      ],
     });
 
     render(<ChatPanel />);

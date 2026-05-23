@@ -46,7 +46,7 @@ const validProviderConfig: ProviderConfig = {
   modelId: 'gpt-4o',
 };
 
-const mockMessages = [{ id: '1', role: 'user' as const, content: 'Hello' }];
+const mockMessages = [{ id: '1', role: 'user' as const, content: 'Hello', parts: [] }];
 
 describe('handleChatRequest', () => {
   beforeEach(() => {

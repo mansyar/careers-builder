@@ -1,8 +1,20 @@
 import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
 import { useState, useEffect, useRef } from 'react';
 
 const WELCOME_MESSAGE =
   "Welcome! I'll be your executive resume writer. Let's start building your CV. First, what's your full name?";
+
+/**
+ * Extract plain text content from a UIMessage's parts array.
+ * Concatenates all text-type parts together.
+ */
+function getMessageText(msg: { parts: Array<{ type: string; text?: string }> }): string {
+  return msg.parts
+    .filter((p): p is { type: 'text'; text: string } => p.type === 'text' && p.text !== undefined)
+    .map((p) => p.text)
+    .join('');
+}
 
 /**
  * ChatPanel — Conversational AI chat interface for the CV Builder.
@@ -14,7 +26,7 @@ const WELCOME_MESSAGE =
  */
 export function ChatPanel({ onOpenSettings }: { onOpenSettings?: () => void }) {
   const { messages, sendMessage, status, error, clearError } = useChat({
-    api: '/api/chat',
+    transport: new DefaultChatTransport({ api: '/api/chat' }),
   });
 
   const [input, setInput] = useState('');
@@ -38,7 +50,7 @@ export function ChatPanel({ onOpenSettings }: { onOpenSettings?: () => void }) {
     clearError();
     const lastUserMessage = messages.filter((m) => m.role === 'user').pop();
     if (lastUserMessage) {
-      const text = typeof lastUserMessage.content === 'string' ? lastUserMessage.content : '';
+      const text = getMessageText(lastUserMessage);
       sendMessage({ text });
     }
   };
@@ -100,7 +112,7 @@ export function ChatPanel({ onOpenSettings }: { onOpenSettings?: () => void }) {
                 }`}
               >
                 <p className="text-sm leading-relaxed">
-                  {typeof msg.content === 'string' ? msg.content : ''}
+                  {getMessageText(msg)}
                   {msg.role === 'assistant' && isStreaming && (
                     <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse bg-gray-500" />
                   )}
@@ -111,7 +123,7 @@ export function ChatPanel({ onOpenSettings }: { onOpenSettings?: () => void }) {
                     type="button"
                     className="mt-2 rounded-md bg-[var(--sea-ink)] px-3 py-1 text-xs font-medium text-white transition-opacity hover:opacity-90"
                     onClick={() => {
-                      console.log('Extract section:', msg.content);
+                      console.log('Extract section:', getMessageText(msg));
                     }}
                   >
                     Done — extract this section
